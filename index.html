@@ -1,35 +1,349 @@
+<style>
+/* تحسين خلفية الصفحة وتظليل الحواف */
+body {
+    background: linear-gradient(135deg, #e3f0fa 0%, #f8fbff 100%) fixed;
+    min-height: 100vh;
+    font-family: 'Cairo', Tahoma, Arial, sans-serif;
+    color: #212529;
+.container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 18px #b6d4fe33, 0 1.5px 0 #e3f0fa;
+    padding: 8px 6px 10px 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    max-width: 900px;
+    width: 100%;
+header h1 {
+    font-size: 1.35em;
+    color: #1976d2;
+    letter-spacing: 1px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 0 #fff, 0 2px 8px #b6d4fe22;
+    text-align: center;
+    width: 100%;
+}
+.tab-content {
+    background: #fafdff;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 1px 8px #b6d4fe22;
+    padding: 6px 4px 6px 4px;
+}
+.form-group label {
+    color: #1976d2;
+    font-size: 0.97em;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+}
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+    font-size: 0.97em;
+    padding: 3px 7px;
+    min-height: 21px;
+    height: 21px;
+    border-radius: 6px;
+    border: 1.2px solid #b6d4fe;
+    background: #fafdff;
+    box-shadow: 0 1px 2px #b6d4fe22;
+    margin-bottom: 1px;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    text-align: center;
+}
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px #2196f344;
+    background: #e3f2fd;
+}
+.form-group input[type="text"]:hover,
+.form-group input[type="number"]:hover,
+.form-group input[type="date"]:hover,
+.form-group select:hover {
+    border-color: #1976d2;
+}
+button {
+    font-size: 0.97em;
+    padding: 4px 11px;
+    min-height: 22px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #1976d2 0%, #43cea2 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px #b6d4fe33, 0 1.5px 0 #e3f0fa;
+    text-shadow: 0 1px 2px #0007, 0 0px 1px #fff2;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+    letter-spacing: 0.5px;
+}
+button:hover {
+    background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px #185a9d44;
+    text-shadow: 0 1px 2px #000a, 0 0px 1px #fff2;
+}
+button:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 2px #2196f322;
+}
+button:focus-visible {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+.validation-feedback {
+    font-size: 0.85em;
+    margin-top: 1px;
+    margin-bottom: 2px;
+    color: #dc3545;
+}
+.tab-panel, .nested-tab-panel, #backup-panel {
+    background: #fafdff;
+    border-radius: 12px;
+    box-shadow: 0 1px 8px #b6d4fe22;
+}
+.explanation {
+    background: #f3f7fa;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.92em;
+}
+::-webkit-scrollbar {
+    width: 7px;
+    background: #e3f2fd;
+}
+::-webkit-scrollbar-thumb {
+    background: #b6d4fe;
+    border-radius: 6px;
+}
+::selection {
+    background: #b6d4fe44;
+}
+</style>
+<script>
+// --- Beneficiary Search Logic ---
+document.addEventListener('DOMContentLoaded', function() {
+    let beneficiarySearchTerm = '';
+    if (typeof window.currentBeneficiaryFilterType === 'undefined') {
+        window.currentBeneficiaryFilterType = 'all';
+    }
+    const beneficiarySearchInput = document.getElementById('beneficiary-search-input');
+    const beneficiarySearchClear = document.getElementById('beneficiary-search-clear');
+    const beneficiaryFilterButtons = document.getElementById('beneficiary-filter-buttons');
+
+    function applyBeneficiarySearchAndFilter() {
+        let filteredList = Array.isArray(window.beneficiaries) ? [...window.beneficiaries] : [];
+        if (typeof window.currentBeneficiaryFilterType !== 'undefined' && window.currentBeneficiaryFilterType !== 'all') {
+            filteredList = filteredList.filter(b => b.compensation && b.compensation.type === window.currentBeneficiaryFilterType);
+        }
+        if (beneficiarySearchTerm.length > 0) {
+            const term = beneficiarySearchTerm.toLowerCase();
+            filteredList = filteredList.filter(b =>
+                (b.lastName && b.lastName.toLowerCase().includes(term)) ||
+                (b.firstName && b.firstName.toLowerCase().includes(term)) ||
+                (b.ssNum && b.ssNum.includes(term))
+            );
+        }
+        if (typeof window.renderBeneficiariesTable === 'function') {
+            window.renderBeneficiariesTable(filteredList);
+        }
+    }
+
+    if (beneficiarySearchInput) {
+        beneficiarySearchInput.addEventListener('input', function() {
+            beneficiarySearchTerm = this.value.trim();
+            if (beneficiarySearchTerm.length > 0) {
+                beneficiarySearchClear.style.display = '';
+            } else {
+                beneficiarySearchClear.style.display = 'none';
+            }
+            applyBeneficiarySearchAndFilter();
+        });
+    }
+    if (beneficiarySearchClear) {
+        beneficiarySearchClear.addEventListener('click', function() {
+            beneficiarySearchInput.value = '';
+            beneficiarySearchTerm = '';
+            beneficiarySearchClear.style.display = 'none';
+            applyBeneficiarySearchAndFilter();
+            beneficiarySearchInput.focus();
+        });
+    }
+    if (beneficiaryFilterButtons) {
+        beneficiaryFilterButtons.addEventListener('click', function(e) {
+            if (e.target.closest('button')) {
+                setTimeout(applyBeneficiarySearchAndFilter, 0);
+            }
+        });
+    }
+
+    window.applyBeneficiaryFilter = function(filterType) {
+        window.currentBeneficiaryFilterType = filterType;
+        applyBeneficiarySearchAndFilter();
+        document.querySelectorAll('#beneficiary-filter-buttons button').forEach(button => {
+            button.classList.toggle('active', button.getAttribute('data-filter-type') === filterType);
+        });
+    };
+
+    // التصفية التلقائية عند تحميل الصفحة لأول مرة
+    applyBeneficiarySearchAndFilter();
+});
+</script>
+</script>
+</script>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>برنامج تسيير مستحقات مركز امتحان اثبات المستوى</title>
-    <!-- Include SheetJS library for XLSX export -->
+    <title>برنامج تسيير مستحقات  مركز  امتحان اثبات المستوى</title>
+     <!-- Include SheetJS library for XLSX export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Optional: Include a Google Font for better typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <!-- Include Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>برنامج تسيير مستحقات مركز امتحان اثبات المستوى</h1>
-        </header>
-        <main>
-            <!-- محتوى الصفحة -->
-            <div class="tabs">
-                <!-- أزرار التبويب -->
-            </div>
-            <div class="tab-content">
-                <!-- محتوى التبويب -->
-            </div>
-        </main>
-    </div>
-    <script src="js/main.js"></script>
-</body>
-</html>
+
+    <style>
+        /* تحسينات جمالية إضافية للواجهة */
+        html, body {
+            font-size: 13px;
+            background: linear-gradient(135deg, #e3f0fa 0%, #f8fbff 100%);
+            height: 100%;
+        }
+        body {
+            box-shadow: 0 0 0 1px #e0e7ef inset;
+            min-height: 100vh;
+            /* تم إلغاء التوسيط العمودي والأفقي للعناصر */
+        }
+        .container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 18px #b6d4fe33, 0 1.5px 0 #e3f0fa;
+            padding: 18px 12px 24px 12px;
+            margin-top: 18px;
+            margin-bottom: 18px;
+            max-width: 900px;
+            width: 100%;
+            /* تم إلغاء display:flex والتوسيط */
+        }
+        header h1 {
+            font-size: 1.25em;
+            color: #1976d2;
+            letter-spacing: 1px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 0 #fff, 0 2px 8px #b6d4fe22;
+            text-align: center;
+            width: 100%;
+        }
+        .tabs {
+            background: #fafdff;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 1px 4px #b6d4fe22;
+            padding: 2px 0 2px 0;
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-color: #b6d4fe #e3f2fd;
+            scrollbar-width: thin;
+        }
+        .tab-button {
+            font-size: 0.98em;
+            padding: 6px 13px;
+            border-radius: 7px 7px 0 0;
+            margin: 0 2px;
+            background: none;
+            color: #1976d2;
+            border: none;
+            transition: background 0.18s, color 0.18s;
+            display: inline-block;
+            min-width: 120px;
+            text-align: center;
+        }
+        .tab-button.active, .tab-button:focus {
+            background: linear-gradient(90deg, #e3f2fd 60%, #fff 100%);
+            color: #004085;
+            font-weight: 700;
+            box-shadow: 0 2px 8px #b6d4fe22;
+            z-index: 2;
+        }
+        .tab-button:hover {
+            background: #e3f2fd;
+            color: #0056b3;
+            z-index: 2;
+        /* تخصيص شريط التمرير الأفقي للتبويبات */
+        }
+        .tabs::-webkit-scrollbar {
+            height: 7px;
+            background: #e3f2fd;
+        }
+        .tabs::-webkit-scrollbar-thumb {
+            background: #b6d4fe;
+            border-radius: 6px;
+        }
+        }
+        .tab-content {
+            background: #fafdff;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 1px 8px #b6d4fe22;
+            padding: 18px 10px 10px 10px;
+            /* تم إلغاء display:flex والتوسيط */
+        }
+        .form-group label {
+            color: #1976d2;
+            font-size: 0.92em;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group select {
+            font-size: 0.92em;
+            padding: 3px 7px;
+            min-height: 21px;
+            height: 21px;
+            border-radius: 6px;
+            border: 1.2px solid #b6d4fe;
+            background: #fafdff;
+            box-shadow: 0 1px 2px #b6d4fe22;
+            margin-bottom: 2px;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            text-align: center;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group select:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px #2196f344;
+            background: #e3f2fd;
+        }
+        .form-group input[type="text"]:hover,
+        .form-group input[type="number"]:hover,
+        .form-group input[type="date"]:hover,
+        .form-group select:hover {
+            border-color: #1976d2;
+        }
+        button {
+            font-size: 0.95em;
+            padding: 4px 11px;
+            min-height: 22px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #1976d2 0%, #43cea2 100%);
+            color: #fff;
+            border: none;
+            box-shadow: 0 2px 8px #1976d233, 0 1.5px 0 #e3f0fa;
+            text-shadow: 0 1px 2px #0007, 0 0px 1px #fff2;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+            letter-spacing: 0.5px;
+        }
         button:hover {
             background: linear-gradient(90deg, #185a9d 0%, #43cea2 100%);
             color: #fff;
@@ -1532,7 +1846,7 @@ document.addEventListener('DOMContentLoaded', function() {
                               <button data-report-type="تصحيح_ثانوي" class="print-report-btn"><i class="fas fa-print"></i> طباعة التقرير</button>
                               <button data-report-type="تصحيح_ثانوي" class="export-excel-btn"><i class="fas fa-file-excel"></i> تصدير إلى XLSX</button>
                               <button data-report-type="تصحيح_ثانوي" class="export-txt-btn"><i class="fas fa-file-code"></i> تصدير ملف TXT</button>
-                         </div>
+                          </div>
                          <div class="report-output" id="reports-report-preview-تصحيح_ثانوي">
                              <!-- Report HTML will be generated here by JavaScript -->
                          </div>
