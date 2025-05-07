@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
-Sitemap: https://github.com/abdoreimo/center-dues-system.git
+Sitemap: https://abdoreimo.github.io/center-dues-system/sitemap.xml
