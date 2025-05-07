@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeFilters();
     loadBeneficiaries();
+    initializeTabs();
 });
 
 // تهيئة وظائف البحث
@@ -47,6 +48,33 @@ function initializeFilters() {
                 setTimeout(applyBeneficiarySearchAndFilter, 0);
             }
         });
+    }
+}
+
+// تهيئة التبويبات
+function initializeTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content > div');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-target');
+            
+            // إزالة الفئة النشطة من جميع الأزرار
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            // إضافة الفئة النشطة للزر المحدد
+            button.classList.add('active');
+            
+            // إخفاء جميع المحتويات
+            tabContents.forEach(content => content.style.display = 'none');
+            // إظهار المحتوى المحدد
+            document.getElementById(targetId).style.display = 'block';
+        });
+    });
+
+    // تفعيل التبويب الأول افتراضياً
+    if (tabButtons.length > 0) {
+        tabButtons[0].click();
     }
 }
 
