@@ -1,0 +1,17 @@
+# ملفات النظام
+.DS_Store
+Thumbs.db
+
+# ملفات IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# ملفات مؤقتة
+*.log
+*.tmp
+*.temp
+
+# ملفات التبعيات
+node_modules/
+vendor/ 
