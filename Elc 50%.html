@@ -1,0 +1,2955 @@
+
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</title>
+    <!-- Include SheetJS library for XLSX export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Optional: Include a Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- CSS Variables (Optional but Recommended for easier maintenance) --- */
+        :root {
+            /* Colors - Balanced Medium Theme */
+            --primary-color: #5b87b4;       /* Medium Blue */
+            --primary-dark-color: #3a6ea5;  /* Deeper Medium Blue */
+            --secondary-color: #8c97a0;     /* Medium Gray */
+            --success-color: #5caa7f;       /* Medium Sea Green */
+            --danger-color: #d95d49;        /* Medium Red */
+            --warning-color: #f7b854;       /* Medium Amber */
+            --info-color: #4caed9;         /* Medium Blue */
+            --light-color: #e7eff2;         /* Light Gray-Blue */
+            --dark-color: #3b4446;          /* Medium-Dark Gray */
+            --background-light: #a0c2d8;   /* Medium Blue-Gray */
+            --background-white: #e0e7eb;    /* Light Gray */
+            --background-section: #d0d9e1;  /* Light-Medium Gray */
+            --border-color: #9dacb3;       /* Medium Gray */
+            --border-light-color: #c1ccd1; /* Light-Medium Gray */
+            --text-color: #2b3942;         /* Dark Gray Text */
+            --text-secondary-color: #5a6d7b; /* Medium Gray Text */
+
+            /* Spacing */
+            --space-xs: 5px;
+            --space-sm: 10px;
+            --space-md: 20px;
+            --space-lg: 30px;
+            --space-xl: 40px;
+
+            /* Typography */
+            --font-family: 'Cairo', sans-serif;
+            --font-size-base: 1em;
+            --font-size-h1: 2.2em;
+            --font-size-h2: 1.8em;
+            --font-size-h3: 1.4em;
+            --font-size-h4: 1.1em;
+
+            /* Borders */
+            --border-radius-sm: 5px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 25px;
+            --border-radius-xl: 30px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.3);
+            --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        /* --- General Styles --- */
+        body {
+            font-family: var(--font-family); /* Use Cairo or another suitable Arabic font */
+            margin: 0;
+            padding: var(--space-md) var(--space-md) 60px var(--space-md); /* Add more padding at bottom for the ticker */
+            background-color: var(--background-light); /* A soft light blue/cyan */
+            direction: rtl; /* Right-to-left for Arabic */
+            text-align: right;
+            line-height: 1.6;
+            color: var(--text-color);
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-image: linear-gradient(to bottom right, #7fa7cc, #8fb8d8, #a0c2d8);
+            background-attachment: fixed;
+        }
+
+        header {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark-color));
+            color: white;
+            padding: var(--space-md) 0;
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: var(--font-size-h1);
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            margin-top: var(--space-md);
+        }
+
+        nav button {
+            margin: 0 8px;
+            padding: 12px 25px;
+            cursor: pointer;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: var(--border-radius-lg);
+            font-size: 1.05em;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(5px);
+            font-family: var(--font-family);
+            font-weight: 400;
+            display: inline-flex; /* Allow icon and text inline */
+            align-items: center; /* Vertically align icon and text */
+            gap: var(--space-xs); /* Space between icon and text */
+        }
+
+        nav button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        nav button:active {
+             transform: translateY(0);
+             box-shadow: var(--shadow-sm);
+        }
+
+        nav button i {
+             /* Optional: specific icon styling */
+             font-size: 1.2em; /* Make icon slightly larger */
+        }
+        .app-section {
+            background-color: var(--background-white); /* Keep section backgrounds white for clarity */
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .app-section h2, .app-section h3 {
+            color: var(--primary-dark-color);
+            border-bottom: 2px solid var(--border-light-color);
+            padding-bottom: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            font-weight: 700;
+        }
+        .app-section h2 { font-size: var(--font-size-h2); }
+        .app-section h3 { font-size: var(--font-size-h3); }
+
+
+        form div {
+            /* Default margin removed or adjusted - Adjusted for direct children or specific classes */
+             margin-bottom: 0; /* Remove default bottom margin for all form divs */
+        }
+
+        /* Add margin back specifically to direct children of the form */
+        form > div {
+            margin-bottom: var(--space-md);
+        }
+        /* Remove margin for divs inside a form-row */
+         .form-row > div {
+             margin-bottom: 0;
+         }
+
+
+         /* Style for grouped form rows */
+         .form-row {
+             display: flex;
+             gap: var(--space-lg); /* Space between items in the row */
+             margin-bottom: var(--space-md); /* Space between rows */
+             flex-wrap: wrap; /* Allow wrapping on smaller screens */
+         }
+         /* Ensure inner divs in form-row are flexible */
+         .form-row > div {
+             flex: 1 1 250px; /* Default flex for two items */
+         }
+         /* Specific flex for the three items in beneficiary add/edit forms */
+          #add-beneficiary-form .form-row > div,
+          #edit-beneficiary-form .form-row > div {
+              flex: 1 1 180px; /* Adjust basis for three items */
+          }
+
+
+         /* Add space before the button in a form */
+         form button[type="submit"]:not(.modal-buttons button) {
+            margin-top: var(--space-lg); /* Add space above the submit button */
+            /* Keep other button styles */
+         }
+
+
+        form label {
+            display: block;
+            margin-bottom: var(--space-sm); /* Keep space below label */
+            font-weight: 700;
+            color: var(--text-secondary-color);
+            font-size: 1.05em;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: calc(100% - 26px); /* Keep the calc width relative to the parent div */
+            padding: 13px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            box-sizing: border-box;
+            text-align: right;
+            font-size: var(--font-size-base);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: var(--background-white);
+        }
+         form input[type="text"]:focus,
+         form input[type="number"]:focus,
+         form select:focus {
+             border-color: var(--primary-color);
+             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+             outline: none;
+             background-color: var(--border-light-color);
+         }
+
+        /* Style for grouping quarters side-by-side */
+        .quarter-group {
+            display: flex;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .quarter-inputs {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid var(--border-color);
+            padding: var(--space-md);
+            border-radius: var(--border-radius-md);
+            background-color: var(--background-section);
+             box-shadow: var(--shadow-inset);
+             display: flex; /* Use flexbox for inner items */
+             flex-direction: column;
+             gap: var(--space-sm);
+             transition: box-shadow 0.3s ease; /* Add hover effect */
+        }
+         .quarter-inputs:hover {
+             box-shadow: var(--shadow-md); /* Lift slightly on hover */
+         }
+
+
+        .quarter-inputs div {
+             margin-bottom: 0; /* Remove default form div margin */
+             display: flex; /* Use flexbox for inner items */
+             align-items: center; /* Align label and input vertically */
+             gap: var(--space-sm); /* Gap between label and input */
+        }
+        .quarter-inputs div label {
+             margin-bottom: 0; /* Remove label margin */
+             width: 120px; /* Keep fixed width for labels */
+             text-align: right;
+             font-weight: normal;
+             color: var(--text-secondary-color);
+             font-size: var(--font-size-base);
+             flex-shrink: 0; /* Prevent label from shrinking */
+        }
+        .quarter-inputs div input {
+             width: auto; /* Let flexbox manage width */
+             flex-grow: 1; /* Allow input to grow */
+             padding: var(--space-sm);
+             font-size: 0.95em;
+             background-color: var(--background-white);
+             border: 1px solid var(--border-color); /* Ensure border is set */
+              border-radius: var(--border-radius-sm);
+         }
+         .quarter-inputs div input:focus {
+             background-color: var(--border-light-color);
+         }
+
+
+        .quarter-inputs h4 {
+            margin-top: 0;
+            margin-bottom: var(--space-md);
+            color: var(--primary-color);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: var(--space-sm);
+            font-weight: 700;
+             font-size: var(--font-size-h4);
+        }
+
+
+        /* Style for primary form submit buttons (like Save, Add, Calculate) */
+        form button[type="submit"]:not(.modal-buttons button) {
+            padding: 14px 30px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-xl);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+             box-shadow: var(--shadow-md);
+             font-weight: 700;
+             font-family: var(--font-family);
+              display: inline-flex; /* Allow icon and text inline */
+              align-items: center; /* Vertically align icon and text */
+              gap: var(--space-xs); /* Space between icon and text */
+        }
+
+        form button[type="submit"]:not(.modal-buttons button):hover {
+            background-color: #218838;
+             transform: translateY(-2px);
+             box-shadow: var(--shadow-lg);
+        }
+         form button[type="submit"]:not(.modal-buttons button):active {
+             transform: translateY(0);
+             box-shadow: var(--shadow-sm);
+         }
+
+          form button[type="submit"]:not(.modal-buttons button) i {
+              font-size: 1.2em;
+          }
+
+
+        /* Delete button specific style */
+        .delete-btn {
+            padding: 8px 15px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+             margin-left: var(--space-xs);
+             font-family: var(--font-family);
+              display: inline-flex; /* Allow icon and text inline */
+              align-items: center; /* Vertically align icon and text */
+              gap: var(--space-xs); /* Space between icon and text */
+        }
+        .delete-btn:hover {
+             background-color: #c82333;
+              transform: translateY(-1px);
+         }
+          .delete-btn:active {
+             transform: translateY(0);
+             box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);
+         }
+         .delete-btn i { font-size: 1em; /* Keep delete icon smaller */ }
+
+
+        /* Edit button specific style */
+        .edit-btn {
+            padding: 8px 15px;
+            background-color: var(--warning-color);
+            color: var(--dark-color);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            box-shadow: var(--shadow-sm);
+             margin-left: var(--space-xs);
+             font-family: var(--font-family);
+             display: inline-flex; /* Allow icon and text inline */
+             align-items: center; /* Vertically align icon and text */
+             gap: var(--space-xs); /* Space between icon and text */
+        }
+        .edit-btn:hover {
+             background-color: #e0a800;
+             color: white;
+              transform: translateY(-1px);
+         }
+          .edit-btn:active {
+             transform: translateY(0);
+             box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);
+         }
+          .edit-btn i { font-size: 1em; /* Keep edit icon smaller */ }
+
+
+        /* Backup/Restore section buttons */
+        #backup-restore-section button {
+             margin-left: var(--space-sm);
+             padding: 12px 25px;
+             background-color: var(--info-color);
+             color: white;
+             border: none;
+             border-radius: var(--border-radius-sm);
+             font-size: 1.1em;
+             cursor: pointer;
+             transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              font-family: var(--font-family);
+              display: inline-flex; /* Allow icon and text inline */
+              align-items: center; /* Vertically align icon and text */
+              gap: var(--space-xs); /* Space between icon and text */
+         }
+          #backup-restore-section button:hover {
+             background-color: #138496;
+              transform: translateY(-1px);
+         }
+          #backup-restore-section button:active {
+             transform: translateY(0);
+             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          }
+           #backup-restore-section button i { font-size: 1.2em; }
+
+        #backup-restore-section p {
+            font-size: 0.9em; /* Smaller text for the explanation */
+            color: #5a6268; /* Slightly darker text */
+            margin-bottom: var(--space-md);
+        }
+         #backup-restore-section .button-group {
+             display: flex; /* Use flex for button grouping */
+             align-items: center;
+             gap: var(--space-sm);
+         }
+         #backup-restore-section .button-group input[type="file"] {
+             /* The hidden file input doesn't need styling */
+         }
+         /* Add margin-top to the explanation text */
+         #backup-restore-section .explanation {
+             margin-top: var(--space-sm);
+             font-size: 0.85em;
+             color: #6c757d;
+         }
+
+
+         /* Report/Export buttons - Apply primary button style */
+         #reporting-section button {
+             padding: 14px 30px;
+             background-color: var(--success-color); /* Using success color as they are positive actions */
+             color: white;
+             border: none;
+             border-radius: var(--border-radius-xl);
+             cursor: pointer;
+             font-size: 1.1em;
+             transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+              box-shadow: var(--shadow-md);
+              font-weight: 700;
+              font-family: var(--font-family);
+              margin-left: var(--space-sm);
+               display: inline-flex; /* Allow icon and text inline */
+               align-items: center; /* Vertically align icon and text */
+               gap: var(--space-xs); /* Space between icon and text */
+         }
+          #reporting-section button:hover {
+             background-color: #218838; /* Darker green */
+             transform: translateY(-2px);
+             box-shadow: var(--shadow-lg);
+         }
+          #reporting-section button:active {
+             transform: translateY(0);
+             box-shadow: var(--shadow-sm);
+         }
+          /* Style for disabled button */
+          #reporting-section button:disabled {
+              background-color: #cccccc;
+              cursor: not-allowed;
+              transform: none;
+              box-shadow: none;
+              gap: var(--space-xs); /* Keep gap */
+          }
+           #reporting-section button i { font-size: 1.2em; }
+
+          /* Add margin-top to the explanation text */
+         #reporting-section .explanation {
+             margin-top: var(--space-sm);
+             font-size: 0.85em;
+             color: #6c757d;
+         }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-md);
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+            background-color: var(--background-white);
+        }
+
+        table th, table td {
+            border-bottom: 1px solid var(--border-light-color);
+            padding: var(--space-sm);
+            text-align: right;
+             font-size: 0.95em;
+        }
+        table thead tr {
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--border-light-color);
+            font-weight: bold;
+            color: var(--text-secondary-color);
+        }
+        /* Adjust border for new column */
+        th:first-child { border-right: 1px solid rgba(0,0,0,0.05); }
+        th:last-child { border-left: 1px solid rgba(0,0,0,0.05); }
+
+
+        tbody tr:nth-child(even) {
+            background-color: var(--light-color);
+        }
+         tbody tr:hover {
+             background-color: #e2e6ea;
+         }
+
+         /* Ensure action cell content is centered visually with buttons */
+         #beneficiaries-table td:last-child {
+             text-align: center;
+             vertical-align: middle;
+             border-left: 1px solid var(--border-light-color);
+         }
+          /* Action buttons container (optional, for alignment) */
+         #beneficiaries-table td:last-child div {
+             display: flex;
+             justify-content: center; /* Center buttons horizontally */
+             align-items: center;
+             gap: var(--space-xs); /* Space between buttons */
+         }
+         /* Adjust margin on buttons within the action cell if using gap on parent div */
+          #beneficiaries-table td:last-child button {
+              margin-left: 0; /* Remove individual button margin */
+          }
+
+
+        .report-output {
+            margin-top: var(--space-md);
+            padding: var(--space-md);
+            border: 1px dashed var(--border-color);
+            background-color: var(--background-white);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        .report-output table {
+            border: 2px solid var(--dark-color);
+            width: 100%;
+            min-width: 800px;
+        }
+        .report-output th, .report-output td {
+             border: 1px solid var(--text-color);
+             padding: var(--space-sm);
+             text-align: center;
+             font-size: 11px;
+        }
+        .report-output th {
+            background-color: #adb5bd;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+        .report-output .report-header,
+        .report-output .report-footer {
+            margin-bottom: var(--space-md);
+            text-align: center;
+        }
+        .report-output .report-header p,
+        .report-output .report-footer p {
+            margin: var(--space-xs) 0;
+        }
+        /* Make header text larger and bold in report preview */
+        .report-output .report-header p {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .report-output .total-row th,
+        .report-output .total-row td {
+            font-weight: bold;
+             background-color: var(--border-color);
+        }
+
+        /* Hide sections initially */
+        .app-section {
+            display: none;
+        }
+
+        /* --- Ticker Tape Styles --- */
+        #ticker-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45px;
+            background-color: rgba(52, 58, 64, 0.95);
+            color: var(--light-color);
+            overflow: hidden;
+            padding: 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+            line-height: 45px;
+            white-space: nowrap;
+            box-sizing: border-box;
+            direction: rtl; /* Right-to-left for Arabic */
+            z-index: 1000;
+             font-size: 1em;
+             font-weight: normal;
+             text-align: center;
+             font-family: var(--font-family);
+         }
+
+         #ticker-content {
+             display: inline-block;
+             position: absolute;
+              /* Start off-screen LEFT */
+              left: -100%;
+              right: auto; /* Ensure right is auto */
+              white-space: nowrap;
+              /* Use animation moving from left to right relative to the container */
+             animation: scrollTickerLeftToRight 25s linear infinite;
+         }
+
+         @keyframes scrollTickerLeftToRight {
+             0% { left: -100%; } /* Start off-screen left by its own width */
+             100% { left: 100vw; } /* Move off-screen right by 100% of viewport width */
+         }
+
+         /* Add space between repeating phrases in the ticker */
+         #ticker-content span {
+             margin-right: 50px; /* Add space on the RIGHT for LTR visual flow */
+             margin-left: 0; /* Remove left margin */
+         }
+
+
+        /* --- Edit Modal/Form Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+             display: none;
+              opacity: 0;
+              transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-overlay.visible {
+             display: flex;
+             opacity: 1;
+        }
+        .modal-overlay.visible .modal-content {
+             transform: translateY(0);
+             opacity: 1;
+        }
+
+
+        .modal-content {
+            background-color: var(--background-white);
+            padding: 35px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-xl);
+            max-width: 550px;
+            width: 90%;
+            text-align: right;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+             position: relative;
+        }
+
+
+         .modal-content h3 {
+            margin-top: 0;
+            margin-bottom: var(--space-md);
+             color: var(--primary-dark-color);
+             border-bottom: 2px solid var(--border-light-color);
+             padding-bottom: var(--space-sm);
+             font-weight: 700;
+         }
+
+         .modal-content form div {
+             margin-bottom: var(--space-md);
+         }
+
+         .modal-content form label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-weight: bold;
+            color: var(--text-secondary-color);
+         }
+          .modal-content form input[type="text"],
+          .modal-content form input[type="number"] {
+              width: calc(100% - 20px);
+              padding: 12px;
+              border: 1px solid var(--border-color);
+              border-radius: var(--border-radius-sm);
+              box-sizing: border-box;
+               font-size: var(--font-size-base);
+               transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          }
+            .modal-content form input[type="text"]:focus,
+            .modal-content form input[type="number"]:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                outline: none;
+            }
+
+
+         .modal-buttons {
+             text-align: left;
+             margin-top: var(--space-lg);
+         }
+          .modal-buttons button {
+             margin-left: var(--space-sm);
+             padding: 10px 20px;
+             border: none;
+             border-radius: var(--border-radius-sm);
+             cursor: pointer;
+             font-size: 1em;
+             transition: background-color 0.3s ease, transform 0.1s ease;
+             box-shadow: var(--shadow-sm);
+              font-family: var(--font-family);
+               display: inline-flex; /* Allow icon and text inline */
+               align-items: center; /* Vertically align icon and text */
+               gap: var(--space-xs); /* Space between icon and text */
+          }
+           .modal-buttons .save-button {
+               background-color: var(--success-color);
+               color: white;
+           }
+            .modal-buttons .save-button:hover {
+                background-color: #218838;
+                transform: translateY(-1px);
+            }
+             .modal-buttons .save-button:active {
+                 transform: translateY(0);
+                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+             }
+
+           .modal-buttons .cancel-button {
+               background-color: var(--secondary-color);
+               color: white;
+           }
+            .modal-buttons .cancel-button:hover {
+                 background-color: #5a6268;
+                 transform: translateY(-1px);
+            }
+             .modal-buttons .cancel-button:active {
+                 transform: translateY(0);
+                 box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            }
+             .modal-buttons button i { font-size: 1.1em; }
+
+
+        /* Improve focus indicator */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        /* Remove default outline for elements with custom focus styles */
+        input:focus, select:focus, button:focus {
+           outline: none;
+        }
+        /* --- Print Specific Styles --- */
+        @media print {
+            body {
+                padding: 0;
+                margin: 0;
+                background-color: white !important;
+                 -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-family: 'Arial', sans-serif !important;
+                color: #000 !important;
+            }
+
+            header, main, .app-section, #report-preview, #ticker-container, .modal-overlay {
+                display: none !important;
+            }
+
+            #print-report-content {
+                display: block !important;
+                margin: 0;
+                padding: 0;
+                border: none;
+                box-shadow: none;
+                width: 100%;
+                box-sizing: border-box;
+                background-color: #ffffff !important;
+            }
+
+            @page {
+              size: landscape;
+              margin: 1cm;
+            }
+
+            .report-output {
+                 padding: 0;
+                 border: none;
+                 box-shadow: none;
+                 overflow-x: visible;
+                 font-size: 10pt;
+                 color: #000 !important;
+                 background-color: #ffffff !important;
+                 font-family: 'Arial', sans-serif !important;
+            }
+
+            .report-output table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+                 border: 2px solid #000 !important;
+            }
+
+            .report-output th, .report-output td {
+                font-size: 9pt;
+                padding: 3px 5px;
+                word-wrap: break-word;
+                 white-space: normal;
+                 text-align: center;
+                 border: 1px solid #000 !important;
+                 color: #000 !important;
+            }
+             /* Specific text alignment adjustments for print */
+             .report-output td:first-child, /* الرقم */
+             .report-output th:first-child {
+                text-align: center;
+             }
+              .report-output td:nth-child(2), /* اسم المستفيد */
+              .report-output th:nth-child(2) {
+                text-align: right;
+              }
+               .report-output td:nth-child(3), /* رقم الحساب */
+               .report-output th:nth-child(3) {
+                text-align: center;
+               }
+               /* Shift indices due to new column */
+                .report-output td:nth-child(4), /* المفتاح - New column index */
+                .report-output th:nth-child(4) {
+                   text-align: center; /* Adjust alignment for the new key column */
+                }
+                .report-output td:nth-child(5), /* تعويض ث 1 - Shifted index */
+                .report-output th:nth-child(5) {
+                    text-align: center;
+                }
+                .report-output td:nth-child(6), /* تعويض ث 2 - Shifted index */
+                .report-output th:nth-child(6) {
+                    text-align: center;
+                }
+                .report-output td:nth-child(7), /* تعويض ث 3 - Shifted index */
+                .report-output th:nth-child(7) {
+                    text-align: center;
+                }
+                .report-output td:nth-child(8), /* تعويض ث 4 - Shifted index */
+                .report-output th:nth-child(8) {
+                    text-align: center;
+                }
+                 .report-output td:nth-child(9), /* الصافي للدفع - Shifted index */
+                .report-output th:nth-child(9) {
+                    text-align: center;
+                }
+
+
+            .report-output .report-header {
+                text-align: center;
+                margin-bottom: 15px;
+                 color: #000 !important;
+            }
+             .report-output .report-header p {
+                 font-size: 11pt;
+                 font-weight: bold;
+                 margin: 3px 0;
+                 color: #000 !important;
+             }
+
+            .report-output .report-footer {
+                 margin-top: 20px;
+                 text-align: center;
+                  color: #000 !important;
+            }
+            .report-output .report-footer p {
+                text-align: right;
+                margin: 3px 1cm;
+                font-size: 10pt;
+                 font-weight: normal;
+                 color: #000 !important;
+            }
+             .report-output .signatures {
+                margin-top: 30px;
+                display: flex;
+                justify-content: space-around;
+                width: 100%;
+                 color: #000 !important;
+             }
+             .report-output .signature {
+                text-align: center;
+                min-width: 150px;
+                 font-size: 10pt;
+                  color: #000 !important;
+             }
+              .report-output .page-number {
+                display: none !important;
+             }
+
+             /* Adjust specific column widths for print - Need to add width for the new Key column */
+             .report-output table th:nth-child(1), .report-output table td:nth-child(1) { width: 6%; } /* الرقم */
+             .report-output table th:nth-child(2), .report-output table td:nth-child(2) { width: 20%; text-align: right; } /* اسم المستفيد */
+             .report-output table th:nth-child(3), .report-output table td:nth-child(3) { width: 10%; } /* رقم الحساب (CCP) */
+             .report-output table th:nth-child(4), .report-output table td:nth-child(4) { width: 15%; } /* رقم RIP الكامل (Adjusted width for 20 digits) */
+             .report-output table th:nth-child(5), .report-output table td:nth-child(5) { width: 9%; } /* تعويض ث 1 */
+             .report-output table th:nth-child(6), .report-output table td:nth-child(6) { width: 9%; } /* تعويض ث 2 */
+             .report-output table th:nth-child(7), .report-output table td:nth-child(7) { width: 9%; } /* تعويض ث 3 */
+             .report-output table th:nth-child(8), .report-output table td:nth-child(8) { width: 9%; } /* تعويض ث 4 */
+             .report-output table th:nth-child(9), .report-output table td:nth-child(9) { width: 13%; } /* الصافي للدفع (Adjusted width) */
+
+              /* Ensure total row colspan is correct */
+              .report-output .total-row td:first-child {
+                  colspan: 4; /* Update colspan */
+                  text-align: center;
+              }
+               .report-output .total-row th, .report-output .total-row td { background-color: #ced4da !important; color: #000 !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
+        <nav>
+            <button onclick="showSection('institution-info-section')"><i class="fas fa-building"></i> معلومات المؤسسة</button>
+            <button onclick="showSection('beneficiary-management-section')"><i class="fas fa-users"></i> إدارة المستفيدين</button>
+            <button onclick="showSection('compensation-management-section')"><i class="fas fa-money-bill-wave"></i> إدارة التعويضات</button>
+            <button onclick="showSection('reporting-section')"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
+             <button onclick="showSection('backup-restore-section')"><i class="fas fa-database"></i> النسخ الاحتياطي والاستعادة</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- معلومات المؤسسة -->
+        <section id="institution-info-section" class="app-section">
+            <h2>معلومات المؤسسة</h2>
+            <form id="institution-info-form">
+                <!-- Grouping fields in rows -->
+                <div class="form-row">
+                    <div>
+                        <label for="republic">الجمهورية:</label>
+                        <input type="text" id="republic" value="الجمهورية الجزائرية الديمقراطية الشعبية">
+                    </div>
+                    <div>
+                        <label for="ministry">الوزارة:</label>
+                        <input type="text" id="ministry" value="وزارة التربية الوطنية">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="directorate">المديرية:</label>
+                        <input type="text" id="directorate" value="مديرية التربية لولاية أدرار">
+                    </div>
+                    <div>
+                        <label for="institution">المؤسسة:</label>
+                        <input type="text" id="institution" value="متوسطة حكومي قدور بن علال">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="fiscal-year">السنة المالية (YYYY):</label>
+                        <input type="text" id="fiscal-year" value="2025" placeholder="مثال: 2025" maxlength="4">
+                    </div>
+                    <div>
+                        <label for="financial-month">الشهر المالي (MM):</label>
+                        <input type="text" id="financial-month" value="" placeholder="مثال: 04" maxlength="2">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="treasury-account">رقم الحساب البريدي لدى الخزينة (CCP):</label>
+                        <input type="text" id="treasury-account" value="" placeholder="حساب الخزينة CCP">
+                    </div>
+                    <div>
+                        <label for="treasury-key">مفتاح الحساب البريدي لدى الخزينة (CLE):</label>
+                        <input type="text" id="treasury-key" value="" placeholder="مفتاح حساب الخزينة 02 رقم" maxlength="2">
+                    </div>
+                </div>
+                <!-- New row for Order and Transfer Numbers -->
+                <div class="form-row">
+                     <div>
+                         <label for="order-number">رقم الأمر بالصرف:</label>
+                         <input type="text" id="order-number" value="">
+                     </div>
+                     <div>
+                         <label for="transfer-number">رقم الحوالة:</label>
+                         <input type="text" id="transfer-number" value="">
+                     </div>
+                </div>
+                 <!-- Button remains in its own div for spacing -->
+                <div>
+                    <button type="submit"><i class="fas fa-save"></i> حفظ المعلومات</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- إدارة المستفيدين -->
+        <section id="beneficiary-management-section" class="app-section">
+            <h2>إدارة المستفيدين</h2>
+            <form id="add-beneficiary-form">
+                <h3><i class="fas fa-user-plus"></i> إضافة مستفيد جديد</h3>
+                <!-- Name field remains separate -->
+                <div>
+                    <label for="beneficiary-name">اللقب و الاسم:</label>
+                    <!-- Added pattern, placeholder, and inputmode -->
+                    <input type="text" id="beneficiary-name" required
+                           placeholder="الرجاء حجز الاسم و اللقب كاملا باللغة اللاتينية"
+                           pattern="^[a-zA-Z\s\-]+$"
+                           inputmode="latin">
+                </div>
+                <!-- Grouping Account, Meter, and Calculated RIP -->
+                <div class="form-row">
+                    <div>
+                        <label for="account-number">رقم الحساب (CCP):</label>
+                        <input type="text" id="account-number" required oninput="updateCalculatedRIP()">
+                    </div>
+                    <div>
+                        <label for="meter-number">رقم العداد:</label>
+                        <input type="text" id="meter-number">
+                    </div>
+                    <div>
+                        <label for="calculated-rip">رقم RIP الكامل (20 رقم):</label>
+                        <input type="text" id="calculated-rip" value="" readonly placeholder="يتم حسابه تلقائياً">
+                    </div>
+                </div>
+                 <!-- Button remains in its own div -->
+                <div>
+                    <button type="submit"><i class="fas fa-plus-circle"></i> إضافة مستفيد</button>
+                </div>
+            </form>
+
+            <h3>قائمة المستفيدين</h3>
+            <table id="beneficiaries-table">
+                <thead>
+                    <tr>
+                        <th>الرقم</th>
+                        <th>اللقب و الاسم</th>
+                        <th>رقم الحساب (CCP)</th> <!-- Updated Header -->
+                        <th>رقم RIP الكامل</th> <!-- New/Updated header -->
+                        <th>رقم العداد</th> <!-- Shifted -->
+                        <th>إجراءات</th> <!-- Shifted -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Beneficiary rows will be added here by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- إدارة التعويضات -->
+        <section id="compensation-management-section" class="app-section">
+             <h2>إدارة التعويضات</h2>
+            <form id="manage-compensation-form">
+                <h3><i class="fas fa-calculator"></i> إدخال / تحديث تعويض لمستفيد</h3>
+                 <!-- Search input added -->
+                 <div class="beneficiary-search-container">
+                      <label for="beneficiary-search-input"><i class="fas fa-search"></i> البحث عن مستفيد:</label>
+                      <input type="text" id="beneficiary-search-input" placeholder="ابحث بالاسم أو رقم الحساب">
+                 </div>
+                 <div>
+                    <label for="select-beneficiary"><i class="fas fa-user-check"></i> اختيار المستفيد:</label>
+                    <select id="select-beneficiary" required>
+                        <option value="">-- اختر مستفيداً --</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Quarterly Compensation Inputs - Grouped Side-by-Side -->
+                <div class="quarter-group">
+                    <div class="quarter-inputs">
+                        <h4>الثلاثي الأول</h4>
+                        <div><label for="q1-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q1-amount-nofees" value="0.00"></div>
+                        <div><label for="q1-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q1-added-value" value="0.00"></div>
+                        <div><label for="q1-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q1-state-contrib" value="0.00"></div>
+                    </div>
+                     <div class="quarter-inputs">
+                        <h4>الثلاثي الثاني</h4>
+                        <div><label for="q2-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q2-amount-nofees" value="0.00"></div>
+                        <div><label for="q2-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q2-added-value" value="0.00"></div>
+                        <div><label for="q2-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q2-state-contrib" value="0.00"></div>
+                    </div>
+                </div>
+
+                <div class="quarter-group">
+                    <div class="quarter-inputs">
+                        <h4>الثلاثي الثالث</h4>
+                        <div><label for="q3-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q3-amount-nofees" value="0.00"></div>
+                        <div><label for="q3-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q3-added-value" value="0.00"></div>
+                        <div><label for="q3-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q3-state-contrib" value="0.00"></div>
+                    </div>
+                     <div class="quarter-inputs">
+                        <h4>الثلاثي الرابع</h4>
+                        <div><label for="q4-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q4-amount-nofees" value="0.00"></div>
+                        <div><label for="q4-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q4-added-value" value="0.00"></div>
+                        <div><label for="q4-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q4-state-contrib" value="0.00"></div>
+                    </div>
+                </div>
+
+                <button type="submit"><i class="fas fa-file-invoice-dollar"></i> حساب وحفظ التعويض</button>
+            </form>
+
+            <h3>ملخص التعويضات المدخلة</h3>
+             <table id="compensation-summary-table">
+                <thead>
+                    <tr>
+                        <th>الرقم</th>
+                        <th>اللقب و الاسم</th>
+                        <th>رقم الحساب (CCP)</th> <!-- Clarified header -->
+                        <th>رقم RIP الكامل</th> <!-- New/Updated header -->
+                        <th>تعويض ث 1</th> <!-- Shifted -->
+                        <th>تعويض ث 2</th> <!-- Shifted -->
+                        <th>تعويض ث 3</th> <!-- Shifted -->
+                        <th>تعويض ث 4</th> <!-- Shifted -->
+                        <th>الصافي للدفع</th> <!-- Shifted -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Compensation summary rows will be added here by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- التقارير والتصدير -->
+        <section id="reporting-section" class="app-section">
+             <h2>التقارير والتصدير</h2>
+             <p>التقرير سيتم إنشاؤه بناءً على معلومات المؤسسة وقائمة المستفيدين وتعويضاتهم.</p>
+             <div>
+                 <button onclick="printReport()"><i class="fas fa-print"></i> طباعة التقرير</button>
+                 <button onclick="exportXLSX()"><i class="fas fa-file-excel"></i> تصدير إلى XLSX</button>
+                 <button onclick="exportTxt()"><i class="fas fa-file-code"></i> تصدير ملف TXT (نظام CCP)</button>
+             </div>
+              <p class="explanation">ملاحظة: يعرض المتصفح غالباً نافذة لاختيار مكان حفظ ملف التصدير، حسب إعدادات المتصفح لديك.</p>
+
+             <h3>معاينة التقرير (قد يختلف عن الطباعة النهائية)</h3>
+             <div id="report-preview" class="report-output">
+                 <!-- Report HTML will be generated here by JavaScript -->
+             </div>
+        </section>
+
+         <!-- New section for Backup/Restore -->
+         <section id="backup-restore-section" class="app-section">
+             <h2>النسخ الاحتياطي والاستعادة</h2>
+             <p>يمكنك إنشاء نسخة احتياطية لبياناتك الحالية أو استعادة بيانات من ملف نسخة احتياطية سابق.</p>
+             <div class="button-group">
+                 <button onclick="createBackup()"><i class="fas fa-download"></i> إنشاء نسخة احتياطية</button>
+                 <input type="file" id="restore-file-input" accept=".json" style="display: none;"> <!-- Hidden file input -->
+                 <button onclick="restoreBackup()"><i class="fas fa-upload"></i> استعادة من نسخة احتياطية</button>
+             </div>
+             <p class="explanation">ملاحظة: عند إنشاء نسخة احتياطية، يعرض المتصفح غالباً نافذة لاختيار مكان حفظ الملف، حسب إعدادات المتصفح لديك.</p>
+         </section>
+
+
+    </main>
+
+     <!-- Hidden section for print output -->
+    <div id="print-report-content" class="report-output">
+        <!-- This div will contain the exact HTML structure for printing -->
+    </div>
+
+    <!-- Edit Beneficiary Modal/Overlay -->
+    <div id="edit-beneficiary-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3><i class="fas fa-user-edit"></i> تعديل بيانات المستفيد</h3>
+            <form id="edit-beneficiary-form">
+                 <!-- Hidden input to store the ID of the beneficiary being edited -->
+                 <input type="hidden" id="edit-beneficiary-id">
+
+                 <div>
+                    <label for="edit-beneficiary-name">اللقب و الاسم:</label>
+                     <!-- Added pattern, placeholder, and inputmode -->
+                    <input type="text" id="edit-beneficiary-name" required
+                           placeholder="الرجاء حجز الاسم و اللقب كاملا باللغة اللاتينية"
+                           pattern="^[a-zA-Z\s\-]+$"
+                           inputmode="latin">
+                </div>
+                <!-- Grouping Account, Meter, and Calculated RIP in modal -->
+                <div class="form-row">
+                    <div>
+                        <label for="edit-account-number">رقم الحساب (CCP):</label>
+                        <input type="text" id="edit-account-number" required oninput="updateCalculatedRIPModal()">
+                    </div>
+                    <div>
+                        <label for="edit-meter-number">رقم العداد:</label>
+                        <input type="text" id="edit-meter-number">
+                    </div>
+                    <div>
+                        <label for="edit-calculated-rip">رقم RIP الكامل (20 رقم):</label>
+                        <input type="text" id="edit-calculated-rip" value="" readonly placeholder="يتم حسابه تلقائياً">
+                    </div>
+                </div>
+                 <div class="modal-buttons">
+                    <button type="submit" class="save-button"><i class="fas fa-save"></i> حفظ التعديلات</button>
+                    <button type="button" class="cancel-button" onclick="cancelEdit()"><i class="fas fa-times-circle"></i> إلغاء</button>
+                 </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Ticker Tape at the bottom -->
+    <div id="ticker-container">
+        <div id="ticker-content">
+            <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+             <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+             <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Storage (using localStorage for simple persistence) ---
+        let institutionInfo = {
+            republic: "الجمهورية الجزائرية الديمقراطية الشعبية",
+            ministry: "وزارة التربية الوطنية",
+            directorate: "مديرية التربية لولاية أدرار",
+            institution: "متوسطة حكومي قدور بن علال",
+            fiscalYear: "2025",
+            financialMonth: "",
+            treasuryAccount: "", // CCP of the treasury account
+            treasuryKey: "",     // Key of the treasury account (from Institution Info)
+            orderNumber: "",     // New field: Order Number
+            transferNumber: ""   // New field: Transfer Number
+        };
+
+        // Updated beneficiary structure: removed 'key', RIP is calculated
+        let beneficiaries = []; // Array of { id: 1, name: "...", account: "...", meter: "..." } (account is CCP)
+        // Compensation data structure: stores input components AND calculated quarterly amounts + net payable
+        let compensations = []; // Array of { beneficiaryId: 1, q1: { nofees: 0, value: 0, contrib: 0, calculated: 0 }, q2: { ... }, q3: { ... }, q4: { ... }, netPayable: 0 }
+
+
+        // --- Helper Functions ---
+        function loadData() {
+            try {
+                const savedInstitutionInfo = localStorage.getItem('institutionInfo');
+                const savedBeneficiaries = localStorage.getItem('beneficiaries');
+                const savedCompensations = localStorage.getItem('compensations');
+
+                // Load institution info
+                if (savedInstitutionInfo) {
+                    try {
+                        // Use a temporary object to merge and ensure all new fields exist after parse
+                        const tempInfo = JSON.parse(savedInstitutionInfo);
+                         institutionInfo = {
+                             ...institutionInfo, // Start with defaults
+                             ...tempInfo // Overlay saved values
+                         };
+                         // Explicitly ensure new fields have default empty strings if not in saved data (for older saves)
+                         if (institutionInfo.orderNumber === undefined) institutionInfo.orderNumber = "";
+                         if (institutionInfo.transferNumber === undefined) institutionInfo.transferNumber = "";
+
+                    } catch (e) {
+                        console.error("Failed to parse institutionInfo from localStorage:", e);
+                        // On parsing error, use the default institutionInfo defined at the start
+                    }
+                }
+
+                // Load beneficiaries
+                if (savedBeneficiaries) {
+                    try {
+                        beneficiaries = JSON.parse(savedBeneficiaries);
+                        beneficiaries.forEach(b => {
+                            b.id = parseInt(b.id) || 0;
+                             if (b.meter === undefined) b.meter = "";
+                             // Remove 'key' property if it exists from older saves
+                             if (b.key !== undefined) delete b.key;
+                        });
+                        beneficiaries = beneficiaries.filter(b => b.id > 0);
+                    } catch (e) {
+                        console.error("Failed to parse beneficiaries from localStorage:", e);
+                        beneficiaries = [];
+                    }
+                } else {
+                    // Add dummy data if no saved data
+                    beneficiaries.push({ id: 1, name: "OULFI ABDEL RAHMANE", account: "12345678", meter: "7890" });
+                }
+
+                // Load compensations
+                if (savedCompensations) {
+                    try {
+                        compensations = JSON.parse(savedCompensations);
+                        compensations.forEach(comp => {
+                            comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                             const defaultQuarter = { nofees: 0, value: 0, contrib: 0, calculated: 0 };
+                             comp.q1 = {...defaultQuarter, ...(comp.q1 || {})};
+                             comp.q2 = {...defaultQuarter, ...(comp.q2 || {})};
+                             comp.q3 = {...defaultQuarter, ...(comp.q3 || {})};
+                             comp.q4 = {...defaultQuarter, ...(comp.q4 || {})};
+
+                             comp.q1.nofees = parseFloat(comp.q1.nofees) || 0; comp.q1.value = parseFloat(comp.q1.value) || 0; comp.q1.contrib = parseFloat(comp.q1.contrib) || 0; comp.q1.calculated = parseFloat(comp.q1.calculated) || 0;
+                             comp.q2.nofees = parseFloat(comp.q2.nofees) || 0; comp.q2.value = parseFloat(comp.q2.value) || 0; comp.q2.contrib = parseFloat(comp.q2.contrib) || 0; comp.q2.calculated = parseFloat(comp.q2.calculated) || 0;
+                             comp.q3.nofees = parseFloat(comp.q3.nofees) || 0; comp.q3.value = parseFloat(comp.q3.value) || 0; comp.q3.contrib = parseFloat(comp.q3.contrib) || 0; comp.q3.calculated = parseFloat(comp.q3.calculated) || 0;
+                             comp.q4.nofees = parseFloat(comp.q4.nofees) || 0; comp.q4.value = parseFloat(comp.q4.value) || 0; comp.q4.contrib = parseFloat(comp.q4.contrib) || 0; comp.q4.calculated = parseFloat(comp.q4.calculated) || 0;
+
+                             comp.netPayable = parseFloat(comp.netPayable) || 0;
+                             // Re-calculate netPayable on load to be safe
+                             comp.netPayable = comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated;
+                        });
+                        compensations = compensations.filter(comp => comp.beneficiaryId > 0);
+                    } catch (e) {
+                        console.error("Failed to parse compensations from localStorage:", e);
+                        compensations = [];
+                    }
+                } else {
+                    // Add dummy compensation data
+                    compensations.push({
+                        beneficiaryId: 1,
+                         q1: { nofees: 3627.50, value: 0, contrib: 0, calculated: 1813.75 },
+                         q2: { nofees: 0, value: 0, contrib: 0, calculated: 0 },
+                         q3: { nofees: 0, value: 0, contrib: 0, calculated: 0 },
+                         q4: { nofees: 0, value: 0, contrib: 0, calculated: 0 },
+                        netPayable: 1813.75
+                    });
+                }
+                 // Filter out compensations for beneficiaries that no longer exist *after* loading both lists
+                 compensations = compensations.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+
+                  console.log("Loaded Institution Info:", institutionInfo);
+                  console.log("Loaded Beneficiaries:", beneficiaries);
+                  console.log("Loaded Compensations:", compensations);
+
+            } catch (e) {
+                console.error("An error occurred during data loading:", e);
+                // Optionally reset data if loading fails critically
+                institutionInfo = {
+                     republic: "الجمهورية الجزائرية الديمقراطية الشعبية",
+                     ministry: "وزارة التربية الوطنية",
+                     directorate: "مديرية التربية لولاية أدرار",
+                     institution: "متوسطة حكومي قدور بن علال",
+                     fiscalYear: "2025",
+                     financialMonth: "",
+                     treasuryAccount: "",
+                     treasuryKey: "",
+                     orderNumber: "",
+                     transferNumber: ""
+                 };
+                beneficiaries = [];
+                compensations = [];
+                alert("حدث خطأ أثناء تحميل البيانات المحفوظة. تم إعادة تعيين البيانات الافتراضية.");
+            }
+        }
+
+        function saveData() {
+            try {
+                 localStorage.setItem('institutionInfo', JSON.stringify(institutionInfo));
+                localStorage.setItem('beneficiaries', JSON.stringify(beneficiaries));
+                localStorage.setItem('compensations', JSON.stringify(compensations));
+                 console.log("Data saved to localStorage.");
+            } catch (e) {
+                console.error("An error occurred during data saving:", e);
+                alert("حدث خطأ أثناء حفظ البيانات.");
+            }
+        }
+
+        function getNextBeneficiaryId() {
+            if (beneficiaries.length === 0) {
+                return 1;
+            }
+            const maxId = Math.max(...beneficiaries.map(b => parseInt(b.id) || 0));
+            return maxId > 0 ? maxId + 1 : 1;
+        }        function formatCurrency(amount) {
+            const numAmount = parseFloat(amount) || 0;
+            return numAmount.toFixed(2).replace('.', '٫');
+        }
+        
+        // Function to convert numbers to Arabic text representation
+        function numberToArabicText(amount) {
+            // Round to 2 decimal places and separate integer and decimal parts
+            const roundedAmount = Math.round(amount * 100) / 100;
+            const [integerPart, decimalPart] = roundedAmount.toFixed(2).split('.');
+            
+            // Arrays for Arabic number naming
+            const onesArabic = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة', 'عشرة', 
+                              'أحد عشر', 'اثنا عشر', 'ثلاثة عشر', 'أربعة عشر', 'خمسة عشر', 'ستة عشر', 'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'];
+            const tensArabic = ['', '', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+            const hundreds = ['', 'مائة', 'مائتان', 'ثلاثمائة', 'أربعمائة', 'خمسمائة', 'ستمائة', 'سبعمائة', 'ثمانمائة', 'تسعمائة'];
+            const thousands = ['', 'ألف', 'ألفان', 'آلاف', 'آلاف', 'آلاف', 'آلاف', 'آلاف', 'آلاف', 'آلاف', 'آلاف'];
+            const millions = ['', 'مليون', 'مليونان', 'ملايين', 'ملايين', 'ملايين', 'ملايين', 'ملايين', 'ملايين', 'ملايين', 'ملايين'];
+            
+            function processThreeDigits(num) {
+                if (num === 0) return '';
+                
+                const hundred = Math.floor(num / 100);
+                const remainder = num % 100;
+                
+                let result = '';
+                if (hundred > 0) {
+                    result += hundreds[hundred];
+                    if (remainder > 0) result += ' و ';
+                }
+                
+                if (remainder > 0 && remainder < 20) {
+                    result += onesArabic[remainder];
+                } else if (remainder >= 20) {
+                    const tens = Math.floor(remainder / 10);
+                    const ones = remainder % 10;
+                    
+                    if (ones > 0) {
+                        result += onesArabic[ones] + ' و ' + tensArabic[tens];
+                    } else {
+                        result += tensArabic[tens];
+                    }
+                }
+                
+                return result;
+            }
+            
+            // Convert integer part
+            const intValue = parseInt(integerPart);
+            if (intValue === 0 && parseInt(decimalPart) === 0) return 'صفر دينار'; // Handle exact zero
+            
+            const million = Math.floor(intValue / 1000000);
+            const thousand = Math.floor((intValue % 1000000) / 1000);
+            const remain = intValue % 1000;
+            
+            let result = '';
+            
+            // Process millions
+            if (million > 0) {
+                if (million === 1) {
+                    result += millions[1];
+                } else if (million === 2) {
+                    result += millions[2];
+                } else if (million >= 3 && million <= 10) { // Simplified plural rule
+                     result += processThreeDigits(million) + ' ' + 'ملايين';
+                 } else {
+                    result += processThreeDigits(million) + ' ' + 'مليون'; // Default for > 10
+                 }
+                
+                if (thousand > 0 || remain > 0) result += ' و ';
+            }
+            
+            // Process thousands
+            if (thousand > 0) {
+                if (thousand === 1) {
+                    result += thousands[1];
+                } else if (thousand === 2) {
+                    result += thousands[2];
+                } else if (thousand >= 3 && thousand <= 10) { // Simplified plural rule
+                     result += processThreeDigits(thousand) + ' ' + 'آلاف';
+                 } else {
+                    result += processThreeDigits(thousand) + ' ' + 'ألف'; // Default for > 10
+                 }
+                
+                if (remain > 0) result += ' و ';
+            }
+            
+            // Process hundreds, tens, ones
+            if (remain > 0 || (intValue === 0 && (thousand > 0 || million > 0))) { // Include remain if not zero, or if intValue was zero but had thousands/millions
+                result += processThreeDigits(remain);
+            }
+            
+            // Add currency unit for integer part
+            if (intValue > 0) {
+                 if (intValue === 1) result += ' دينار';
+                 else if (intValue === 2) result += ' ديناران';
+                 else if (intValue >= 3 && intValue <= 10) result += ' دنانير'; // Simplified plural rule
+                 else result += ' دينار'; // Default for > 10
+             } else if (parseInt(decimalPart) === 0) {
+                  result += ' دينار'; // If integer part is 0 but decimal is 0, still say "صفر دينار" handled at start
+             }
+
+
+            // Add decimal part if not zero
+            if (parseInt(decimalPart) > 0) {
+                 const decimalValue = parseInt(decimalPart);
+                 let centsUnit = 'سنتيم';
+                 if (decimalValue === 1) centsUnit = 'سنتيم'; // Simplified singular
+                 else if (decimalValue === 2) centsUnit = 'سنتيمان'; // Simplified dual
+                 else if (decimalValue >= 3 && decimalValue <= 10) centsUnit = 'سنتيمات'; // Simplified plural
+                 else centsUnit = 'سنتيم'; // Default for > 10
+
+                result += ' و ' + processThreeDigits(decimalValue) + ' ' + centsUnit;
+            } else if (intValue > 0) { // If integer part exists but decimal is zero, still add currency unit if not already added
+                 // This case is mostly handled above within the intValue > 0 block
+            }
+            
+            // Clean up leading/trailing spaces and " و "
+            result = result.replace(/^ و /, '').replace(/ و $/, '');
+            
+            return result;
+        }
+
+         // Function to calculate the 20-digit RIP from a CCP number string (based on external page logic)
+         // Uses BigInt for accurate large number arithmetic. Returns 20-char RIP string or error string.
+         function calculateRIP(ccpNumberString) {
+             try {
+                 if (!ccpNumberString || typeof ccpNumberString !== 'string' || ccpNumberString.trim() === '') {
+                     return 'CCP فارغ'; // Indicate empty input
+                 }
+
+                 const ccpValue = ccpNumberString.trim();
+
+                 // Ensure CCP is numeric before attempting BigInt conversion and calculations
+                 if (!/^\d+$/.test(ccpValue)) {
+                      console.warn(`RIP Calc Warning: Non-numeric CCP input "${ccpValue}".`);
+                      return 'رقم CCP غير صالح'; // Return error indicator for non-numeric input
+                 }
+
+                 let ccpBigIntValue;
+                 try {
+                      ccpBigIntValue = BigInt(ccpValue);
+                 } catch (e) {
+                     console.error(`RIP Calc Error: Cannot convert CCP "${ccpValue}" to BigInt.`, e);
+                      return 'خطأ في التحويل'; // Return error indicator if conversion fails
+                 }
+
+
+                 // Calculate ripKey (0-96 range, based on the original code logic)
+                 // Using BigInt for intermediate steps for precision
+                 const ccpTimes100BigInt = ccpBigIntValue * BigInt(100);
+                 const remainder97BigInt = ccpTimes100BigInt % BigInt(97);
+                 let ripKeyCalcBigInt = BigInt(85) + remainder97BigInt;
+                 let finalRipKeyBigInt = ripKeyCalcBigInt;
+
+                 if (finalRipKeyBigInt > BigInt(97)) {
+                     finalRipKeyBigInt = BigInt(97) - (finalRipKeyBigInt - BigInt(97));
+                 } else {
+                     finalRipKeyBigInt = BigInt(97) - finalRipKeyBigInt;
+                 }
+
+                 // Calculate the 'r' part (13 digits) using BigInt
+                 const constantToAddBigInt = BigInt('9000000000000'); // The large constant from the external page
+                 const r_part_bigint = (ccpBigIntValue * BigInt(100)) + finalRipKeyBigInt + constantToAddBigInt;
+
+                 // Convert r_part_bigint to string and pad/truncate to exactly 13 digits
+                 const r_part_string = r_part_bigint.toString();
+                 // Pad with leading zeros to ensure a minimum length of 13 characters
+                 const padded_r_part_string = r_part_string.padStart(13, '0');
+                 // Take the rightmost 13 characters (handles cases where the number might become slightly longer than 13 after calculation)
+                 const final_r_part_string = padded_r_part_string.substring(padded_r_part_string.length - 13);
+
+
+                 // Concatenate fixed prefix and padded r_part_string
+                 const fixedPrefix = "0079999"; // Bank and Branch codes (7 chars)
+                 const fullRIP = fixedPrefix + final_r_part_string;
+
+                 // Final length check (should be 7 + 13 = 20)
+                 if (fullRIP.length !== 20) {
+                      console.error(`RIP Calc Error: Generated RIP "${fullRIP}" has incorrect length (${fullRIP.length}) for CCP: "${ccpValue}".`);
+                      return 'خطأ في الطول'; // Return specific error indicator for length mismatch
+                 }
+
+                 return fullRIP; // Return the calculated 20-character RIP
+
+             } catch (e) {
+                 console.error(`An unexpected error occurred during RIP calculation for CCP "${ccpNumberString}".`, e);
+                 return 'خطأ غير متوقع'; // Return generic error indicator for unexpected errors
+             }
+         }
+
+
+        // Helper function to update RIP display in Add form
+        function updateCalculatedRIP() {
+            const ccpInput = document.getElementById('account-number');
+            const ripDisplay = document.getElementById('calculated-rip');
+             if(!ccpInput || !ripDisplay) return; // Safety check
+            const ccpValue = ccpInput.value.trim();
+            if (ccpValue) {
+                 const rip = calculateRIP(ccpValue);
+                 ripDisplay.value = rip;
+            } else {
+                 ripDisplay.value = '';
+            }
+        }
+
+        // Helper function to update RIP display in Edit form
+        function updateCalculatedRIPModal() {
+            const ccpInput = document.getElementById('edit-account-number');
+            const ripDisplay = document.getElementById('edit-calculated-rip');
+             if(!ccpInput || !ripDisplay) return; // Safety check
+            const ccpValue = ccpInput.value.trim();
+            if (ccpValue) {
+                 const rip = calculateRIP(ccpValue);
+                 ripDisplay.value = rip;
+            } else {
+                 ripDisplay.value = '';
+            }
+        }
+
+
+        // --- Navigation ---
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.app-section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('visible');
+            });
+
+            // Show the requested section
+            const sectionToShow = document.getElementById(sectionId);
+            if (sectionToShow) {
+                 const displayType = sectionId.includes('-modal') ? 'flex' : 'block';
+                 sectionToShow.style.display = displayType;
+                 if (sectionId.includes('-modal')) {
+                     setTimeout(() => {
+                         sectionToShow.classList.add('visible');
+                     }, 10);
+                 }
+            } else {
+                console.error("Section not found:", sectionId);
+                return;
+            }
+
+            // Optional: Perform section-specific actions when showing
+            if (sectionId === 'institution-info-section') {
+                document.getElementById('republic').value = institutionInfo.republic;
+                document.getElementById('ministry').value = institutionInfo.ministry;
+                document.getElementById('directorate').value = institutionInfo.directorate;
+                document.getElementById('institution').value = institutionInfo.institution;
+                document.getElementById('fiscal-year').value = institutionInfo.fiscalYear;
+                document.getElementById('financial-month').value = institutionInfo.financialMonth;
+                document.getElementById('treasury-account').value = institutionInfo.treasuryAccount;
+                document.getElementById('treasury-key').value = institutionInfo.treasuryKey;
+                 // Populate new fields
+                 document.getElementById('order-number').value = institutionInfo.orderNumber;
+                 document.getElementById('transfer-number').value = institutionInfo.transferNumber;
+
+            } else if (sectionId === 'beneficiary-management-section') {
+                renderBeneficiariesTable();
+                // Clear beneficiary add form inputs and calculated RIP display
+                 const nameInput = document.getElementById('beneficiary-name');
+                 const accountInput = document.getElementById('account-number');
+                 const meterInput = document.getElementById('meter-number');
+                 const ripDisplay = document.getElementById('calculated-rip');
+                 if(nameInput) nameInput.value = '';
+                 if(accountInput) accountInput.value = '';
+                 if(meterInput) meterInput.value = '';
+                 if(ripDisplay) ripDisplay.value = '';
+
+                // When showing beneficiary management, ensure compensation section search/dropdown are clean
+                document.getElementById('beneficiary-search-input').value = '';
+                populateBeneficiaryDropdown('');
+                 document.getElementById('select-beneficiary').value = '';
+                 resetCompensationFormInputs();
+
+            } else if (sectionId === 'compensation-management-section') {
+                 // Clear search input, dropdown, and comp inputs when showing
+                 document.getElementById('beneficiary-search-input').value = '';
+                populateBeneficiaryDropdown();
+                 document.getElementById('select-beneficiary').value = '';
+                resetCompensationFormInputs();
+                renderCompensationTable();
+            } else if (sectionId === 'reporting-section') {
+                generateReportPreview();
+            } else if (sectionId === 'backup-restore-section') {
+                 // Nothing specific to do on showing backup/restore section yet
+            }
+        }
+
+
+        // --- Institution Info Management ---
+        function saveInstitutionInfo(event) {
+            event.preventDefault();
+            try {
+                institutionInfo.republic = document.getElementById('republic').value.trim();
+                institutionInfo.ministry = document.getElementById('ministry').value.trim();
+                institutionInfo.directorate = document.getElementById('directorate').value.trim();
+                institutionInfo.institution = document.getElementById('institution').value.trim();
+                institutionInfo.fiscalYear = document.getElementById('fiscal-year').value.trim();
+                institutionInfo.financialMonth = document.getElementById('financial-month').value.trim();
+                institutionInfo.treasuryAccount = document.getElementById('treasury-account').value.trim();
+                institutionInfo.treasuryKey = document.getElementById('treasury-key').value.trim();
+                 // Get values from new fields
+                 institutionInfo.orderNumber = document.getElementById('order-number').value.trim();
+                 institutionInfo.transferNumber = document.getElementById('transfer-number').value.trim();
+
+
+                saveData();
+                alert('تم حفظ معلومات المؤسسة.');
+                if (document.getElementById('reporting-section').style.display === 'block') {
+                     generateReportPreview();
+                }
+            } catch (e) {
+                console.error("Error saving institution info:", e);
+                alert("حدث خطأ أثناء حفظ معلومات المؤسسة.");
+            }
+        }
+
+
+        // --- Beneficiary Management ---
+        function addBeneficiary(event) {
+            event.preventDefault();
+            try {
+                const nameInput = document.getElementById('beneficiary-name');
+                const accountInput = document.getElementById('account-number');
+                const meterInput = document.getElementById('meter-number');
+                 const ripDisplay = document.getElementById('calculated-rip');
+
+
+                const name = nameInput.value.trim();
+                const account = accountInput.value.trim(); // CCP
+                const meter = meterInput.value.trim();
+
+                // --- Validation ---
+                const latinPattern = /^[a-zA-Z\s\-]+$/;
+
+                if (!name || !account) {
+                    alert('الرجاء إدخال اسم المستفيد ورقم الحساب (CCP).');
+                    return;
+                }
+
+                 if (!latinPattern.test(name)) {
+                     alert('الرجاء إدخال اللقب والاسم باستخدام الأحرف اللاتينية فقط، والمسافات، وعلامة الطرح (-).');
+                     nameInput.focus();
+                     return;
+                 }
+
+                if (beneficiaries.some(b => b.account === account)) {
+                 alert(`رقم الحساب "${account}" مسجل بالفعل.`);
+                 accountInput.focus();
+                 return;
+                }
+
+                const calculatedRIP = calculateRIP(account);
+                if (!calculatedRIP || calculatedRIP.includes('خطأ')) {
+                    alert('رقم الحساب (CCP) المدخل غير صالح لحساب رقم RIP. الرجاء التحقق من الرقم المدخل.');
+                    accountInput.focus();
+                    return;
+                }
+
+
+                const newBeneficiary = {
+                    id: getNextBeneficiaryId(),
+                    name: name,
+                    account: account, // Store only CCP
+                    meter: meter
+                };
+
+                beneficiaries.push(newBeneficiary);
+                saveData(); // Save updated beneficiaries list
+
+                renderBeneficiariesTable(); // Re-render table with new beneficiary
+
+                // REFRESH COMPENSATION DROPDOWN and clear its search/selection
+                document.getElementById('beneficiary-search-input').value = '';
+                populateBeneficiaryDropdown(''); // Explicitly refresh with empty search term
+                document.getElementById('select-beneficiary').value = ''; // Clear dropdown selection
+                resetCompensationFormInputs(); // Clear compensation inputs
+
+                // Clear form and calculated RIP display
+                nameInput.value = '';
+                accountInput.value = '';
+                meterInput.value = '';
+                 if(ripDisplay) ripDisplay.value = ''; // Clear calculated RIP display
+                nameInput.focus();
+                 alert('تم إضافة المستفيد بنجاح.');
+             } catch (e) {
+                 console.error("Error adding beneficiary:", e);
+                 alert("حدث خطأ أثناء إضافة المستفيد.");
+             }
+        }
+
+    function deleteBeneficiary(beneficiaryIdToDelete) {
+        const beneficiaryToDelete = beneficiaries.find(b => b.id === beneficiaryIdToDelete);
+        const beneficiaryName = beneficiaryToDelete ? beneficiaryToDelete.name : 'المستفيد';
+
+        if (confirm(`هل أنت متأكد من حذف المستفيد "${beneficiaryName}" (رقم ${beneficiaryIdToDelete}) وجميع تعويضاته المرتبطة به؟\n\nسيتم تحديث أرقام المستفيدين تلقائياً بعد الحذف.`)) {
+            try {
+                beneficiaries = beneficiaries.filter(b => b.id !== beneficiaryIdToDelete);
+                compensations = compensations.filter(comp => comp.beneficiaryId !== beneficiaryIdToDelete);
+
+                beneficiaries.sort((a, b) => a.id - b.id);
+
+                const oldIdToNewIdMap = {};
+                beneficiaries.forEach((beneficiary, index) => {
+                    const oldId = beneficiary.id;
+                    const newId = index + 1;
+                    beneficiary.id = newId;
+                    oldIdToNewIdMap[oldId] = newId;
+                });
+
+                compensations.forEach(comp => {
+                     if (oldIdToNewIdMap.hasOwnProperty(comp.beneficiaryId)) {
+                          comp.beneficiaryId = oldIdToNewIdMap[comp.beneficiaryId];
+                     } else {
+                         console.warn(`Compensation record found for unknown or deleted beneficiary ID: ${comp.beneficiaryId}`);
+                     }
+                });
+
+                saveData();
+                renderBeneficiariesTable(); // Re-render beneficiary table
+                renderCompensationTable(); // Re-render compensation summary table
+
+                 document.getElementById('beneficiary-search-input').value = '';
+                 populateBeneficiaryDropdown('');
+                 document.getElementById('select-beneficiary').value = '';
+                 resetCompensationFormInputs();
+
+
+                  alert(`تم حذف المستفيد "${beneficiaryName}". تم تحديث الترقيم.`);
+            } catch (e) {
+                console.error("Error during beneficiary deletion:", e);
+                alert("حدث خطأ أثناء حذف المستفيد.");
+            }
+        }
+    }
+
+    function editBeneficiary(beneficiaryIdToEdit) {
+         try {
+             const beneficiary = beneficiaries.find(b => b.id === beneficiaryIdToEdit);
+
+             if (!beneficiary) {
+                 alert('خطأ: لم يتم العثور على بيانات المستفيد.');
+                 return;
+             }
+
+             document.getElementById('edit-beneficiary-id').value = beneficiary.id;
+             document.getElementById('edit-beneficiary-name').value = beneficiary.name;
+             document.getElementById('edit-account-number').value = beneficiary.account; // Populate CCP
+             document.getElementById('edit-meter-number').value = beneficiary.meter;
+
+             const calculatedRIP = calculateRIP(beneficiary.account);
+             document.getElementById('edit-calculated-rip').value = calculatedRIP;
+
+             const editAccountInput = document.getElementById('edit-account-number');
+             if(editAccountInput) { // Safety check
+                 editAccountInput.removeEventListener('input', updateCalculatedRIPModal);
+                 editAccountInput.addEventListener('input', updateCalculatedRIPModal); // Add listener
+             }
+
+
+             showSection('edit-beneficiary-modal');
+             document.getElementById('edit-beneficiary-name').focus();
+         } catch (e) {
+             console.error("Error opening edit modal:", e);
+             alert("حدث خطأ أثناء فتح نافذة تعديل المستفيد.");
+         }
+    }
+
+    function cancelEdit() {
+        try {
+             const editAccountInput = document.getElementById('edit-account-number');
+             if(editAccountInput) {
+                 editAccountInput.removeEventListener('input', updateCalculatedRIPModal); // Remove listener
+             }
+
+             document.getElementById('edit-beneficiary-modal').classList.remove('visible');
+             setTimeout(() => {
+                 document.getElementById('edit-beneficiary-modal').style.display = 'none';
+             }, 300);
+
+             document.getElementById('edit-beneficiary-id').value = '';
+             document.getElementById('edit-beneficiary-name').value = '';
+             document.getElementById('edit-account-number').value = '';
+             document.getElementById('edit-meter-number').value = '';
+             document.getElementById('edit-calculated-rip').value = '';
+        } catch (e) {
+            console.error("Error cancelling edit:", e);
+        }
+    }
+
+    function saveEditedBeneficiary(event) {
+         event.preventDefault();
+         try {
+             const beneficiaryId = parseInt(document.getElementById('edit-beneficiary-id').value);
+             const editedName = document.getElementById('edit-beneficiary-name').value.trim();
+             const editedAccount = document.getElementById('edit-account-number').value.trim(); // Edited CCP
+             const editedMeter = document.getElementById('edit-meter-number').value.trim();
+
+             // --- Validation ---
+            const latinPattern = /^[a-zA-Z\s\-]+$/;
+
+             if (!editedName || !editedAccount) {
+                 alert('الرجاء إدخال اللقب والاسم، ورقم الحساب.');
+                 return;
+             }
+
+              if (!latinPattern.test(editedName)) {
+                 alert('الرجاء إدخال اللقب والاسم باستخدام الأحرف اللاتينية فقط، والمسافات، وعلامة الطرح (-).');
+                 document.getElementById('edit-beneficiary-name').focus();
+                 return;
+             }
+
+             const beneficiary = beneficiaries.find(b => b.id === beneficiaryId);
+
+             if (!beneficiary) {
+                 alert('خطأ: لم يتم العثور على المستفيد المراد تعديله.');
+                 cancelEdit();
+                 renderBeneficiariesTable();
+                 populateBeneficiaryDropdown();
+                 return;
+             }
+
+             const isDuplicateAccount = beneficiaries.some(
+                 b => b.account === editedAccount && b.id !== beneficiaryId
+             );
+
+             if (isDuplicateAccount) {
+                 alert(`رقم الحساب (CCP) "${editedAccount}" مسجل بالفعل لمستفيد آخر.`);
+                 document.getElementById('edit-account-number').focus();
+                 return;
+             }
+
+             const calculatedRIP = calculateRIP(editedAccount);
+              if (!calculatedRIP || calculatedRIP.includes('خطأ')) {
+                  alert('رقم الحساب (CCP) المعدل غير صالح لحساب رقم RIP. الرجاء التحقق من الرقم المدخل.');
+                  document.getElementById('edit-account-number').focus();
+                  return;
+              }
+
+
+             beneficiary.name = editedName;
+             beneficiary.account = editedAccount;
+             beneficiary.meter = editedMeter;
+
+             saveData(); // Save updated beneficiary
+
+             renderBeneficiariesTable(); // Re-render beneficiary table
+             renderCompensationTable(); // Re-render compensation summary table
+
+             document.getElementById('beneficiary-search-input').value = '';
+             populateBeneficiaryDropdown(''); // Refresh dropdown
+             document.getElementById('select-beneficiary').value = ''; // Clear selection
+             resetCompensationFormInputs(); // Clear inputs
+
+
+             alert('تم حفظ تعديلات المستفيد بنجاح.');
+             cancelEdit();
+         } catch (e) {
+             console.error("Error saving edited beneficiary:", e);
+             alert("حدث خطأ أثناء حفظ تعديلات المستفيد.");
+         }
+    }
+
+
+    function renderBeneficiariesTable() {
+        try {
+            const tableBody = document.getElementById('beneficiaries-table').querySelector('tbody');
+             if (!tableBody) {
+                  console.error("Beneficiaries table body not found.");
+                  throw new Error("Beneficiaries table body not found.");
+             }
+            tableBody.innerHTML = '';
+
+            beneficiaries.forEach(beneficiary => {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = beneficiary.id;
+                row.insertCell().textContent = beneficiary.name;
+                row.insertCell().textContent = beneficiary.account; // Display CCP
+                const rip = calculateRIP(beneficiary.account);
+                row.insertCell().textContent = rip; // Display calculated RIP (will show error string if calc failed)
+                row.insertCell().textContent = beneficiary.meter;
+
+                const actionCell = row.insertCell();
+                 const actionsContainer = document.createElement('div');
+                 actionCell.appendChild(actionsContainer);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = ' تعديل';
+                 editButton.innerHTML = '<i class="fas fa-edit"></i>' + editButton.innerHTML;
+                editButton.classList.add('edit-btn');
+                editButton.onclick = () => editBeneficiary(beneficiary.id);
+                actionsContainer.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = ' حذف';
+                 deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>' + deleteButton.innerHTML;
+                deleteButton.classList.add('delete-btn');
+                deleteButton.onclick = () => deleteBeneficiary(beneficiary.id);
+                actionsContainer.appendChild(deleteButton);
+            });
+
+             // Update table headers - moved to Initialization or first render logic if dynamic headers are complex
+             // For simplicity and stability, headers should ideally be static HTML.
+             // Let's ensure the static headers in the HTML match the column structure.
+             // Updated static HTML table headers to match 6 columns (الرقم, الاسم, CCP, RIP, العداد, إجراءات)
+
+
+        } catch (e) {
+            console.error("Error rendering beneficiaries table:", e);
+             const tableBody = document.getElementById('beneficiaries-table').querySelector('tbody');
+             if (tableBody) {
+                 tableBody.innerHTML = `<tr><td colspan="6" style="color: var(--danger-color); text-align: center;">حدث خطأ أثناء عرض قائمة المستفيدين: ${e.message || e}. الرجاء التحقق من بيانات المستفيدين أو محاولة الاستعادة من نسخة احتياطية.</td></tr>`;
+             } else {
+                 alert("حدث خطأ فادح أثناء عرض قائمة المستفيدين.");
+             }
+        }
+    }
+
+    // --- Compensation Management ---
+    function populateBeneficiaryDropdown(searchTerm = '') {
+        try {
+            const selectElement = document.getElementById('select-beneficiary');
+             if (!selectElement) {
+                 console.error("Compensation dropdown select element not found.");
+                 return; // Cannot proceed if dropdown element is missing
+             }
+
+            const currentlySelectedId = selectElement.value ? parseInt(selectElement.value) : null;
+
+            selectElement.innerHTML = '<option value="">-- اختر مستفيداً --</option>';
+             selectElement.disabled = false;
+
+            const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
+
+            const filteredBeneficiaries = beneficiaries.filter(beneficiary => {
+                if (lowerCaseSearchTerm === '') {
+                    return true;
+                }
+                 // Search by name or CCP
+                return beneficiary.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                       beneficiary.account.toLowerCase().includes(lowerCaseSearchTerm);
+            });
+
+            const sortedBeneficiaries = [...filteredBeneficiaries].sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+
+            if (sortedBeneficiaries.length === 0 && lowerCaseSearchTerm !== '') {
+                 const noResultOption = document.createElement('option');
+                 noResultOption.value = "";
+                 noResultOption.textContent = "-- لا توجد نتائج مطابقة --";
+                 selectElement.appendChild(noResultOption);
+            } else {
+                sortedBeneficiaries.forEach(beneficiary => {
+                    // Only calculate RIP for display, don't filter beneficiaries based on RIP validity here
+                    const rip = calculateRIP(beneficiary.account);
+                    const option = document.createElement('option');
+                    option.value = beneficiary.id;
+                     // Display CCP and Calculated RIP in dropdown
+                     option.textContent = `${beneficiary.name} (حساب: ${beneficiary.account}${rip && !rip.includes('خطأ') ? ', RIP: ' + rip : ''})`; // Only show RIP if valid and not error string
+                    selectElement.appendChild(option);
+                });
+            }
+
+
+            if (currentlySelectedId !== null) {
+                const optionToReSelect = selectElement.querySelector(`option[value="${currentlySelectedId}"]`);
+                if (optionToReSelect) {
+                    selectElement.value = currentlySelectedId;
+                    loadCompensationDataForSelectedBeneficiary();
+                } else {
+                    resetCompensationFormInputs();
+                }
+            } else {
+                 resetCompensationFormInputs();
+            }
+        } catch (e) {
+            console.error("Error populating beneficiary dropdown:", e);
+             const selectElement = document.getElementById('select-beneficiary');
+             if (selectElement) {
+                selectElement.innerHTML = '<option value="">-- خطأ في تحميل المستفيدين --</option>';
+                selectElement.disabled = true;
+             }
+            alert("حدث خطأ أثناء تحميل قائمة المستفيدين.");
+        }
+    }
+
+    function loadCompensationDataForSelectedBeneficiary() {
+        try {
+             const beneficiaryId = parseInt(document.getElementById('select-beneficiary').value);
+             resetCompensationFormInputs();
+
+             if (!beneficiaryId) {
+                 resetCompensationFormInputs();
+                 return;
+             }
+
+             const compData = compensations.find(comp => comp.beneficiaryId === beneficiaryId);
+
+             if (compData) {
+                  document.getElementById('q1-amount-nofees').value = compData.q1.nofees;
+                  document.getElementById('q1-added-value').value = compData.q1.value;
+                  document.getElementById('q1-state-contrib').value = compData.q1.contrib;
+
+                  document.getElementById('q2-amount-nofees').value = compData.q2.nofees;
+                  document.getElementById('q2-added-value').value = compData.q2.value;
+                  document.getElementById('q2-state-contrib').value = compData.q2.contrib;
+
+                  document.getElementById('q3-amount-nofees').value = compData.q3.nofees;
+                  document.getElementById('q3-added-value').value = compData.q3.value;
+                  document.getElementById('q3-state-contrib').value = compData.q3.contrib;
+
+                  document.getElementById('q4-amount-nofees').value = compData.q4.nofees;
+                  document.getElementById('q4-added-value').value = compData.q4.value;
+                  document.getElementById('q4-state-contrib').value = compData.q4.contrib;
+
+                  console.log(`Loaded compensation input data for beneficiary ${beneficiaryId}.`);
+             } else {
+                 console.log(`No stored compensation data for beneficiary ${beneficiaryId}. Inputs remain 0.`);
+             }
+        } catch (e) {
+            console.error("Error loading compensation data:", e);
+            alert("حدث خطأ أثناء تحميل بيانات التعويض للمستفيد المختار.");
+        }
+    }
+
+    function resetCompensationFormInputs() {
+         const inputs = ['q1-amount-nofees', 'q1-added-value', 'q1-state-contrib', 'q2-amount-nofees', 'q2-added-value', 'q2-state-contrib', 'q3-amount-nofees', 'q3-added-value', 'q3-state-contrib', 'q4-amount-nofees', 'q4-added-value', 'q4-state-contrib'];
+         inputs.forEach(id => {
+             const input = document.getElementById(id);
+             if(input) input.value = '0.00';
+         });
+    }
+
+    // Function to calculate the quarterly compensation (50% of the total amount)
+    // NOTE: The provided code snippet for RIP calculation does NOT use addedValue or stateContrib.
+    // It only uses "المبلغ دون رسوم" (nofees) divided by 2.
+    // I will update this function to match that 50% logic, ignoring value and contrib.
+    // If the calculation should use those fields, please provide the correct formula.
+    function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
+        // Calculate 50% of the amount without fees (المبلغ دون رسوم)
+        const totalAmount = parseFloat(amountNoFees || 0);
+        // Check for non-finite numbers after parsing
+         if (!isFinite(totalAmount)) {
+             console.warn(`calculateQuarterlyComp: Invalid input amountNoFees "${amountNoFees}".`);
+             return 0; // Return 0 or NaN for invalid input
+         }
+        return totalAmount * 0.5; // 50% of the amount
+    }
+
+    function saveCompensation(event) {
+        event.preventDefault();
+        try {
+            const selectElement = document.getElementById('select-beneficiary');
+             if (!selectElement) {
+                 console.error("Compensation dropdown select element not found.");
+                 alert("حدث خطأ داخلي: عنصر اختيار المستفيد غير موجود.");
+                 return;
+             }
+            const beneficiaryId = parseInt(selectElement.value);
+
+            if (!beneficiaryId) {
+                alert('الرجاء اختيار مستفيد لحفظ التعويضات.');
+                return;
+            }
+             const beneficiaryExists = beneficiaries.find(b => b.id === beneficiaryId);
+             if (!beneficiaryExists) {
+                  alert('المستفيد المختار غير موجود. الرجاء تحديث القائمة واختيار مستفيد آخر.');
+                  selectElement.value = '';
+                  resetCompensationFormInputs();
+                  populateBeneficiaryDropdown();
+                  return;
+             }
+
+            // Get input values for each quarter (use optional chaining for safety)
+            const q1_nofees = parseFloat(document.getElementById('q1-amount-nofees')?.value) || 0;
+            const q1_value = parseFloat(document.getElementById('q1-added-value')?.value) || 0;
+            const q1_contrib = parseFloat(document.getElementById('q1-state-contrib')?.value) || 0;
+
+            const q2_nofees = parseFloat(document.getElementById('q2-amount-nofees')?.value) || 0;
+            const q2_value = parseFloat(document.getElementById('q2-added-value')?.value) || 0;
+            const q2_contrib = parseFloat(document.getElementById('q2-state-contrib')?.value) || 0;
+
+            const q3_nofees = parseFloat(document.getElementById('q3-amount-nofees')?.value) || 0;
+            const q3_value = parseFloat(document.getElementById('q3-added-value')?.value) || 0;
+            const q3_contrib = parseFloat(document.getElementById('q3-state-contrib')?.value) || 0;
+
+            const q4_nofees = parseFloat(document.getElementById('q4-amount-nofees')?.value) || 0;
+            const q4_value = parseFloat(document.getElementById('q4-added-value')?.value) || 0;
+            const q4_contrib = parseFloat(document.getElementById('q4-state-contrib')?.value) || 0;
+
+            // Calculate compensation for each quarter using the updated function
+            const q1_calculated = calculateQuarterlyComp(q1_nofees, q1_value, q1_contrib);
+            const q2_calculated = calculateQuarterlyComp(q2_nofees, q2_value, q2_contrib);
+            const q3_calculated = calculateQuarterlyComp(q3_nofees, q3_value, q3_contrib);
+            const q4_calculated = calculateQuarterlyComp(q4_nofees, q4_value, q4_contrib);
+
+            const netPayable = q1_calculated + q2_calculated + q3_calculated + q4_calculated;
+
+            const newCompensationData = {
+                beneficiaryId: beneficiaryId,
+                q1: { nofees: q1_nofees, value: q1_value, contrib: q1_contrib, calculated: q1_calculated },
+                q2: { nofees: q2_nofees, value: q2_value, contrib: q2_contrib, calculated: q2_calculated },
+                q3: { nofees: q3_nofees, value: q3_value, contrib: q3_contrib, calculated: q3_calculated },
+                q4: { nofees: q4_nofees, value: q4_value, contrib: q4_contrib, calculated: q4_calculated },
+                netPayable: netPayable
+            };
+
+
+            const existingCompensationIndex = compensations.findIndex(comp => comp.beneficiaryId === beneficiaryId);
+
+            if (existingCompensationIndex > -1) {
+                compensations[existingCompensationIndex] = newCompensationData;
+            } else {
+                compensations.push(newCompensationData);
+            }
+
+            saveData(); // Save updated compensations list
+
+            renderCompensationTable(); // Re-render summary table
+
+            resetCompensationFormInputs();
+            selectElement.value = '';
+            alert('تم حساب وحفظ التعويض بنجاح.');
+        } catch (e) {
+            console.error("Error saving compensation:", e);
+            alert("حدث خطأ أثناء حساب وحفظ التعويض.");
+        }
+    }
+
+    function renderCompensationTable() {
+        try {
+            const tableBody = document.getElementById('compensation-summary-table').querySelector('tbody');
+             if (!tableBody) {
+                  console.error("Compensation summary table body not found.");
+                  throw new Error("Compensation summary table body not found.");
+             }
+            tableBody.innerHTML = '';
+
+            // Update table headers (should be static HTML, this is just a safeguard)
+             const headers = document.getElementById('compensation-summary-table').querySelectorAll('th');
+             if(headers.length >= 9) {
+                 headers[2].textContent = 'رقم الحساب (CCP)';
+                 headers[3].textContent = 'رقم RIP الكامل';
+                 headers[4].textContent = 'تعويض ث 1';
+                 headers[5].textContent = 'تعويض ث 2';
+                 headers[6].textContent = 'تعويض ث 3';
+                 headers[7].textContent = 'تعويض ث 4';
+                 headers[8].textContent = 'الصافي للدفع';
+             } else {
+                  console.warn("Compensation summary table headers not found or insufficient count for update.");
+             }
+
+
+            const summaryData = compensations.map(comp => {
+                 try { // Catch errors during individual row data preparation
+                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                     if (!beneficiary) {
+                          console.warn(`Beneficiary ID ${comp.beneficiaryId} not found for summary table.`);
+                          return null;
+                     }
+
+                     const rip = calculateRIP(beneficiary.account);
+
+                    return {
+                        id: beneficiary.id,
+                        name: beneficiary.name,
+                        account: beneficiary.account,
+                        rip: rip, // Display calculated RIP (will show error string if calc failed)
+                        q1: comp.q1.calculated,
+                        q2: comp.q2.calculated,
+                        q3: comp.q3.calculated,
+                        q4: comp.q4.calculated,
+                        netPayable: comp.netPayable
+                    };
+                 } catch (e) {
+                     console.error(`Error preparing summary data for compensation ID ${comp.beneficiaryId}:`, e);
+                     return null; // Skip row on error
+                 }
+            }).filter(item => item !== null);
+
+            summaryData.sort((a, b) => a.id - b.id);
+
+            summaryData.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = item.id;
+                row.insertCell().textContent = item.name;
+                row.insertCell().textContent = item.account; // CCP
+                row.insertCell().textContent = item.rip;    // RIP
+                row.insertCell().textContent = formatCurrency(item.q1);
+                row.insertCell().textContent = formatCurrency(item.q2);
+                row.insertCell().textContent = formatCurrency(item.q3);
+                row.insertCell().textContent = formatCurrency(item.q4);
+                row.insertCell().textContent = formatCurrency(item.netPayable);
+            });
+
+             // Update total row colspan
+             const totalRow = document.getElementById('compensation-summary-table').querySelector('.total-row td:first-child');
+             if(totalRow) {
+                 totalRow.colSpan = 4;
+             } else {
+                  console.warn("Total row TD not found for colspan update in summary table.");
+             }
+
+        } catch (e) {
+            console.error("Error rendering compensation table:", e);
+             const tableBody = document.getElementById('compensation-summary-table').querySelector('tbody');
+             if (tableBody) {
+                 tableBody.innerHTML = `<tr><td colspan="9" style="color: var(--danger-color); text-align: center;">حدث خطأ أثناء عرض ملخص التعويضات: ${e.message || e}.</td></tr>`;
+             } else {
+                 alert("حدث خطأ فادح أثناء عرض ملخص التعويضات.");
+             }
+        }
+    }
+
+    // --- Reporting ---
+    function generateReportHTML(forPrint = false) {
+        try {
+            const reportData = compensations.map(comp => {
+                 try { // Catch errors during individual row data preparation
+                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                      if (!beneficiary) {
+                          console.warn(`Beneficiary ID ${comp.beneficiaryId} not found for report.`);
+                          return null;
+                      }
+
+                     const rip = calculateRIP(beneficiary.account);
+
+                    return {
+                        id: beneficiary.id,
+                        name: beneficiary.name,
+                        account: beneficiary.account, // CCP
+                        rip: rip, // RIP
+                        q1: comp.q1.calculated,
+                        q2: comp.q2.calculated,
+                        q3: comp.q3.calculated,
+                        q4: comp.q4.calculated,
+                        netPayable: comp.netPayable
+                    };
+                 } catch (e) {
+                     console.error(`Error preparing report data for compensation ID ${comp.beneficiaryId}:`, e);
+                     return null; // Skip row on error
+                 }
+            }).filter(item => item !== null);
+
+            reportData.sort((a, b) => a.id - b.id);
+
+            const totalBeneficiaries = reportData.length;
+            const totalNetPayableNumeric = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const totalNetPayableText = numberToArabicText(totalNetPayableNumeric);
+
+            let html = `
+                <div class="report-header">
+                     <p>${institutionInfo.republic}</p>
+                    <p>${institutionInfo.ministry}</p>
+                    <p>${institutionInfo.directorate}</p>
+                    <p>${institutionInfo.institution}</p>
+                    <p>السنة المالية: ${institutionInfo.fiscalYear}</p>
+                    <br>
+                    <h3>جدول المستفيدين من تعويض استهلاك الكهرباء والغاز</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الرقم</th>
+                            <th>اسم المستفيد</th>
+                            <th>رقم الحساب (CCP)</th>
+                            <th>رقم RIP الكامل</th>
+                            <th>تعويض ث 1</th>
+                            <th>تعويض ث 2</th>
+                            <th>تعويض ث 3</th>
+                            <th>تعويض ث 4</th>
+                            <th>الصافي للدفع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${reportData.map(item => `
+                            <tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.account}</td>
+                                <td>${item.rip}</td>
+                                <td>${formatCurrency(item.q1)}</td>
+                                <td>${formatCurrency(item.q2)}</td>
+                                <td>${formatCurrency(item.q3)}</td>
+                                <td>${formatCurrency(item.q4)}</td>
+                                <td>${formatCurrency(item.netPayable)}</td>
+                            </tr>
+                        `).join('')}
+                         <tr class="total-row">
+                             <!-- Updated colspan to cover 4 columns (رقم, اسم, CCP, RIP) -->
+                            <td colspan="4">المجموع</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q1, 0))}</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q2, 0))}</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q3, 0))}</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q4, 0))}</td>
+                            <td>${formatCurrency(totalNetPayableNumeric)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="report-footer">
+                    <p>أوقف الجدول على مجموع مستفيدين قدره: ${totalBeneficiaries}</p>
+                    <p>أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayableNumeric)} دج</p>
+                    <p>أوقف الجدول على مجموع كلي بالأحرف: ${totalNetPayableText} دج</p>
+                     ${forPrint ? `
+                        <div class="signatures">
+                            <div class="signature">
+                                <p>المدير</p>
+                                <br><br>
+                                <p>...............</p>
+                            </div>
+                             <div class="signature">
+                                <p>المسير المالي</p>
+                                 <br><br>
+                                <p>...............</p>
+                            </div>
+                        </div>
+                     ` : ''}
+                </div>
+            `;
+            return html;
+        } catch (e) {
+            console.error("Error generating report HTML:", e);
+            return `<div style="color: var(--danger-color); text-align: center;">حدث خطأ أثناء إنشاء محتوى التقرير: ${e.message || e}. الرجاء التحقق من بيانات المستفيدين.</div>`;
+        }
+    }
+
+    function generateReportPreview() {
+        const previewArea = document.getElementById('report-preview');
+         const reportContent = generateReportHTML(false);
+         if (reportContent) {
+            previewArea.innerHTML = reportContent;
+         } else {
+             previewArea.innerHTML = `<div style="color: var(--danger-color); text-align: center;">فشل في إنشاء معاينة التقرير.</div>`;
+         }
+    }
+
+    function printReport() {
+        try {
+            const printContentDiv = document.getElementById('print-report-content');
+             if (!printContentDiv) {
+                 console.error("Print content div not found.");
+                 alert("خطأ داخلي: عنصر الطباعة غير موجود.");
+                 return;
+             }
+
+            const reportContent = generateReportHTML(true);
+             if (!reportContent || reportContent.trim() === '' || reportContent.includes('<div style="color: var(--danger-color)')) {
+                 alert("لا يمكن طباعة التقرير بسبب وجود خطأ في إعداده أو عدم وجود بيانات.");
+                 printContentDiv.innerHTML = reportContent || `<div style="color: var(--danger-color); text-align: center;">فشل في إنشاء محتوى الطباعة.</div>`;
+                  console.warn("Print aborted due to report generation error.");
+                  return;
+             }
+            printContentDiv.innerHTML = reportContent;
+
+            setTimeout(() => {
+                window.print();
+
+                setTimeout(() => {
+                    printContentDiv.innerHTML = '';
+                }, 100);
+            }, 50);
+        } catch (e) {
+            console.error("Error initiating print:", e);
+            alert("حدث خطأ أثناء محاولة طباعة التقرير.");
+        }
+    }
+
+    // --- XLSX Export using SheetJS ---
+    async function exportXLSX() {
+        try {
+            const exportData = compensations.map(comp => {
+                 try {
+                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                      if (!beneficiary) {
+                           console.warn(`Skipping XLSX export row for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
+                           return null;
+                      }
+
+                     const rip = calculateRIP(beneficiary.account);
+                     const displayedRip = rip && !rip.includes('خطأ') ? rip : 'غير صالح';
+
+                     const netPayableNum = parseFloat(comp.netPayable) || 0;
+                     const truncatedNetPayable = Math.floor(netPayableNum * 100) / 100;
+
+                    return {
+                        "الرقم": beneficiary.id,
+                        "رقم الحساب (CCP)": beneficiary.account,
+                        "رقم RIP الكامل": displayedRip,
+                        "الصافي للدفع": truncatedNetPayable, // Use the truncated value (as number)
+                        "اسم المستفيد": beneficiary.name
+                    };
+                 } catch (e) {
+                     console.error(`Error generating XLSX row for compensation ID ${comp.beneficiaryId}:`, e);
+                     return null; // Skip row on error
+                 }
+            }).filter(item => item !== null);
+
+            exportData.sort((a, b) => a["الرقم"] - b["الرقم"]);
+
+            if (exportData.length === 0) {
+                alert("لا توجد بيانات مستفيدين بـ تعويضات صالحة للتصدير إلى ملف XLSX.");
+                return;
+            }
+
+
+            const ws = XLSX.utils.json_to_sheet(exportData);
+
+             const payableColIndex = Object.keys(exportData[0] || {}).indexOf("الصافي للدفع");
+              if (payableColIndex > -1 && ws['!ref']) {
+                 const range = XLSX.utils.decode_range(ws['!ref']);
+                 for (let R = range.s.r + 1; R <= range.e.r; ++R) {
+                    const cell_address = XLSX.utils.encode_cell({r: R, c: payableColIndex});
+                    const cell = ws[cell_address];
+                    if (cell && cell.t === 'n') {
+                         cell.z = '0.00'; // Simple 2 decimal places format in Excel display
+                    }
+                 }
+              }
+
+
+            const colWidths = [
+                {wch: 10}, // الرقم
+                {wch: 15}, // رقم الحساب (CCP)
+                {wch: 22}, // رقم RIP الكامل
+                {wch: 15}, // الصافي للدفع
+                {wch: 30}  // اسم المستفيد
+            ];
+            ws['!cols'] = colWidths;
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "تقرير التعويضات");
+            
+            const filename = 'تقرير_التعويضات_' + institutionInfo.fiscalYear + '.xlsx';
+            
+            try {
+                if (window.showSaveFilePicker) {
+                    const options = {
+                        suggestedName: filename,
+                        types: [{
+                            description: 'ملف إكسل (XLSX)',
+                            accept: {'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']}
+                        }]
+                    };
+                    
+                    const fileHandle = await window.showSaveFilePicker(options);
+                    
+                    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                    const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    
+                    const writableStream = await fileHandle.createWritable();
+                    await writableStream.write(blob);
+                    await writableStream.close();
+                    
+                    alert('تم حفظ ملف الإكسل في المكان الذي اخترته.');
+                    return;
+                }
+            } catch (error) {
+                console.error("Error using File System Access API for Excel export:", error);
+                // Fallback
+            }
+            
+            XLSX.writeFile(wb, filename);
+            alert('تم بدء تنزيل ملف الإكسل. سيطلب منك المتصفح اختيار مكان الحفظ إذا كان يدعم ذلك.\n\nإذا لم يظهر حوار اختيار مكان الحفظ، فيرجى التحقق من إعدادات المتصفح الخاص بك.');
+        } catch (e) {
+             console.error("Error during XLSX export:", e);
+             alert("حدث خطأ أثناء تصدير ملف XLSX.");
+        }
+    }
+
+    // --- Generate TXT Header Line ---
+    function generateTxtHeaderLine() {
+        try {
+            const inst = institutionInfo;
+
+            const startChar = '*'; // 1 char
+
+            // Calculate RIP for the Treasury Account
+            const treasuryRIP = calculateRIP(inst.treasuryAccount || '');
+
+            // Use the calculated RIP (20 chars) if valid, otherwise indicate error
+            const ripSection = (treasuryRIP && !treasuryRIP.includes('خطأ')) ? treasuryRIP : '*'.repeat(20); // 20 chars, use * if invalid RIP
+
+            if (ripSection.length !== 20) {
+                 console.error(`TXT Header Error: Calculated RIP for Treasury Account "${inst.treasuryAccount}" is not 20 characters long.`);
+                 // Fallback to 20 * if RIP calc had a length error
+                 const treasuryAccountCheck = String(inst.treasuryAccount || '').trim();
+                 if (!treasuryAccountCheck || !/^\d+$/.test(treasuryAccountCheck)) {
+                     // If treasury account itself is invalid, use a different indicator
+                      return '*'.padEnd(61, 'I') + '0'; // Indicate Invalid Info
+                 }
+                 return '*'.padEnd(61, 'R') + '0'; // Indicate RIP calculation error
+            }
+
+
+            // Calculate Total Net Payable (13 chars, in cents)
+             const totalNetPayableNumeric = compensations.reduce((sum, comp) => {
+                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                 // Only include compensation in total if beneficiary exists AND RIP can be calculated AND amount is valid number
+                 const beneficiaryRip = calculateRIP(beneficiary?.account || '');
+                 if (beneficiary && beneficiaryRip && !beneficiaryRip.includes('خطأ') && !isNaN(parseFloat(comp.netPayable))) {
+                     return sum + parseFloat(comp.netPayable);
+                 }
+                 return sum;
+            }, 0);
+
+            const totalPayableCentsString = String(Math.round(totalNetPayableNumeric * 100));
+            const finalPaddedTotalPayable = totalPayableCentsString.padStart(13, '0').substring(0, 13);
+
+
+            // Calculate Number of Beneficiaries for TXT body
+             // Count compensation records that have a corresponding beneficiary AND whose RIP can be calculated
+             // AND whose name is valid Latin (as these are the records included in the body)
+             const numberOfBeneficiariesForBody = compensations.filter(comp => {
+                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                 const rip = calculateRIP(beneficiary?.account || '');
+                 const name = String(beneficiary?.name || '').trim();
+                 const latinPattern = /^[a-zA-Z\s\-]+$/;
+                 return beneficiary && rip && !rip.includes('خطأ') && name && latinPattern.test(name);
+             }).length;
+
+
+            const finalPaddedBeneficiaryCount = String(numberOfBeneficiariesForBody).padStart(7, '0').substring(0, 7);
+
+
+            // Financial Month (2 chars)
+            const financialMonth = String(inst.financialMonth || '').trim();
+             let finalPaddedFinancialMonth;
+             if (financialMonth === '' || !/^\d+$/.test(financialMonth)) {
+                  console.warn(`TXT Header Warning: Invalid or missing financial month: "${financialMonth}". Using "00".`);
+                  finalPaddedFinancialMonth = '00';
+             } else {
+                  finalPaddedFinancialMonth = financialMonth.padStart(2, '0').substring(0, 2);
+             }
+
+
+            // Fiscal Year (4 chars)
+            const fiscalYear = String(inst.fiscalYear || '').trim();
+            let finalPaddedFiscalYear;
+            if (fiscalYear === '' || !/^\d{4}$/.test(fiscalYear)) {
+                 console.warn(`TXT Header Warning: Invalid or missing fiscal year: "${fiscalYear}". Using "0000".`);
+                 finalPaddedFiscalYear = '0000';
+            } else {
+                 finalPaddedFiscalYear = fiscalYear.padStart(4, '0').substring(0, 4);
+            }
+
+            // Order Number (8 chars)
+            const orderNumber = String(inst.orderNumber || '').trim();
+            const paddedOrderNumber = orderNumber.padStart(8, '0').substring(0, 8);
+
+            // Transfer Number (6 chars)
+            const transferNumber = String(inst.transferNumber || '').trim();
+            const paddedTransferNumber = transferNumber.padStart(6, '0').substring(0, 6);
+
+
+            // Combined field (Order + Transfer) = 8 + 6 = 14 chars
+            const orderTransferSection = paddedOrderNumber + paddedTransferNumber;
+
+
+            // End char (1 char)
+            const endChar = '0';
+
+            // Combine all parts (1 + 20 + 13 + 7 + 2 + 4 + 14 + 1 = 62)
+            const headerLine = startChar +
+                               ripSection +              // 20 chars (Calculated RIP of Treasury CCP)
+                               finalPaddedTotalPayable + // 13 chars
+                               finalPaddedBeneficiaryCount + // 7 chars
+                               finalPaddedFinancialMonth + // 2 chars
+                               finalPaddedFiscalYear +     // 4 chars
+                               orderTransferSection +    // 14 chars (Order + Transfer)
+                               endChar;                     // 1 char
+
+            // Final length check (should already be 62)
+            if (headerLine.length !== 62) {
+                 console.error(`FATAL: Generated TXT header line has incorrect total length (${headerLine.length}). Generated: "${headerLine}"`);
+                 return '*'.padEnd(61, 'L') + '0'; // Indicate Length error
+            }
+
+            return headerLine;
+        } catch (e) {
+             console.error("Error generating TXT header line:", e);
+             return '*'.padEnd(61, 'E') + '0'; // Indicate general Error
+        }
+    }
+
+
+    // --- Export TXT ---
+    async function exportTxt() {
+        try {
+             // Generate the header line first
+             const headerLine = generateTxtHeaderLine();
+             // Check if header line generation failed critically
+             if (headerLine.length !== 62 || headerLine.includes('I') || headerLine.includes('L') || headerLine.includes('E')) { // Check for error indicators
+                  alert("لا يمكن تصدير ملف TXT.\nالرجاء التأكد من صحة واكتمال معلومات المؤسسة (حساب الخزينة، الشهر، السنة المالية، رقم الأمر بالصرف، رقم الحوالة) وأنها تحتوي على أرقام فقط حيث يجب، وأن حساب الخزينة صالح لحساب رقم RIP.");
+                  console.error("TXT export aborted due to malformed header line.");
+                  return;
+             }
+
+
+             // Generate the beneficiary data lines, filtering invalid ones
+             const txtData = compensations.map(comp => {
+                 try {
+                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                      if (!beneficiary) {
+                           console.warn(`Skipping TXT export record for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
+                           return null;
+                      }
+
+                     const account = String(beneficiary.account || '').trim(); // CCP
+                     const name = String(beneficiary.name || '').trim();
+
+                      const latinPattern = /^[a-zA-Z\s\-]+$/;
+                      if (account === '' || !latinPattern.test(name)) {
+                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Invalid account "${account}" or non-Latin name "${name}".`);
+                           return null;
+                      }
+
+                     // Calculate RIP for the TXT line
+                     const fullRIP = calculateRIP(account);
+                     if (!fullRIP || fullRIP.includes('خطأ')) {
+                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Failed RIP calculation for CCP "${account}" (Result: ${fullRIP}).`);
+                          return null;
+                     }
+
+                     // --- Build the 62-character string ---
+                     const startChar = '*';
+                     const ripSection = fullRIP; // 20 chars, should be valid now
+                     const netPayableCentsString = String(Math.round((parseFloat(comp.netPayable) || 0) * 100));
+                     const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
+                     const nameLength = name.length;
+                     const spacesNeededForName = 27 - nameLength;
+                     const finalNameField = (name + (spacesNeededForName > 0 ? ' '.repeat(spacesNeededForName) : '')).substring(0, 27);
+                     const endChar = '1';
+
+                     const txtRecord = startChar + ripSection + finalPaddedNetPayable + finalNameField + endChar; // Total 62 chars
+
+                     if (txtRecord.length !== 62) {
+                          console.error(`FATAL: Generated TXT record has incorrect length (${txtRecord.length}) for beneficiary ID ${beneficiary.id}. Record: "${txtRecord}". This should not happen if RIP calculation is correct.`);
+                         return null; // Fatal error for this record
+                     }
+
+                     return txtRecord;
+
+                 } catch (e) {
+                     console.error(`Error generating TXT record for compensation ID ${comp.beneficiaryId}:`, e);
+                     return null; // Skip record on error
+                 }
+             }).filter(record => record !== null); // Filter out any null records
+
+
+             // Combine header and data lines
+             let txtContent = headerLine; // Start with the validated header
+
+             if (txtData.length > 0) {
+                 txtContent += '\n' + txtData.join('\n');
+             } else {
+                 alert("تم إنشاء ملف TXT بالسطر الأول (معلومات الدفعة) فقط.\n\nلا توجد بيانات تعويضات صالحة للمستفيدين ليتم تضمينها في جسم الملف.\nالرجاء التأكد من وجود مستفيدين ببيانات حساب (CCP) يسمح بحساب رقم RIP، وأن الاسم مكتوب بالأحرف اللاتينية فقط، ووجود تعويضات محفوظة لهم.");
+             }
+
+
+             const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+             const filename = `Payment_File_${institutionInfo.fiscalYear}.txt`;
+
+            try {
+                if (window.showSaveFilePicker) {
+                    const options = {
+                        suggestedName: filename,
+                        types: [{
+                            description: 'ملف نصي (TXT)',
+                            accept: {'text/plain': ['.txt']}
+                        }]
+                    };
+
+                    const fileHandle = await window.showSaveFilePicker(options);
+
+                    const writableStream = await fileHandle.createWritable();
+                    await writableStream.write(blob);
+                    await writableStream.close();
+
+                    alert('تم حفظ ملف TXT في المكان الذي اخترته.');
+                    return;
+                }
+            } catch (error) {
+                console.error("Error using File System Access API for TXT export:", error);
+                // Fallback
+            }
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+             if (txtData.length > 0) {
+                alert('تم بدء تنزيل ملف TXT. سيطلب منك المتصفح اختيار مكان الحفظ إذا كان يدعم ذلك.\n\nإذا لم يظهر حوار اختيار مكان الحفظ، فيرجى التحقق من إعدادات المتصفح الخاص بك.');
+             }
+        } catch (e) {
+             console.error("Error during TXT export process:", e);
+             alert("حدث خطأ أثناء تصدير ملف TXT.");
+        }
+    }
+
+
+    // --- Backup and Restore Functions ---
+    async function createBackup() {
+        try {
+            const backupData = {
+                institutionInfo: institutionInfo,
+                beneficiaries: beneficiaries,
+                compensations: compensations
+            };
+
+            const jsonString = JSON.stringify(backupData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const now = new Date();
+            const filename = `CompData_Backup_${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}-${now.getMinutes().toString().padStart(2, '0')}-${now.getSeconds().toString().padStart(2, '0')}.json`;
+            
+            try {
+                if (window.showSaveFilePicker) {
+                    const options = {
+                        suggestedName: filename,
+                        types: [{
+                            description: 'ملف نسخة احتياطية (JSON)',
+                            accept: {'application/json': ['.json']}
+                        }]
+                    };
+                    
+                    const fileHandle = await window.showSaveFilePicker(options);
+                    const writableStream = await fileHandle.createWritable();
+                    await writableStream.write(blob);
+                    await writableStream.close();
+                    
+                    alert('تم حفظ النسخة الاحتياطية في المكان الذي اخترته.');
+                    return;
+                }
+            } catch (error) {
+                console.error("Error using File System Access API for backup:", error);
+            }
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert('تم بدء تنزيل ملف النسخة الاحتياطية. سيطلب منك المتصفح اختيار مكان الحفظ إذا كان يدعم ذلك.\n\nإذا لم يظهر حوار اختيار مكان الحفظ، فيرجى التحقق من إعدادات المتصفح الخاص بك.');
+        } catch (e) {
+            console.error("Error during backup creation:", e);
+            alert("حدث خطأ أثناء إنشاء النسخة الاحتياطية.");
+        }
+    }
+
+    function restoreBackup() {
+        const fileInput = document.getElementById('restore-file-input');
+        fileInput.value = null;
+        fileInput.click();
+    }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.name.toLowerCase().endsWith('.json')) {
+             alert('الرجاء اختيار ملف JSON صالح لعملية الاستعادة.');
+             return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            try {
+                const fileContent = e.target.result;
+                const restoredData = JSON.parse(fileContent);
+
+                if (restoredData && restoredData.institutionInfo !== undefined && Array.isArray(restoredData.beneficiaries) && Array.isArray(restoredData.compensations)) {
+                    if (confirm('هل أنت متأكد من استعادة هذه البيانات؟ سيؤدي ذلك إلى مسح البيانات الحالية واستبدالها.\n\nالرجاء التأكد من أن هذا هو ملف النسخة الاحتياطية الصحيح.')) {
+                        // Clear current data in localStorage before storing restored data
+                         localStorage.removeItem('institutionInfo');
+                         localStorage.removeItem('beneficiaries');
+                         localStorage.removeItem('compensations');
+
+                         localStorage.setItem('institutionInfo', JSON.stringify(restoredData.institutionInfo));
+                         localStorage.setItem('beneficiaries', JSON.stringify(restoredData.beneficiaries));
+                         localStorage.setItem('compensations', JSON.stringify(restoredData.compensations));
+
+                        loadData(); // Reload from localStorage to apply parsing/cleaning logic
+
+                        const visibleSection = document.querySelector('.app-section[style*="display: block"], .app-section[style*="display: flex"]');
+                        if (visibleSection) {
+                             showSection(visibleSection.id);
+                        } else {
+                            showSection('institution-info-section');
+                        }
+
+                        alert('تم استعادة البيانات بنجاح.');
+                    }
+                } else {
+                    alert('هيكل ملف النسخة الاحتياطية غير صالح. لا يمكن استعادة البيانات.');
+                }
+            } catch (error) {
+                alert('حدث خطأ أثناء قراءة أو تحليل ملف النسخة الاحتياطية. قد يكون الملف تالفاً.');
+                console.error("Restore error:", error);
+             }
+         };
+
+        reader.onerror = (error) => {
+            alert('حدث خطأ أثناء قراءة الملف.');
+            console.error("File reading error:", error);
+         };
+
+        reader.readAsText(file);
+    }
+
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        loadData();
+        showSection('institution-info-section'); // Show the first section by default
+
+        // Add event listeners
+        document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
+        document.getElementById('add-beneficiary-form').addEventListener('submit', addBeneficiary);
+        document.getElementById('manage-compensation-form').addEventListener('submit', saveCompensation);
+        document.getElementById('edit-beneficiary-form').addEventListener('submit', saveEditedBeneficiary);
+
+         // Add input event listener for CCP in the add form to update calculated RIP display
+         const addAccountInput = document.getElementById('account-number');
+         if(addAccountInput) {
+            addAccountInput.addEventListener('input', updateCalculatedRIP);
+         } else {
+             console.error("Add beneficiary account input not found on DOM load.");
+         }
+
+         // The edit modal input listener is added/removed when the modal is opened/closed.
+
+         // Add event listener for beneficiary dropdown change to load compensation data
+         const selectBeneficiaryInput = document.getElementById('select-beneficiary');
+          if(selectBeneficiaryInput) {
+             selectBeneficiaryInput.addEventListener('change', loadCompensationDataForSelectedBeneficiary);
+          } else {
+              console.error("Compensation beneficiary select input not found on DOM load.");
+          }
+
+
+         // Add event listener for the hidden file input change (handled by handleFileSelect)
+         const restoreFileInput = document.getElementById('restore-file-input');
+          if(restoreFileInput) {
+             restoreFileInput.addEventListener('change', handleFileSelect);
+          } else {
+               console.error("Restore file input not found on DOM load.");
+          }
+
+
+         // Add event listener for the beneficiary search input
+         const beneficiarySearchInput = document.getElementById('beneficiary-search-input');
+          if(beneficiarySearchInput) {
+              beneficiarySearchInput.addEventListener('input', (event) => {
+                 const searchTerm = event.target.value;
+                 populateBeneficiaryDropdown(searchTerm);
+              });
+          } else {
+               console.error("Beneficiary search input not found on DOM load.");
+          }
+
+    });
+</script>
+</body>
+</html>
+```
