@@ -1,0 +1,10 @@
+{
+  "name": "center-dues-system",
+  "version": "1.0.0",
+  "description": "نظام إدارة مستحقات المركز",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+} 
