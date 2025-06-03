@@ -1,5 +1,5 @@
 
-```html
+﻿
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -419,9 +419,7 @@
              align-items: center;
              gap: var(--space-sm);
          }
-         #backup-restore-section .button-group input[type="file"] {
-             /* The hidden file input doesn't need styling */
-         }
+         /* The hidden file input doesn't need styling, so no ruleset is needed */
          /* Add margin-top to the explanation text */
          #backup-restore-section .explanation {
              margin-top: var(--space-sm);
@@ -919,7 +917,6 @@
 
               /* Ensure total row colspan is correct */
               .report-output .total-row td:first-child {
-                  colspan: 4; /* Update colspan */
                   text-align: center;
               }
                .report-output .total-row th, .report-output .total-row td { background-color: #ced4da !important; color: #000 !important; }
@@ -2303,7 +2300,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
              // Update total row colspan
              const totalRow = document.getElementById('compensation-summary-table').querySelector('.total-row td:first-child');
              if(totalRow) {
-                 totalRow.colSpan = 4;
+                 totalRow.setAttribute('colspan', '4');
              } else {
                   console.warn("Total row TD not found for colspan update in summary table.");
              }
@@ -2984,4 +2981,3 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
 </script>
 </body>
 </html>
-```
