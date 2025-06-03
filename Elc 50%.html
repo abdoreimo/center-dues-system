@@ -1121,6 +1121,7 @@
                         <th>تعويض ث 3</th> <!-- Shifted -->
                         <th>تعويض ث 4</th> <!-- Shifted -->
                         <th>الصافي للدفع</th> <!-- Shifted -->
+                <th>إجراء</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1293,22 +1294,29 @@
                 if (savedCompensations) {
                     try {
                         compensations = JSON.parse(savedCompensations);
+
+
                         compensations.forEach(comp => {
                             comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
-                             const defaultQuarter = { nofees: 0, value: 0, contrib: 0, calculated: 0 };
-                             comp.q1 = {...defaultQuarter, ...(comp.q1 || {})};
-                             comp.q2 = {...defaultQuarter, ...(comp.q2 || {})};
-                             comp.q3 = {...defaultQuarter, ...(comp.q3 || {})};
-                             comp.q4 = {...defaultQuarter, ...(comp.q4 || {})};
+                            const defaultQuarter = { nofees: 0, value: 0, contrib: 0, calculated: 0 };
+                            comp.q1 = {...defaultQuarter, ...(comp.q1 || {})};
+                            comp.q2 = {...defaultQuarter, ...(comp.q2 || {})};
+                            comp.q3 = {...defaultQuarter, ...(comp.q3 || {})};
+                            comp.q4 = {...defaultQuarter, ...(comp.q4 || {})};
 
-                             comp.q1.nofees = parseFloat(comp.q1.nofees) || 0; comp.q1.value = parseFloat(comp.q1.value) || 0; comp.q1.contrib = parseFloat(comp.q1.contrib) || 0; comp.q1.calculated = parseFloat(comp.q1.calculated) || 0;
-                             comp.q2.nofees = parseFloat(comp.q2.nofees) || 0; comp.q2.value = parseFloat(comp.q2.value) || 0; comp.q2.contrib = parseFloat(comp.q2.contrib) || 0; comp.q2.calculated = parseFloat(comp.q2.calculated) || 0;
-                             comp.q3.nofees = parseFloat(comp.q3.nofees) || 0; comp.q3.value = parseFloat(comp.q3.value) || 0; comp.q3.contrib = parseFloat(comp.q3.contrib) || 0; comp.q3.calculated = parseFloat(comp.q3.calculated) || 0;
-                             comp.q4.nofees = parseFloat(comp.q4.nofees) || 0; comp.q4.value = parseFloat(comp.q4.value) || 0; comp.q4.contrib = parseFloat(comp.q4.contrib) || 0; comp.q4.calculated = parseFloat(comp.q4.calculated) || 0;
+                            comp.q1.nofees = parseFloat(comp.q1.nofees) || 0; comp.q1.value = parseFloat(comp.q1.value) || 0; comp.q1.contrib = parseFloat(comp.q1.contrib) || 0;
+                            comp.q2.nofees = parseFloat(comp.q2.nofees) || 0; comp.q2.value = parseFloat(comp.q2.value) || 0; comp.q2.contrib = parseFloat(comp.q2.contrib) || 0;
+                            comp.q3.nofees = parseFloat(comp.q3.nofees) || 0; comp.q3.value = parseFloat(comp.q3.value) || 0; comp.q3.contrib = parseFloat(comp.q3.contrib) || 0;
+                            comp.q4.nofees = parseFloat(comp.q4.nofees) || 0; comp.q4.value = parseFloat(comp.q4.value) || 0; comp.q4.contrib = parseFloat(comp.q4.contrib) || 0;
 
-                             comp.netPayable = parseFloat(comp.netPayable) || 0;
-                             // Re-calculate netPayable on load to be safe
-                             comp.netPayable = comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated;
+                            // إعادة حساب كل ثلاثي حسب الدالة الحالية
+                            comp.q1.calculated = calculateQuarterlyComp(comp.q1.nofees, comp.q1.value, comp.q1.contrib);
+                            comp.q2.calculated = calculateQuarterlyComp(comp.q2.nofees, comp.q2.value, comp.q2.contrib);
+                            comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
+                            comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
+
+                            // إعادة حساب الصافي للدفع
+                            comp.netPayable = comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated;
                         });
                         compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                     } catch (e) {
@@ -2272,6 +2280,24 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                 row.insertCell().textContent = formatCurrency(item.q3);
                 row.insertCell().textContent = formatCurrency(item.q4);
                 row.insertCell().textContent = formatCurrency(item.netPayable);
+                // زر الحذف فقط
+                const actionCell = row.insertCell();
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'حذف';
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.title = 'حذف تعويض هذا المستفيد';
+                deleteBtn.onclick = function() { deleteCompensation(item.id); };
+                actionCell.appendChild(deleteBtn);
+    // دالة حذف تعويض مستفيد
+    function deleteCompensation(beneficiaryId) {
+        if (!confirm('هل أنت متأكد أنك تريد حذف تعويض هذا المستفيد؟')) return;
+        const idx = compensations.findIndex(c => c.beneficiaryId === beneficiaryId);
+        if (idx > -1) {
+            compensations.splice(idx, 1);
+            saveData();
+            renderCompensationTable();
+        }
+    }
             });
 
              // Update total row colspan
