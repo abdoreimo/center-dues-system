@@ -2332,7 +2332,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                     return {
                         id: beneficiary.id,
                         name: beneficiary.name,
-                        account: beneficiary.account, // CCP
+                        meter: beneficiary.meter, // رقم العداد
                         rip: rip, // RIP
                         q1: comp.q1.calculated,
                         q2: comp.q2.calculated,
@@ -2367,7 +2367,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         <tr>
                             <th>الرقم</th>
                             <th>اسم المستفيد</th>
-                            <th>رقم الحساب (CCP)</th>
+                            <th>رقم العداد</th>
                             <th>رقم RIP الكامل</th>
                             <th>تعويض ث 1</th>
                             <th>تعويض ث 2</th>
@@ -2381,7 +2381,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                             <tr>
                                 <td>${item.id}</td>
                                 <td>${item.name}</td>
-                                <td>${item.account}</td>
+                                <td>${item.meter}</td>
                                 <td>${item.rip}</td>
                                 <td>${formatCurrency(item.q1)}</td>
                                 <td>${formatCurrency(item.q2)}</td>
