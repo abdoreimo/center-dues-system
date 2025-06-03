@@ -1041,7 +1041,7 @@
                     <tr>
                         <th>الرقم</th>
                         <th>اللقب و الاسم</th>
-                        <th>رقم الحساب (CCP)</th> <!-- Updated Header -->
+                        <th>رقم العداد</th> <!-- Updated Header -->
                         <th>رقم RIP الكامل</th> <!-- New/Updated header -->
                         <th>رقم العداد</th> <!-- Shifted -->
                         <th>إجراءات</th> <!-- Shifted -->
@@ -1111,7 +1111,7 @@
                     <tr>
                         <th>الرقم</th>
                         <th>اللقب و الاسم</th>
-                        <th>رقم الحساب (CCP)</th> <!-- Clarified header -->
+                        <th>رقم العداد</th> <!-- Clarified header -->
                         <th>رقم RIP الكامل</th> <!-- New/Updated header -->
                         <th>تعويض ث 1</th> <!-- Shifted -->
                         <th>تعويض ث 2</th> <!-- Shifted -->
@@ -2488,7 +2488,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
 
                     return {
                         "الرقم": beneficiary.id,
-                        "رقم الحساب (CCP)": beneficiary.account,
+                        "رقم العداد": beneficiary.meter,
                         "رقم RIP الكامل": displayedRip,
                         "الصافي للدفع": truncatedNetPayable, // Use the truncated value (as number)
                         "اسم المستفيد": beneficiary.name
@@ -2709,7 +2709,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                            return null;
                       }
 
-                     const account = String(beneficiary.account || '').trim(); // CCP
+                     const account = String(beneficiary.meter || '').trim(); // Meter number instead of CCP
                      const name = String(beneficiary.name || '').trim();
 
                       const latinPattern = /^[a-zA-Z\s\-]+$/;
