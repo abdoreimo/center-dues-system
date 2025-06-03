@@ -1,3 +1,5 @@
+
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -2109,16 +2111,22 @@
     // It only uses "المبلغ دون رسوم" (nofees) divided by 2.
     // I will update this function to match that 50% logic, ignoring value and contrib.
     // If the calculation should use those fields, please provide the correct formula.
-    function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
-        // Calculate 50% of the amount without fees (المبلغ دون رسوم)
-        const totalAmount = parseFloat(amountNoFees || 0);
-        // Check for non-finite numbers after parsing
-         if (!isFinite(totalAmount)) {
-             console.warn(`calculateQuarterlyComp: Invalid input amountNoFees "${amountNoFees}".`);
-             return 0; // Return 0 or NaN for invalid input
-         }
-        return totalAmount * 0.5; // 50% of the amount
+// دالة حساب تعويض الثلاثي حسب القاعدة الجديدة
+function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
+    // تحويل القيم إلى أرقام عشرية
+    const amount = parseFloat(amountNoFees || 0);
+    const value = parseFloat(addedValue || 0);
+    const contrib = parseFloat(stateContrib || 0);
+    // التحقق من صحة القيم
+    if (!isFinite(amount) || !isFinite(value) || !isFinite(contrib)) {
+        console.warn(`calculateQuarterlyComp: Invalid input values`, { amountNoFees, addedValue, stateContrib });
+        return 0;
     }
+    // حساب التعويض: (المبلغ دون رسوم + القيمة المضافة - مساهمة الدولة) ÷ 2
+    const compensation = (amount + value - contrib) / 2;
+    // إذا كانت النتيجة سالبة نرجع صفر
+    return compensation > 0 ? compensation : 0;
+}
 
     function saveCompensation(event) {
         event.preventDefault();
