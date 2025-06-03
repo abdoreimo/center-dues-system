@@ -2709,7 +2709,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                            return null;
                       }
 
-                     const account = String(beneficiary.meter || '').trim(); // Meter number instead of CCP
+                     const account = String(beneficiary.account || '').trim(); // Use CCP for TXT export
                      const name = String(beneficiary.name || '').trim();
 
                       const latinPattern = /^[a-zA-Z\s\-]+$/;
