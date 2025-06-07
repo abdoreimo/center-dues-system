@@ -1,3 +1,16 @@
+/* ألوان خلفية الحقول الخاصة بكل ثلاثي في واجهة إدارة التقارير */
+.report-q1-bg {
+    background-color: #fffbe6 !important; /* أصفر فاتح جدا */
+}
+.report-q2-bg {
+    background-color: #eaffea !important; /* أخضر فاتح جدا */
+}
+.report-q3-bg {
+    background-color: #ffeaea !important; /* أحمر فاتح جدا */
+}
+.report-q4-bg {
+    background-color: #eaf3ff !important; /* أزرق فاتح جدا */
+}
 /* تحسينات جمالية إضافية للواجهة */
 html, body {
     font-size: 13px;

@@ -1073,13 +1073,13 @@
 
                 <!-- Quarterly Compensation Inputs - Grouped Side-by-Side -->
                 <div class="quarter-group">
-                    <div class="quarter-inputs report-q1-bg">
+                    <div class="quarter-inputs">
                         <h4>الثلاثي الأول</h4>
                         <div><label for="q1-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q1-amount-nofees" value="0.00"></div>
                         <div><label for="q1-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q1-added-value" value="0.00"></div>
                         <div><label for="q1-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q1-state-contrib" value="0.00"></div>
                     </div>
-                     <div class="quarter-inputs report-q2-bg">
+                     <div class="quarter-inputs">
                         <h4>الثلاثي الثاني</h4>
                         <div><label for="q2-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q2-amount-nofees" value="0.00"></div>
                         <div><label for="q2-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q2-added-value" value="0.00"></div>
@@ -1088,13 +1088,13 @@
                 </div>
 
                 <div class="quarter-group">
-                    <div class="quarter-inputs report-q3-bg">
+                    <div class="quarter-inputs">
                         <h4>الثلاثي الثالث</h4>
                         <div><label for="q3-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q3-amount-nofees" value="0.00"></div>
                         <div><label for="q3-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q3-added-value" value="0.00"></div>
                         <div><label for="q3-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q3-state-contrib" value="0.00"></div>
                     </div>
-                     <div class="quarter-inputs report-q4-bg">
+                     <div class="quarter-inputs">
                         <h4>الثلاثي الرابع</h4>
                         <div><label for="q4-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q4-amount-nofees" value="0.00"></div>
                         <div><label for="q4-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q4-added-value" value="0.00"></div>
@@ -1312,8 +1312,8 @@
                             comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
                             comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
 
-                            // إعادة حساب الصافي للدفع مع التقريب لأقرب سنتيم
-                            comp.netPayable = Math.round((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) * 100) / 100;
+                            // إعادة حساب الصافي للدفع
+                            comp.netPayable = comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated;
                         });
                         compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                     } catch (e) {
@@ -2180,7 +2180,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
             const q3_calculated = calculateQuarterlyComp(q3_nofees, q3_value, q3_contrib);
             const q4_calculated = calculateQuarterlyComp(q4_nofees, q4_value, q4_contrib);
 
-            const netPayable = Math.round((q1_calculated + q2_calculated + q3_calculated + q4_calculated) * 100) / 100;
+            const netPayable = q1_calculated + q2_calculated + q3_calculated + q4_calculated;
 
             const newCompensationData = {
                 beneficiaryId: beneficiaryId,
@@ -2256,7 +2256,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
-                        netPayable: Math.round(comp.netPayable * 100) / 100
+                        netPayable: comp.netPayable
                     };
                  } catch (e) {
                      console.error(`Error preparing summary data for compensation ID ${comp.beneficiaryId}:`, e);
@@ -2338,7 +2338,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
-                        netPayable: Math.round(comp.netPayable * 100) / 100
+                        netPayable: comp.netPayable
                     };
                  } catch (e) {
                      console.error(`Error preparing report data for compensation ID ${comp.beneficiaryId}:`, e);
@@ -2349,7 +2349,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
             reportData.sort((a, b) => a.id - b.id);
 
             const totalBeneficiaries = reportData.length;
-            const totalNetPayableNumeric = reportData.reduce((sum, item) => sum + Math.round(item.netPayable * 100) / 100, 0);
+            const totalNetPayableNumeric = reportData.reduce((sum, item) => sum + item.netPayable, 0);
             const totalNetPayableText = numberToArabicText(totalNetPayableNumeric);
 
             let html = `
@@ -2383,10 +2383,10 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                                 <td>${item.name}</td>
                                 <td>${item.meter}</td>
                                 <td>${item.rip}</td>
-                                <td class="report-q1-bg">${formatCurrency(item.q1)}</td>
-                                <td class="report-q2-bg">${formatCurrency(item.q2)}</td>
-                                <td class="report-q3-bg">${formatCurrency(item.q3)}</td>
-                                <td class="report-q4-bg">${formatCurrency(item.q4)}</td>
+                                <td>${formatCurrency(item.q1)}</td>
+                                <td>${formatCurrency(item.q2)}</td>
+                                <td>${formatCurrency(item.q3)}</td>
+                                <td>${formatCurrency(item.q4)}</td>
                                 <td>${formatCurrency(item.netPayable)}</td>
                             </tr>
                         `).join('')}
@@ -2572,170 +2572,198 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
     }
 
     // --- Generate TXT Header Line ---
-// totalNetPayableOverride: إذا تم تمريره، استخدمه بدلاً من إعادة الحساب
-function generateTxtHeaderLine(totalNetPayableOverride) {
-    try {
-        const inst = institutionInfo;
-        const startChar = '*'; // 1 char
-        // Calculate RIP for the Treasury Account
-        const treasuryRIP = calculateRIP(inst.treasuryAccount || '');
-        // Use the calculated RIP (20 chars) if valid, otherwise indicate error
-        const ripSection = (treasuryRIP && !treasuryRIP.includes('خطأ')) ? treasuryRIP : '*'.repeat(20); // 20 chars, use * if invalid RIP
-        if (ripSection.length !== 20) {
-            console.error(`TXT Header Error: Calculated RIP for Treasury Account "${inst.treasuryAccount}" is not 20 characters long.`);
-            // Fallback to 20 * if RIP calc had a length error
-            const treasuryAccountCheck = String(inst.treasuryAccount || '').trim();
-            if (!treasuryAccountCheck || !/^\d+$/.test(treasuryAccountCheck)) {
-                // If treasury account itself is invalid, use a different indicator
-                return '*'.padEnd(61, 'I') + '0'; // Indicate Invalid Info
+    function generateTxtHeaderLine() {
+        try {
+            const inst = institutionInfo;
+
+            const startChar = '*'; // 1 char
+
+            // Calculate RIP for the Treasury Account
+            const treasuryRIP = calculateRIP(inst.treasuryAccount || '');
+
+            // Use the calculated RIP (20 chars) if valid, otherwise indicate error
+            const ripSection = (treasuryRIP && !treasuryRIP.includes('خطأ')) ? treasuryRIP : '*'.repeat(20); // 20 chars, use * if invalid RIP
+
+            if (ripSection.length !== 20) {
+                 console.error(`TXT Header Error: Calculated RIP for Treasury Account "${inst.treasuryAccount}" is not 20 characters long.`);
+                 // Fallback to 20 * if RIP calc had a length error
+                 const treasuryAccountCheck = String(inst.treasuryAccount || '').trim();
+                 if (!treasuryAccountCheck || !/^\d+$/.test(treasuryAccountCheck)) {
+                     // If treasury account itself is invalid, use a different indicator
+                      return '*'.padEnd(61, 'I') + '0'; // Indicate Invalid Info
+                 }
+                 return '*'.padEnd(61, 'R') + '0'; // Indicate RIP calculation error
             }
-            return '*'.padEnd(61, 'R') + '0'; // Indicate RIP calculation error
-        }
-        // استخدم المجموع الممرر إذا توفر، وإلا احسبه بالطريقة القديمة (للتوافق)
-        let totalNetPayableNumeric;
-        if (typeof totalNetPayableOverride === 'number') {
-            totalNetPayableNumeric = totalNetPayableOverride;
-        } else {
-            totalNetPayableNumeric = compensations.reduce((sum, comp) => {
-                const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-                const beneficiaryRip = calculateRIP(beneficiary?.account || '');
-                if (beneficiary && beneficiaryRip && !beneficiaryRip.includes('خطأ') && !isNaN(parseFloat(comp.netPayable))) {
-                    return sum + parseFloat(comp.netPayable);
-                }
-                return sum;
+
+
+            // Calculate Total Net Payable (13 chars, in cents)
+             const totalNetPayableNumeric = compensations.reduce((sum, comp) => {
+                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                 // Only include compensation in total if beneficiary exists AND RIP can be calculated AND amount is valid number
+                 const beneficiaryRip = calculateRIP(beneficiary?.account || '');
+                 if (beneficiary && beneficiaryRip && !beneficiaryRip.includes('خطأ') && !isNaN(parseFloat(comp.netPayable))) {
+                     return sum + parseFloat(comp.netPayable);
+                 }
+                 return sum;
             }, 0);
+
+            const totalPayableCentsString = String(Math.round(totalNetPayableNumeric * 100));
+            const finalPaddedTotalPayable = totalPayableCentsString.padStart(13, '0').substring(0, 13);
+
+
+            // Calculate Number of Beneficiaries for TXT body
+             // Count compensation records that have a corresponding beneficiary AND whose RIP can be calculated
+             // AND whose name is valid Latin (as these are the records included in the body)
+             const numberOfBeneficiariesForBody = compensations.filter(comp => {
+                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                 const rip = calculateRIP(beneficiary?.account || '');
+                 const name = String(beneficiary?.name || '').trim();
+                 const latinPattern = /^[a-zA-Z\s\-]+$/;
+                 return beneficiary && rip && !rip.includes('خطأ') && name && latinPattern.test(name);
+             }).length;
+
+
+            const finalPaddedBeneficiaryCount = String(numberOfBeneficiariesForBody).padStart(7, '0').substring(0, 7);
+
+
+            // Financial Month (2 chars)
+            const financialMonth = String(inst.financialMonth || '').trim();
+             let finalPaddedFinancialMonth;
+             if (financialMonth === '' || !/^\d+$/.test(financialMonth)) {
+                  console.warn(`TXT Header Warning: Invalid or missing financial month: "${financialMonth}". Using "00".`);
+                  finalPaddedFinancialMonth = '00';
+             } else {
+                  finalPaddedFinancialMonth = financialMonth.padStart(2, '0').substring(0, 2);
+             }
+
+
+            // Fiscal Year (4 chars)
+            const fiscalYear = String(inst.fiscalYear || '').trim();
+            let finalPaddedFiscalYear;
+            if (fiscalYear === '' || !/^\d{4}$/.test(fiscalYear)) {
+                 console.warn(`TXT Header Warning: Invalid or missing fiscal year: "${fiscalYear}". Using "0000".`);
+                 finalPaddedFiscalYear = '0000';
+            } else {
+                 finalPaddedFiscalYear = fiscalYear.padStart(4, '0').substring(0, 4);
+            }
+
+            // Order Number (8 chars)
+            const orderNumber = String(inst.orderNumber || '').trim();
+            const paddedOrderNumber = orderNumber.padStart(8, '0').substring(0, 8);
+
+            // Transfer Number (6 chars)
+            const transferNumber = String(inst.transferNumber || '').trim();
+            const paddedTransferNumber = transferNumber.padStart(6, '0').substring(0, 6);
+
+
+            // Combined field (Order + Transfer) = 8 + 6 = 14 chars
+            const orderTransferSection = paddedOrderNumber + paddedTransferNumber;
+
+
+            // End char (1 char)
+            const endChar = '0';
+
+            // Combine all parts (1 + 20 + 13 + 7 + 2 + 4 + 14 + 1 = 62)
+            const headerLine = startChar +
+                               ripSection +              // 20 chars (Calculated RIP of Treasury CCP)
+                               finalPaddedTotalPayable + // 13 chars
+                               finalPaddedBeneficiaryCount + // 7 chars
+                               finalPaddedFinancialMonth + // 2 chars
+                               finalPaddedFiscalYear +     // 4 chars
+                               orderTransferSection +    // 14 chars (Order + Transfer)
+                               endChar;                     // 1 char
+
+            // Final length check (should already be 62)
+            if (headerLine.length !== 62) {
+                 console.error(`FATAL: Generated TXT header line has incorrect total length (${headerLine.length}). Generated: "${headerLine}"`);
+                 return '*'.padEnd(61, 'L') + '0'; // Indicate Length error
+            }
+
+            return headerLine;
+        } catch (e) {
+             console.error("Error generating TXT header line:", e);
+             return '*'.padEnd(61, 'E') + '0'; // Indicate general Error
         }
-        const totalPayableCentsString = String(Math.round(totalNetPayableNumeric * 100));
-        const finalPaddedTotalPayable = totalPayableCentsString.padStart(13, '0').substring(0, 13);
-        // Calculate Number of Beneficiaries for TXT body
-        const numberOfBeneficiariesForBody = compensations.filter(comp => {
-            const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-            const rip = calculateRIP(beneficiary?.account || '');
-            const name = String(beneficiary?.name || '').trim();
-            const latinPattern = /^[a-zA-Z\s\-]+$/;
-            return beneficiary && rip && !rip.includes('خطأ') && name && latinPattern.test(name);
-        }).length;
-        const finalPaddedBeneficiaryCount = String(numberOfBeneficiariesForBody).padStart(7, '0').substring(0, 7);
-        // Financial Month (2 chars)
-        const financialMonth = String(inst.financialMonth || '').trim();
-        let finalPaddedFinancialMonth;
-        if (financialMonth === '' || !/^\d+$/.test(financialMonth)) {
-            console.warn(`TXT Header Warning: Invalid or missing financial month: "${financialMonth}". Using "00".`);
-            finalPaddedFinancialMonth = '00';
-        } else {
-            finalPaddedFinancialMonth = financialMonth.padStart(2, '0').substring(0, 2);
-        }
-        // Fiscal Year (4 chars)
-        const fiscalYear = String(inst.fiscalYear || '').trim();
-        let finalPaddedFiscalYear;
-        if (fiscalYear === '' || !/^\d{4}$/.test(fiscalYear)) {
-            console.warn(`TXT Header Warning: Invalid or missing fiscal year: "${fiscalYear}". Using "0000".`);
-            finalPaddedFiscalYear = '0000';
-        } else {
-            finalPaddedFiscalYear = fiscalYear.padStart(4, '0').substring(0, 4);
-        }
-        // Order Number (8 chars)
-        const orderNumber = String(inst.orderNumber || '').trim();
-        const paddedOrderNumber = orderNumber.padStart(8, '0').substring(0, 8);
-        // Transfer Number (6 chars)
-        const transferNumber = String(inst.transferNumber || '').trim();
-        const paddedTransferNumber = transferNumber.padStart(6, '0').substring(0, 6);
-        // Combined field (Order + Transfer) = 8 + 6 = 14 chars
-        const orderTransferSection = paddedOrderNumber + paddedTransferNumber;
-        // End char (1 char)
-        const endChar = '0';
-        // Combine all parts (1 + 20 + 13 + 7 + 2 + 4 + 14 + 1 = 62)
-        const headerLine = startChar +
-            ripSection +              // 20 chars (Calculated RIP of Treasury CCP)
-            finalPaddedTotalPayable + // 13 chars
-            finalPaddedBeneficiaryCount + // 7 chars
-            finalPaddedFinancialMonth + // 2 chars
-            finalPaddedFiscalYear +     // 4 chars
-            orderTransferSection +    // 14 chars (Order + Transfer)
-            endChar;                     // 1 char
-        // Final length check (should already be 62)
-        if (headerLine.length !== 62) {
-            console.error(`FATAL: Generated TXT header line has incorrect total length (${headerLine.length}). Generated: "${headerLine}"`);
-            return '*'.padEnd(61, 'L') + '0'; // Indicate Length error
-        }
-        return headerLine;
-    } catch (e) {
-        console.error("Error generating TXT header line:", e);
-        return '*'.padEnd(61, 'E') + '0'; // Indicate general Error
     }
-}
 
 
     // --- Export TXT ---
     async function exportTxt() {
         try {
-            // 1. بناء بيانات المستفيدين مع التقريب
-            let roundedNetPayables = [];
-            const txtData = compensations.map(comp => {
-                try {
-                    const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-                    if (!beneficiary) {
-                        console.warn(`Skipping TXT export record for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
-                        return null;
-                    }
-                    const account = String(beneficiary.account || '').trim();
-                    const name = String(beneficiary.name || '').trim();
-                    const latinPattern = /^[a-zA-Z\s\-]+$/;
-                    if (account === '' || !latinPattern.test(name)) {
-                        console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Invalid account "${account}" or non-Latin name "${name}".`);
-                        return null;
-                    }
-                    // Calculate RIP for the TXT line
-                    const fullRIP = calculateRIP(account);
-                    if (!fullRIP || fullRIP.includes('خطأ')) {
-                        console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Failed RIP calculation for CCP "${account}" (Result: ${fullRIP}).`);
-                        return null;
-                    }
-                    // --- التقريب ---
-                    const netPayableRounded = Math.round((parseFloat(comp.netPayable) || 0) * 100) / 100;
-                    roundedNetPayables.push(netPayableRounded);
-                    // --- Build the 62-character string ---
-                    const startChar = '*';
-                    const ripSection = fullRIP; // 20 chars, should be valid now
-                    const netPayableCentsString = String(Math.round(netPayableRounded * 100));
-                    const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
-                    const nameLength = name.length;
-                    const spacesNeededForName = 27 - nameLength;
-                    const finalNameField = (name + (spacesNeededForName > 0 ? ' '.repeat(spacesNeededForName) : '')).substring(0, 27);
-                    const endChar = '1';
-                    const txtRecord = startChar + ripSection + finalPaddedNetPayable + finalNameField + endChar; // Total 62 chars
-                    if (txtRecord.length !== 62) {
-                        console.error(`FATAL: Generated TXT record has incorrect length (${txtRecord.length}) for beneficiary ID ${beneficiary.id}. Record: "${txtRecord}". This should not happen if RIP calculation is correct.`);
-                        return null; // Fatal error for this record
-                    }
-                    return txtRecord;
-                } catch (e) {
-                    console.error(`Error generating TXT record for compensation ID ${comp.beneficiaryId}:`, e);
-                    return null; // Skip record on error
-                }
-            }).filter(record => record !== null);
+             // Generate the header line first
+             const headerLine = generateTxtHeaderLine();
+             // Check if header line generation failed critically
+             if (headerLine.length !== 62 || headerLine.includes('I') || headerLine.includes('L') || headerLine.includes('E')) { // Check for error indicators
+                  alert("لا يمكن تصدير ملف TXT.\nالرجاء التأكد من صحة واكتمال معلومات المؤسسة (حساب الخزينة، الشهر، السنة المالية، رقم الأمر بالصرف، رقم الحوالة) وأنها تحتوي على أرقام فقط حيث يجب، وأن حساب الخزينة صالح لحساب رقم RIP.");
+                  console.error("TXT export aborted due to malformed header line.");
+                  return;
+             }
 
-            // 2. حساب مجموع الصافي بعد التقريب فقط
-            const totalRoundedNetPayable = roundedNetPayables.reduce((sum, val) => sum + val, 0);
 
-            // 3. توليد السطر الأول (header) باستخدام المجموع بعد التقريب
-            const headerLine = generateTxtHeaderLine(totalRoundedNetPayable);
-            if (headerLine.length !== 62 || headerLine.includes('I') || headerLine.includes('L') || headerLine.includes('E')) {
-                alert("لا يمكن تصدير ملف TXT.\nالرجاء التأكد من صحة واكتمال معلومات المؤسسة (حساب الخزينة، الشهر، السنة المالية، رقم الأمر بالصرف، رقم الحوالة) وأنها تحتوي على أرقام فقط حيث يجب، وأن حساب الخزينة صالح لحساب رقم RIP.");
-                console.error("TXT export aborted due to malformed header line.");
-                return;
-            }
+             // Generate the beneficiary data lines, filtering invalid ones
+             const txtData = compensations.map(comp => {
+                 try {
+                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                      if (!beneficiary) {
+                           console.warn(`Skipping TXT export record for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
+                           return null;
+                      }
 
-            // 4. بناء الملف
-            let txtContent = headerLine;
-            if (txtData.length > 0) {
-                txtContent += '\n' + txtData.join('\n');
-            } else {
-                alert("تم إنشاء ملف TXT بالسطر الأول (معلومات الدفعة) فقط.\n\nلا توجد بيانات تعويضات صالحة للمستفيدين ليتم تضمينها في جسم الملف.\nالرجاء التأكد من وجود مستفيدين ببيانات حساب (CCP) يسمح بحساب رقم RIP، وأن الاسم مكتوب بالأحرف اللاتينية فقط، ووجود تعويضات محفوظة لهم.");
-            }
+                     const account = String(beneficiary.account || '').trim(); // Use CCP for TXT export
+                     const name = String(beneficiary.name || '').trim();
 
-            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
-            const filename = `Payment_File_${institutionInfo.fiscalYear}.txt`;
+                      const latinPattern = /^[a-zA-Z\s\-]+$/;
+                      if (account === '' || !latinPattern.test(name)) {
+                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Invalid account "${account}" or non-Latin name "${name}".`);
+                           return null;
+                      }
+
+                     // Calculate RIP for the TXT line
+                     const fullRIP = calculateRIP(account);
+                     if (!fullRIP || fullRIP.includes('خطأ')) {
+                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Failed RIP calculation for CCP "${account}" (Result: ${fullRIP}).`);
+                          return null;
+                     }
+
+                     // --- Build the 62-character string ---
+                     const startChar = '*';
+                     const ripSection = fullRIP; // 20 chars, should be valid now
+                     const netPayableCentsString = String(Math.round((parseFloat(comp.netPayable) || 0) * 100));
+                     const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
+                     const nameLength = name.length;
+                     const spacesNeededForName = 27 - nameLength;
+                     const finalNameField = (name + (spacesNeededForName > 0 ? ' '.repeat(spacesNeededForName) : '')).substring(0, 27);
+                     const endChar = '1';
+
+                     const txtRecord = startChar + ripSection + finalPaddedNetPayable + finalNameField + endChar; // Total 62 chars
+
+                     if (txtRecord.length !== 62) {
+                          console.error(`FATAL: Generated TXT record has incorrect length (${txtRecord.length}) for beneficiary ID ${beneficiary.id}. Record: "${txtRecord}". This should not happen if RIP calculation is correct.`);
+                         return null; // Fatal error for this record
+                     }
+
+                     return txtRecord;
+
+                 } catch (e) {
+                     console.error(`Error generating TXT record for compensation ID ${comp.beneficiaryId}:`, e);
+                     return null; // Skip record on error
+                 }
+             }).filter(record => record !== null); // Filter out any null records
+
+
+             // Combine header and data lines
+             let txtContent = headerLine; // Start with the validated header
+
+             if (txtData.length > 0) {
+                 txtContent += '\n' + txtData.join('\n');
+             } else {
+                 alert("تم إنشاء ملف TXT بالسطر الأول (معلومات الدفعة) فقط.\n\nلا توجد بيانات تعويضات صالحة للمستفيدين ليتم تضمينها في جسم الملف.\nالرجاء التأكد من وجود مستفيدين ببيانات حساب (CCP) يسمح بحساب رقم RIP، وأن الاسم مكتوب بالأحرف اللاتينية فقط، ووجود تعويضات محفوظة لهم.");
+             }
+
+
+             const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+             const filename = `Payment_File_${institutionInfo.fiscalYear}.txt`;
+
             try {
                 if (window.showSaveFilePicker) {
                     const options = {
@@ -2745,10 +2773,13 @@ function generateTxtHeaderLine(totalNetPayableOverride) {
                             accept: {'text/plain': ['.txt']}
                         }]
                     };
+
                     const fileHandle = await window.showSaveFilePicker(options);
+
                     const writableStream = await fileHandle.createWritable();
                     await writableStream.write(blob);
                     await writableStream.close();
+
                     alert('تم حفظ ملف TXT في المكان الذي اخترته.');
                     return;
                 }
@@ -2756,12 +2787,15 @@ function generateTxtHeaderLine(totalNetPayableOverride) {
                 console.error("Error using File System Access API for TXT export:", error);
                 // Fallback
             }
+
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = filename;
+
             document.body.appendChild(a);
             a.click();
+
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
