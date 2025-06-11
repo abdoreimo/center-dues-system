@@ -770,16 +770,14 @@
                 padding: 0;
                 margin: 0;
                 background-color: white !important;
-                 -webkit-print-color-adjust: exact !important;
+                -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
                 font-family: 'Arial', sans-serif !important;
                 color: #000 !important;
             }
-
             header, main, .app-section, #report-preview, #ticker-container, .modal-overlay {
                 display: none !important;
             }
-
             #print-report-content {
                 display: block !important;
                 margin: 0;
@@ -790,136 +788,68 @@
                 box-sizing: border-box;
                 background-color: #ffffff !important;
             }
-
             @page {
-              size: landscape;
-              margin: 1cm;
+                size: landscape;
+                margin: 1cm;
             }
-
             .report-output {
-                 padding: 0;
-                 border: none;
-                 box-shadow: none;
-                 overflow-x: visible;
-                 font-size: 10pt;
-                 color: #000 !important;
-                 background-color: #ffffff !important;
-                 font-family: 'Arial', sans-serif !important;
+                padding: 0;
+                border: none;
+                box-shadow: none;
+                overflow-x: visible;
+                font-size: 10pt;
+                color: #000 !important;
+                background-color: #ffffff !important;
+                font-family: 'Arial', sans-serif !important;
             }
-
             .report-output table {
                 width: 100%;
                 border-collapse: collapse;
                 table-layout: fixed;
-                 border: 2px solid #000 !important;
+                border: 2px solid #000 !important;
             }
-
             .report-output th, .report-output td {
                 font-size: 9pt;
                 padding: 3px 5px;
                 word-wrap: break-word;
-                 white-space: normal;
-                 text-align: center;
-                 border: 1px solid #000 !important;
-                 color: #000 !important;
-            }
-             /* Specific text alignment adjustments for print */
-             .report-output td:first-child, /* الرقم */
-             .report-output th:first-child {
+                white-space: normal;
                 text-align: center;
-             }
-              .report-output td:nth-child(2), /* اسم المستفيد */
-              .report-output th:nth-child(2) {
-                text-align: right;
-              }
-               .report-output td:nth-child(3), /* رقم الحساب */
-               .report-output th:nth-child(3) {
-                text-align: center;
-               }
-               /* Shift indices due to new column */
-                .report-output td:nth-child(4), /* المفتاح - New column index */
-                .report-output th:nth-child(4) {
-                   text-align: center; /* Adjust alignment for the new key column */
-                }
-                .report-output td:nth-child(5), /* تعويض ث 1 - Shifted index */
-                .report-output th:nth-child(5) {
-                    text-align: center;
-                }
-                .report-output td:nth-child(6), /* تعويض ث 2 - Shifted index */
-                .report-output th:nth-child(6) {
-                    text-align: center;
-                }
-                .report-output td:nth-child(7), /* تعويض ث 3 - Shifted index */
-                .report-output th:nth-child(7) {
-                    text-align: center;
-                }
-                .report-output td:nth-child(8), /* تعويض ث 4 - Shifted index */
-                .report-output th:nth-child(8) {
-                    text-align: center;
-                }
-                 .report-output td:nth-child(9), /* الصافي للدفع - Shifted index */
-                .report-output th:nth-child(9) {
-                    text-align: center;
-                }
-
-
-            .report-output .report-header {
-                text-align: center;
-                margin-bottom: 15px;
-                 color: #000 !important;
+                border: 1px solid #000 !important;
+                color: #000 !important;
             }
-             .report-output .report-header p {
-                 font-size: 11pt;
-                 font-weight: bold;
-                 margin: 3px 0;
-                 color: #000 !important;
-             }
-
-            .report-output .report-footer {
-                 margin-top: 20px;
-                 text-align: center;
-                  color: #000 !important;
-            }
-            .report-output .report-footer p {
-                text-align: right;
-                margin: 3px 1cm;
-                font-size: 10pt;
-                 font-weight: normal;
-                 color: #000 !important;
-            }
-             .report-output .signatures {
-                margin-top: 30px;
-                display: flex;
-                justify-content: space-around;
-                width: 100%;
-                 color: #000 !important;
-             }
-             .report-output .signature {
-                text-align: center;
-                min-width: 150px;
-                 font-size: 10pt;
-                  color: #000 !important;
-             }
-              .report-output .page-number {
-                display: none !important;
-             }
-
-             /* Adjust specific column widths for print - Need to add width for the new Key column */
-             .report-output table th:nth-child(1), .report-output table td:nth-child(1) { width: 6%; } /* الرقم */
-             .report-output table th:nth-child(2), .report-output table td:nth-child(2) { width: 20%; text-align: right; } /* اسم المستفيد */
-             .report-output table th:nth-child(3), .report-output table td:nth-child(3) { width: 10%; } /* رقم الحساب (CCP) */
-             .report-output table th:nth-child(4), .report-output table td:nth-child(4) { width: 15%; } /* رقم RIP الكامل (Adjusted width for 20 digits) */
-             .report-output table th:nth-child(5), .report-output table td:nth-child(5) { width: 9%; } /* تعويض ث 1 */
-             .report-output table th:nth-child(6), .report-output table td:nth-child(6) { width: 9%; } /* تعويض ث 2 */
-             .report-output table th:nth-child(7), .report-output table td:nth-child(7) { width: 9%; } /* تعويض ث 3 */
-             .report-output table th:nth-child(8), .report-output table td:nth-child(8) { width: 9%; } /* تعويض ث 4 */
-             .report-output table th:nth-child(9), .report-output table td:nth-child(9) { width: 13%; } /* الصافي للدفع (Adjusted width) */
-
-              /* Ensure total row colspan is correct */
-              .report-output .total-row td:first-child {
-                  text-align: center;
-              }
-               .report-output .total-row th, .report-output .total-row td { background-color: #ced4da !important; color: #000 !important; }
+            /* Specific text alignment adjustments for print */
+            .report-output td:first-child, .report-output th:first-child { text-align: center; }
+            .report-output td:nth-child(2), .report-output th:nth-child(2) { text-align: right; }
+            .report-output td:nth-child(3), .report-output th:nth-child(3) { text-align: center; }
+            .report-output td:nth-child(4), .report-output th:nth-child(4) { text-align: center; }
+            .report-output td:nth-child(5), .report-output th:nth-child(5) { text-align: center; }
+            .report-output td:nth-child(6), .report-output th:nth-child(6) { text-align: center; }
+            .report-output td:nth-child(7), .report-output th:nth-child(7) { text-align: center; }
+            .report-output td:nth-child(8), .report-output th:nth-child(8) { text-align: center; }
+            .report-output td:nth-child(9), .report-output th:nth-child(9) { text-align: center; }
+            .report-output td:nth-child(10), .report-output th:nth-child(10) { text-align: center; }
+            .report-output td:nth-child(11), .report-output th:nth-child(11) { text-align: center; }
+            /* Adjust specific column widths for print - now with الخصم */
+            .report-output table th:nth-child(1), .report-output table td:nth-child(1) { width: 6%; }
+            .report-output table th:nth-child(2), .report-output table td:nth-child(2) { width: 20%; text-align: right; }
+            .report-output table th:nth-child(3), .report-output table td:nth-child(3) { width: 10%; }
+            .report-output table th:nth-child(4), .report-output table td:nth-child(4) { width: 15%; }
+            .report-output table th:nth-child(5), .report-output table td:nth-child(5) { width: 7%; }
+            .report-output table th:nth-child(6), .report-output table td:nth-child(6) { width: 7%; }
+            .report-output table th:nth-child(7), .report-output table td:nth-child(7) { width: 7%; }
+            .report-output table th:nth-child(8), .report-output table td:nth-child(8) { width: 7%; }
+            .report-output table th:nth-child(9), .report-output table td:nth-child(9) { width: 7%; } /* الخصم */
+            .report-output table th:nth-child(10), .report-output table td:nth-child(10) { width: 10%; } /* الصافي للدفع */
+            .report-output table th:nth-child(11), .report-output table td:nth-child(11) { width: 5%; }
+            .report-output .report-header { text-align: center; margin-bottom: 15px; color: #000 !important; }
+            .report-output .report-header p { font-size: 11pt; font-weight: bold; margin: 3px 0; color: #000 !important; }
+            .report-output .report-footer { margin-top: 20px; text-align: center; color: #000 !important; }
+            .report-output .report-footer p { text-align: right; margin: 3px 1cm; font-size: 10pt; font-weight: normal; color: #000 !important; }
+            .report-output .signatures { margin-top: 30px; display: flex; justify-content: space-around; width: 100%; color: #000 !important; }
+            .report-output .signature { text-align: center; min-width: 150px; font-size: 10pt; color: #000 !important; }
+            .report-output .page-number { display: none !important; }
+            .report-output .total-row td:first-child { text-align: center; }
+            .report-output .total-row th, .report-output .total-row td { background-color: #ced4da !important; color: #000 !important; }
         }
     </style>
 </head>
@@ -1102,6 +1032,12 @@
                     </div>
                 </div>
 
+                <!-- حقل الخصم -->
+                <div style="margin: 20px 0; text-align:right">
+                    <label for="comp-discount" style="font-weight:bold">الخصم:</label>
+                    <input type="number" step="0.01" id="comp-discount" value="0.00" style="width:120px; margin-right:10px;">
+                </div>
+
                 <button type="submit"><i class="fas fa-file-invoice-dollar"></i> حساب وحفظ التعويض</button>
             </form>
 
@@ -1111,14 +1047,15 @@
                     <tr>
                         <th>الرقم</th>
                         <th>اللقب و الاسم</th>
-                        <th>رقم العداد</th> <!-- Clarified header -->
-                        <th>رقم RIP الكامل</th> <!-- New/Updated header -->
-                        <th>تعويض ث 1</th> <!-- Shifted -->
-                        <th>تعويض ث 2</th> <!-- Shifted -->
-                        <th>تعويض ث 3</th> <!-- Shifted -->
-                        <th>تعويض ث 4</th> <!-- Shifted -->
-                        <th>الصافي للدفع</th> <!-- Shifted -->
-                <th>إجراء</th>
+                        <th>رقم العداد</th>
+                        <th>رقم RIP الكامل</th>
+                        <th>تعويض ث 1</th>
+                        <th>تعويض ث 2</th>
+                        <th>تعويض ث 3</th>
+                        <th>تعويض ث 4</th>
+                        <th>الخصم</th>
+                        <th>الصافي للدفع</th>
+                        <th>إجراء</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1140,7 +1077,7 @@
 
              <h3>معاينة التقرير (قد يختلف عن الطباعة النهائية)</h3>
              <div id="report-preview" class="report-output">
-                 <!-- Report HTML will be generated here by JavaScript -->
+                 <!-- Report HTML will be generated here بواسطة جافاسكريبت -->
              </div>
         </section>
 
@@ -1312,8 +1249,10 @@
                             comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
                             comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
 
-                            // إعادة حساب الصافي للدفع مع التقريب لأقرب سنتيم
-                            comp.netPayable = Math.round((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) * 100) / 100;
+                            // دعم حقل الخصم الجديد
+                            comp.discount = parseFloat(comp.discount) || 0;
+                            // إعادة حساب الصافي للدفع مع الخصم
+                            comp.netPayable = Math.round(((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) - comp.discount) * 100) / 100;
                         });
                         compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                     } catch (e) {
@@ -2093,8 +2032,11 @@
                   document.getElementById('q4-added-value').value = compData.q4.value;
                   document.getElementById('q4-state-contrib').value = compData.q4.contrib;
 
+                  // تحميل الخصم
+                  document.getElementById('comp-discount').value = compData.discount || 0;
                   console.log(`Loaded compensation input data for beneficiary ${beneficiaryId}.`);
              } else {
+                 document.getElementById('comp-discount').value = 0;
                  console.log(`No stored compensation data for beneficiary ${beneficiaryId}. Inputs remain 0.`);
              }
         } catch (e) {
@@ -2104,7 +2046,7 @@
     }
 
     function resetCompensationFormInputs() {
-         const inputs = ['q1-amount-nofees', 'q1-added-value', 'q1-state-contrib', 'q2-amount-nofees', 'q2-added-value', 'q2-state-contrib', 'q3-amount-nofees', 'q3-added-value', 'q3-state-contrib', 'q4-amount-nofees', 'q4-added-value', 'q4-state-contrib'];
+         const inputs = ['q1-amount-nofees', 'q1-added-value', 'q1-state-contrib', 'q2-amount-nofees', 'q2-added-value', 'q2-state-contrib', 'q3-amount-nofees', 'q3-added-value', 'q3-state-contrib', 'q4-amount-nofees', 'q4-added-value', 'q4-state-contrib', 'comp-discount'];
          inputs.forEach(id => {
              const input = document.getElementById(id);
              if(input) input.value = '0.00';
@@ -2174,13 +2116,17 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
             const q4_value = parseFloat(document.getElementById('q4-added-value')?.value) || 0;
             const q4_contrib = parseFloat(document.getElementById('q4-state-contrib')?.value) || 0;
 
+            // قراءة الخصم
+            const discount = parseFloat(document.getElementById('comp-discount')?.value) || 0;
+
             // Calculate compensation for each quarter using the updated function
             const q1_calculated = calculateQuarterlyComp(q1_nofees, q1_value, q1_contrib);
             const q2_calculated = calculateQuarterlyComp(q2_nofees, q2_value, q2_contrib);
             const q3_calculated = calculateQuarterlyComp(q3_nofees, q3_value, q3_contrib);
             const q4_calculated = calculateQuarterlyComp(q4_nofees, q4_value, q4_contrib);
 
-            const netPayable = Math.round((q1_calculated + q2_calculated + q3_calculated + q4_calculated) * 100) / 100;
+            // حساب الصافي للدفع مع الخصم
+            const netPayable = Math.round(((q1_calculated + q2_calculated + q3_calculated + q4_calculated) - discount) * 100) / 100;
 
             const newCompensationData = {
                 beneficiaryId: beneficiaryId,
@@ -2188,6 +2134,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                 q2: { nofees: q2_nofees, value: q2_value, contrib: q2_contrib, calculated: q2_calculated },
                 q3: { nofees: q3_nofees, value: q3_value, contrib: q3_contrib, calculated: q3_calculated },
                 q4: { nofees: q4_nofees, value: q4_value, contrib: q4_contrib, calculated: q4_calculated },
+                discount: discount,
                 netPayable: netPayable
             };
 
@@ -2224,14 +2171,16 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
 
             // Update table headers (should be static HTML, this is just a safeguard)
              const headers = document.getElementById('compensation-summary-table').querySelectorAll('th');
-             if(headers.length >= 9) {
-                 headers[2].textContent = 'رقم الحساب (CCP)';
+             if(headers.length >= 11) {
+                 headers[2].textContent = 'رقم العداد';
                  headers[3].textContent = 'رقم RIP الكامل';
                  headers[4].textContent = 'تعويض ث 1';
                  headers[5].textContent = 'تعويض ث 2';
                  headers[6].textContent = 'تعويض ث 3';
                  headers[7].textContent = 'تعويض ث 4';
-                 headers[8].textContent = 'الصافي للدفع';
+                 headers[8].textContent = 'الخصم';
+                 headers[9].textContent = 'الصافي للدفع';
+                 headers[10].textContent = 'إجراء';
              } else {
                   console.warn("Compensation summary table headers not found or insufficient count for update.");
              }
@@ -2256,6 +2205,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
+                        discount: comp.discount || 0,
                         netPayable: Math.round(comp.netPayable * 100) / 100
                     };
                  } catch (e) {
@@ -2276,6 +2226,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                 row.insertCell().textContent = formatCurrency(item.q2);
                 row.insertCell().textContent = formatCurrency(item.q3);
                 row.insertCell().textContent = formatCurrency(item.q4);
+                row.insertCell().textContent = formatCurrency(item.discount);
                 row.insertCell().textContent = formatCurrency(item.netPayable);
                 // زر الحذف فقط
                 const actionCell = row.insertCell();
@@ -2297,13 +2248,17 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
     }
             });
 
-             // Update total row colspan
-             const totalRow = document.getElementById('compensation-summary-table').querySelector('.total-row td:first-child');
-             if(totalRow) {
-                 totalRow.setAttribute('colspan', '4');
-             } else {
-                  console.warn("Total row TD not found for colspan update in summary table.");
-             }
+            // إضافة صف المجموع الجديد
+            const totalDiscount = summaryData.reduce((sum, item) => sum + (parseFloat(item.discount) || 0), 0);
+            const totalNetPayable = summaryData.reduce((sum, item) => sum + (parseFloat(item.netPayable) || 0), 0);
+            const totalRow = tableBody.insertRow();
+            totalRow.className = 'total-row';
+            const mergedCell = totalRow.insertCell();
+            mergedCell.colSpan = 8;
+            mergedCell.textContent = 'المجموع';
+            totalRow.insertCell().textContent = formatCurrency(totalDiscount);
+            totalRow.insertCell().textContent = formatCurrency(totalNetPayable);
+            totalRow.insertCell(); // عمود إجراء فارغ
 
         } catch (e) {
             console.error("Error rendering compensation table:", e);
@@ -2338,6 +2293,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
+                        discount: comp.discount || 0,
                         netPayable: Math.round(comp.netPayable * 100) / 100
                     };
                  } catch (e) {
@@ -2373,6 +2329,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                             <th>تعويض ث 2</th>
                             <th>تعويض ث 3</th>
                             <th>تعويض ث 4</th>
+                            <th>الخصم</th>
                             <th>الصافي للدفع</th>
                         </tr>
                     </thead>
@@ -2387,17 +2344,14 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                                 <td class="report-q2-bg">${formatCurrency(item.q2)}</td>
                                 <td class="report-q3-bg">${formatCurrency(item.q3)}</td>
                                 <td class="report-q4-bg">${formatCurrency(item.q4)}</td>
+                                <td>${formatCurrency(item.discount)}</td>
                                 <td>${formatCurrency(item.netPayable)}</td>
                             </tr>
                         `).join('')}
-                         <tr class="total-row">
-                             <!-- Updated colspan to cover 4 columns (رقم, اسم, CCP, RIP) -->
-                            <td colspan="4">المجموع</td>
-                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q1, 0))}</td>
-                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q2, 0))}</td>
-                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q3, 0))}</td>
-                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.q4, 0))}</td>
-                            <td>${formatCurrency(totalNetPayableNumeric)}</td>
+                        <tr class="total-row">
+                            <td colspan="8">المجموع</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + (parseFloat(item.discount) || 0), 0))}</td>
+                            <td>${formatCurrency(reportData.reduce((sum, item) => sum + (parseFloat(item.netPayable) || 0), 0))}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -2485,11 +2439,17 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
 
                      const netPayableNum = parseFloat(comp.netPayable) || 0;
                      const truncatedNetPayable = Math.floor(netPayableNum * 100) / 100;
+                     const discount = comp.discount || 0;
 
                     return {
                         "الرقم": beneficiary.id,
                         "رقم العداد": beneficiary.meter,
                         "رقم RIP الكامل": displayedRip,
+                        "تعويض ث 1": comp.q1.calculated,
+                        "تعويض ث 2": comp.q2.calculated,
+                        "تعويض ث 3": comp.q3.calculated,
+                        "تعويض ث 4": comp.q4.calculated,
+                        "الخصم": discount,
                         "الصافي للدفع": truncatedNetPayable, // Use the truncated value (as number)
                         "اسم المستفيد": beneficiary.name
                     };
@@ -2697,6 +2657,8 @@ function generateTxtHeaderLine(totalNetPayableOverride) {
                     // --- Build the 62-character string ---
                     const startChar = '*';
                     const ripSection = fullRIP; // 20 chars, should be valid now
+                    const discount = comp.discount || 0;
+                    // يمكن تضمين الخصم في ملف TXT كسطر منفصل أو في حقل جديد إذا كان النظام يتطلب ذلك، هنا نكتفي بالحساب فقط
                     const netPayableCentsString = String(Math.round(netPayableRounded * 100));
                     const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
                     const nameLength = name.length;
