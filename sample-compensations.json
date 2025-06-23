@@ -1,0 +1,401 @@
+{
+  "institutionInfo": {
+    "name": "Sample Institution",
+    "address": "123 Main St, City, Country",
+    "contact": "info@sample.org",
+    "createdAt": "2024-06-01T00:00:00Z"
+  },
+  "beneficiaries": [
+  {
+    "id": 1,
+    "name": "Employee 1",
+    "account": "10000001",
+    "meter": "MTR0001",
+    "compensation": {
+      "q1": { "nofees": 10234.55, "value": 1875.21, "contrib": 712.41, "calculated": 12822.16 },
+      "q2": { "nofees": 11012.31, "value": 2100.13, "contrib": 800.11, "calculated": 13912.55 },
+      "q3": { "nofees": 9500.19, "value": 1500.51, "contrib": 600.12, "calculated": 11600.82 },
+      "q4": { "nofees": 12000.23, "value": 2200.17, "contrib": 900.19, "calculated": 15100.59 },
+      "netPayable": 53436.12
+    }
+  },
+  {
+    "id": 2,
+    "name": "Employee 2",
+    "account": "10000002",
+    "meter": "MTR0002",
+    "compensation": {
+      "q1": { "nofees": 9800.11, "value": 2000.13, "contrib": 500.19, "calculated": 12300.43 },
+      "q2": { "nofees": 10500.21, "value": 1800.17, "contrib": 700.23, "calculated": 13000.61 },
+      "q3": { "nofees": 8700.15, "value": 1200.19, "contrib": 400.11, "calculated": 10300.45 },
+      "q4": { "nofees": 11500.13, "value": 2100.21, "contrib": 850.17, "calculated": 14450.51 },
+      "netPayable": 50051.00
+    }
+  },
+  {
+    "id": 3,
+    "name": "Employee 3",
+    "account": "10000003",
+    "meter": "MTR0003",
+    "compensation": {
+      "q1": { "nofees": 9000.13, "value": 1500.11, "contrib": 350.17, "calculated": 10850.41 },
+      "q2": { "nofees": 10000.19, "value": 1700.23, "contrib": 600.13, "calculated": 12300.55 },
+      "q3": { "nofees": 9500.21, "value": 1300.15, "contrib": 500.19, "calculated": 11300.55 },
+      "q4": { "nofees": 10500.23, "value": 2000.17, "contrib": 800.11, "calculated": 13300.51 },
+      "netPayable": 47751.02
+    }
+  },
+  {
+    "id": 4,
+    "name": "Employee 4",
+    "account": "10000004",
+    "meter": "MTR0004",
+    "compensation": {
+      "q1": { "nofees": 11000.15, "value": 2100.19, "contrib": 900.13, "calculated": 14000.47 },
+      "q2": { "nofees": 9500.17, "value": 1200.21, "contrib": 400.15, "calculated": 11100.53 },
+      "q3": { "nofees": 10000.13, "value": 1900.23, "contrib": 500.17, "calculated": 12400.53 },
+      "q4": { "nofees": 10000.19, "value": 1900.11, "contrib": 500.13, "calculated": 12400.43 },
+      "netPayable": 49601.96
+    }
+  },
+  {
+    "id": 5,
+    "name": "Employee 5",
+    "account": "10000005",
+    "meter": "MTR0005",
+    "compensation": {
+      "q1": { "nofees": 10000.13, "value": 1900.21, "contrib": 500.19, "calculated": 12400.53 },
+      "q2": { "nofees": 10000.17, "value": 1900.23, "contrib": 500.11, "calculated": 12400.51 },
+      "q3": { "nofees": 10000.19, "value": 1900.15, "contrib": 500.13, "calculated": 12400.47 },
+      "q4": { "nofees": 10000.21, "value": 1900.17, "contrib": 500.15, "calculated": 12400.53 },
+      "netPayable": 49601.98
+    }
+  },
+  {
+    "id": 6,
+    "name": "Employee 6",
+    "account": "10000006",
+    "meter": "MTR0006",
+    "compensation": {
+      "q1": { "nofees": 10001.13, "value": 1901.21, "contrib": 501.19, "calculated": 12401.53 },
+      "q2": { "nofees": 10002.17, "value": 1902.23, "contrib": 502.11, "calculated": 12402.51 },
+      "q3": { "nofees": 10003.19, "value": 1903.15, "contrib": 503.13, "calculated": 12403.47 },
+      "q4": { "nofees": 10004.21, "value": 1904.17, "contrib": 504.15, "calculated": 12404.53 },
+      "netPayable": 49615.64
+    }
+  },
+  {
+    "id": 7,
+    "name": "Employee 7",
+    "account": "10000007",
+    "meter": "MTR0007",
+    "compensation": {
+      "q1": { "nofees": 10005.13, "value": 1905.21, "contrib": 505.19, "calculated": 12405.53 },
+      "q2": { "nofees": 10006.17, "value": 1906.23, "contrib": 506.11, "calculated": 12406.51 },
+      "q3": { "nofees": 10007.19, "value": 1907.15, "contrib": 507.13, "calculated": 12407.47 },
+      "q4": { "nofees": 10008.21, "value": 1908.17, "contrib": 508.15, "calculated": 12408.53 },
+      "netPayable": 49628.04
+    }
+  },
+  {
+    "id": 8,
+    "name": "Employee 8",
+    "account": "10000008",
+    "meter": "MTR0008",
+    "compensation": {
+      "q1": { "nofees": 10009.13, "value": 1909.21, "contrib": 509.19, "calculated": 12409.53 },
+      "q2": { "nofees": 10010.17, "value": 1910.23, "contrib": 510.11, "calculated": 12410.51 },
+      "q3": { "nofees": 10011.19, "value": 1911.15, "contrib": 511.13, "calculated": 12411.47 },
+      "q4": { "nofees": 10012.21, "value": 1912.17, "contrib": 512.15, "calculated": 12412.53 },
+      "netPayable": 49640.04
+    }
+  },
+  {
+    "id": 9,
+    "name": "Employee 9",
+    "account": "10000009",
+    "meter": "MTR0009",
+    "compensation": {
+      "q1": { "nofees": 10013.13, "value": 1913.21, "contrib": 513.19, "calculated": 12413.53 },
+      "q2": { "nofees": 10014.17, "value": 1914.23, "contrib": 514.11, "calculated": 12414.51 },
+      "q3": { "nofees": 10015.19, "value": 1915.15, "contrib": 515.13, "calculated": 12415.47 },
+      "q4": { "nofees": 10016.21, "value": 1916.17, "contrib": 516.15, "calculated": 12416.53 },
+      "netPayable": 49651.98
+    }
+  },
+  {
+    "id": 10,
+    "name": "Employee 10",
+    "account": "10000010",
+    "meter": "MTR0010",
+    "compensation": {
+      "q1": { "nofees": 10017.13, "value": 1917.21, "contrib": 517.19, "calculated": 12417.53 },
+      "q2": { "nofees": 10018.17, "value": 1918.23, "contrib": 518.11, "calculated": 12418.51 },
+      "q3": { "nofees": 10019.19, "value": 1919.15, "contrib": 519.13, "calculated": 12419.47 },
+      "q4": { "nofees": 10020.21, "value": 1920.17, "contrib": 520.15, "calculated": 12420.53 },
+      "netPayable": 49663.98
+    }
+  }
+  ,
+  {
+    "id": 11,
+    "name": "Employee 11",
+    "account": "10000011",
+    "meter": "MTR0011",
+    "compensation": {
+      "q1": { "nofees": 10021.13, "value": 1921.21, "contrib": 521.19, "calculated": 12421.53 },
+      "q2": { "nofees": 10022.17, "value": 1922.23, "contrib": 522.11, "calculated": 12422.51 },
+      "q3": { "nofees": 10023.19, "value": 1923.15, "contrib": 523.13, "calculated": 12423.47 },
+      "q4": { "nofees": 10024.21, "value": 1924.17, "contrib": 524.15, "calculated": 12424.53 },
+      "netPayable": 49675.64
+    }
+  },
+  {
+    "id": 12,
+    "name": "Employee 12",
+    "account": "10000012",
+    "meter": "MTR0012",
+    "compensation": {
+      "q1": { "nofees": 10025.13, "value": 1925.21, "contrib": 525.19, "calculated": 12425.53 },
+      "q2": { "nofees": 10026.17, "value": 1926.23, "contrib": 526.11, "calculated": 12426.51 },
+      "q3": { "nofees": 10027.19, "value": 1927.15, "contrib": 527.13, "calculated": 12427.47 },
+      "q4": { "nofees": 10028.21, "value": 1928.17, "contrib": 528.15, "calculated": 12428.53 },
+      "netPayable": 49687.64
+    }
+  },
+  {
+    "id": 13,
+    "name": "Employee 13",
+    "account": "10000013",
+    "meter": "MTR0013",
+    "compensation": {
+      "q1": { "nofees": 10029.13, "value": 1929.21, "contrib": 529.19, "calculated": 12429.53 },
+      "q2": { "nofees": 10030.17, "value": 1930.23, "contrib": 530.11, "calculated": 12430.51 },
+      "q3": { "nofees": 10031.19, "value": 1931.15, "contrib": 531.13, "calculated": 12431.47 },
+      "q4": { "nofees": 10032.21, "value": 1932.17, "contrib": 532.15, "calculated": 12432.53 },
+      "netPayable": 49699.64
+    }
+  },
+  {
+    "id": 14,
+    "name": "Employee 14",
+    "account": "10000014",
+    "meter": "MTR0014",
+    "compensation": {
+      "q1": { "nofees": 10033.13, "value": 1933.21, "contrib": 533.19, "calculated": 12433.53 },
+      "q2": { "nofees": 10034.17, "value": 1934.23, "contrib": 534.11, "calculated": 12434.51 },
+      "q3": { "nofees": 10035.19, "value": 1935.15, "contrib": 535.13, "calculated": 12435.47 },
+      "q4": { "nofees": 10036.21, "value": 1936.17, "contrib": 536.15, "calculated": 12436.53 },
+      "netPayable": 49711.64
+    }
+  },
+  {
+    "id": 15,
+    "name": "Employee 15",
+    "account": "10000015",
+    "meter": "MTR0015",
+    "compensation": {
+      "q1": { "nofees": 10037.13, "value": 1937.21, "contrib": 537.19, "calculated": 12437.53 },
+      "q2": { "nofees": 10038.17, "value": 1938.23, "contrib": 538.11, "calculated": 12438.51 },
+      "q3": { "nofees": 10039.19, "value": 1939.15, "contrib": 539.13, "calculated": 12439.47 },
+      "q4": { "nofees": 10040.21, "value": 1940.17, "contrib": 540.15, "calculated": 12440.53 },
+      "netPayable": 49723.64
+    }
+  },
+  {
+    "id": 16,
+    "name": "Employee 16",
+    "account": "10000016",
+    "meter": "MTR0016",
+    "compensation": {
+      "q1": { "nofees": 10041.13, "value": 1941.21, "contrib": 541.19, "calculated": 12441.53 },
+      "q2": { "nofees": 10042.17, "value": 1942.23, "contrib": 542.11, "calculated": 12442.51 },
+      "q3": { "nofees": 10043.19, "value": 1943.15, "contrib": 543.13, "calculated": 12443.47 },
+      "q4": { "nofees": 10044.21, "value": 1944.17, "contrib": 544.15, "calculated": 12444.53 },
+      "netPayable": 49735.64
+    }
+  },
+  {
+    "id": 17,
+    "name": "Employee 17",
+    "account": "10000017",
+    "meter": "MTR0017",
+    "compensation": {
+      "q1": { "nofees": 10045.13, "value": 1945.21, "contrib": 545.19, "calculated": 12445.53 },
+      "q2": { "nofees": 10046.17, "value": 1946.23, "contrib": 546.11, "calculated": 12446.51 },
+      "q3": { "nofees": 10047.19, "value": 1947.15, "contrib": 547.13, "calculated": 12447.47 },
+      "q4": { "nofees": 10048.21, "value": 1948.17, "contrib": 548.15, "calculated": 12448.53 },
+      "netPayable": 49747.64
+    }
+  },
+  {
+    "id": 18,
+    "name": "Employee 18",
+    "account": "10000018",
+    "meter": "MTR0018",
+    "compensation": {
+      "q1": { "nofees": 10049.13, "value": 1949.21, "contrib": 549.19, "calculated": 12449.53 },
+      "q2": { "nofees": 10050.17, "value": 1950.23, "contrib": 550.11, "calculated": 12450.51 },
+      "q3": { "nofees": 10051.19, "value": 1951.15, "contrib": 551.13, "calculated": 12451.47 },
+      "q4": { "nofees": 10052.21, "value": 1952.17, "contrib": 552.15, "calculated": 12452.53 },
+      "netPayable": 49759.64
+    }
+  },
+  {
+    "id": 19,
+    "name": "Employee 19",
+    "account": "10000019",
+    "meter": "MTR0019",
+    "compensation": {
+      "q1": { "nofees": 10053.13, "value": 1953.21, "contrib": 553.19, "calculated": 12453.53 },
+      "q2": { "nofees": 10054.17, "value": 1954.23, "contrib": 554.11, "calculated": 12454.51 },
+      "q3": { "nofees": 10055.19, "value": 1955.15, "contrib": 555.13, "calculated": 12455.47 },
+      "q4": { "nofees": 10056.21, "value": 1956.17, "contrib": 556.15, "calculated": 12456.53 },
+      "netPayable": 49771.64
+    }
+  },
+  {
+    "id": 20,
+    "name": "Employee 20",
+    "account": "10000020",
+    "meter": "MTR0020",
+    "compensation": {
+      "q1": { "nofees": 10057.13, "value": 1957.21, "contrib": 557.19, "calculated": 12457.53 },
+      "q2": { "nofees": 10058.17, "value": 1958.23, "contrib": 558.11, "calculated": 12458.51 },
+      "q3": { "nofees": 10059.19, "value": 1959.15, "contrib": 559.13, "calculated": 12459.47 },
+      "q4": { "nofees": 10060.21, "value": 1960.17, "contrib": 560.15, "calculated": 12460.53 },
+      "netPayable": 49783.64
+    }
+  },
+  {
+    "id": 21,
+    "name": "Employee 21",
+    "account": "10000021",
+    "meter": "MTR0021",
+    "compensation": {
+      "q1": { "nofees": 10061.13, "value": 1961.21, "contrib": 561.19, "calculated": 12461.53 },
+      "q2": { "nofees": 10062.17, "value": 1962.23, "contrib": 562.11, "calculated": 12462.51 },
+      "q3": { "nofees": 10063.19, "value": 1963.15, "contrib": 563.13, "calculated": 12463.47 },
+      "q4": { "nofees": 10064.21, "value": 1964.17, "contrib": 564.15, "calculated": 12464.53 },
+      "netPayable": 49795.64
+    }
+  },
+  {
+    "id": 22,
+    "name": "Employee 22",
+    "account": "10000022",
+    "meter": "MTR0022",
+    "compensation": {
+      "q1": { "nofees": 10065.13, "value": 1965.21, "contrib": 565.19, "calculated": 12465.53 },
+      "q2": { "nofees": 10066.17, "value": 1966.23, "contrib": 566.11, "calculated": 12466.51 },
+      "q3": { "nofees": 10067.19, "value": 1967.15, "contrib": 567.13, "calculated": 12467.47 },
+      "q4": { "nofees": 10068.21, "value": 1968.17, "contrib": 568.15, "calculated": 12468.53 },
+      "netPayable": 49807.64
+    }
+  },
+  {
+    "id": 23,
+    "name": "Employee 23",
+    "account": "10000023",
+    "meter": "MTR0023",
+    "compensation": {
+      "q1": { "nofees": 10069.13, "value": 1969.21, "contrib": 569.19, "calculated": 12469.53 },
+      "q2": { "nofees": 10070.17, "value": 1970.23, "contrib": 570.11, "calculated": 12470.51 },
+      "q3": { "nofees": 10071.19, "value": 1971.15, "contrib": 571.13, "calculated": 12471.47 },
+      "q4": { "nofees": 10072.21, "value": 1972.17, "contrib": 572.15, "calculated": 12472.53 },
+      "netPayable": 49819.64
+    }
+  },
+  {
+    "id": 24,
+    "name": "Employee 24",
+    "account": "10000024",
+    "meter": "MTR0024",
+    "compensation": {
+      "q1": { "nofees": 10073.13, "value": 1973.21, "contrib": 573.19, "calculated": 12473.53 },
+      "q2": { "nofees": 10074.17, "value": 1974.23, "contrib": 574.11, "calculated": 12474.51 },
+      "q3": { "nofees": 10075.19, "value": 1975.15, "contrib": 575.13, "calculated": 12475.47 },
+      "q4": { "nofees": 10076.21, "value": 1976.17, "contrib": 576.15, "calculated": 12476.53 },
+      "netPayable": 49831.64
+    }
+  },
+  {
+    "id": 25,
+    "name": "Employee 25",
+    "account": "10000025",
+    "meter": "MTR0025",
+    "compensation": {
+      "q1": { "nofees": 10077.13, "value": 1977.21, "contrib": 577.19, "calculated": 12477.53 },
+      "q2": { "nofees": 10078.17, "value": 1978.23, "contrib": 578.11, "calculated": 12478.51 },
+      "q3": { "nofees": 10079.19, "value": 1979.15, "contrib": 579.13, "calculated": 12479.47 },
+      "q4": { "nofees": 10080.21, "value": 1980.17, "contrib": 580.15, "calculated": 12480.53 },
+      "netPayable": 49843.64
+    }
+  },
+  {
+    "id": 26,
+    "name": "Employee 26",
+    "account": "10000026",
+    "meter": "MTR0026",
+    "compensation": {
+      "q1": { "nofees": 10081.13, "value": 1981.21, "contrib": 581.19, "calculated": 12481.53 },
+      "q2": { "nofees": 10082.17, "value": 1982.23, "contrib": 582.11, "calculated": 12482.51 },
+      "q3": { "nofees": 10083.19, "value": 1983.15, "contrib": 583.13, "calculated": 12483.47 },
+      "q4": { "nofees": 10084.21, "value": 1984.17, "contrib": 584.15, "calculated": 12484.53 },
+      "netPayable": 49855.64
+    }
+  },
+  {
+    "id": 27,
+    "name": "Employee 27",
+    "account": "10000027",
+    "meter": "MTR0027",
+    "compensation": {
+      "q1": { "nofees": 10085.13, "value": 1985.21, "contrib": 585.19, "calculated": 12485.53 },
+      "q2": { "nofees": 10086.17, "value": 1986.23, "contrib": 586.11, "calculated": 12486.51 },
+      "q3": { "nofees": 10087.19, "value": 1987.15, "contrib": 587.13, "calculated": 12487.47 },
+      "q4": { "nofees": 10088.21, "value": 1988.17, "contrib": 588.15, "calculated": 12488.53 },
+      "netPayable": 49867.64
+    }
+  },
+  {
+    "id": 28,
+    "name": "Employee 28",
+    "account": "10000028",
+    "meter": "MTR0028",
+    "compensation": {
+      "q1": { "nofees": 10089.13, "value": 1989.21, "contrib": 589.19, "calculated": 12489.53 },
+      "q2": { "nofees": 10090.17, "value": 1990.23, "contrib": 590.11, "calculated": 12490.51 },
+      "q3": { "nofees": 10091.19, "value": 1991.15, "contrib": 591.13, "calculated": 12491.47 },
+      "q4": { "nofees": 10092.21, "value": 1992.17, "contrib": 592.15, "calculated": 12492.53 },
+      "netPayable": 49879.64
+    }
+  },
+  {
+    "id": 29,
+    "name": "Employee 29",
+    "account": "10000029",
+    "meter": "MTR0029",
+    "compensation": {
+      "q1": { "nofees": 10093.13, "value": 1993.21, "contrib": 593.19, "calculated": 12493.53 },
+      "q2": { "nofees": 10094.17, "value": 1994.23, "contrib": 594.11, "calculated": 12494.51 },
+      "q3": { "nofees": 10095.19, "value": 1995.15, "contrib": 595.13, "calculated": 12495.47 },
+      "q4": { "nofees": 10096.21, "value": 1996.17, "contrib": 596.15, "calculated": 12496.53 },
+      "netPayable": 49891.64
+    }
+  },
+  {
+    "id": 30,
+    "name": "Employee 30",
+    "account": "10000030",
+    "meter": "MTR0030",
+    "compensation": {
+      "q1": { "nofees": 10097.13, "value": 1997.21, "contrib": 597.19, "calculated": 12497.53 },
+      "q2": { "nofees": 10098.17, "value": 1998.23, "contrib": 598.11, "calculated": 12498.51 },
+      "q3": { "nofees": 10099.19, "value": 1999.15, "contrib": 599.13, "calculated": 12499.47 },
+      "q4": { "nofees": 10100.21, "value": 2000.17, "contrib": 600.15, "calculated": 12500.53 },
+      "netPayable": 49903.64
+    }
+  }
+  ]
+}

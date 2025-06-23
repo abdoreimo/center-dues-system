@@ -1,0 +1,120 @@
+{
+  "institutionInfo": {
+    "republic": "الجمهورية الجزائرية الديمقراطية الشعبية",
+    "ministry": "وزارة التربية الوطنية",
+    "directorate": "مديرية التربية لولاية أدرار",
+    "institution": "متوسطة حكومي قدور بن علال",
+    "fiscalYear": "2025",
+    "financialMonth": "",
+    "treasuryAccount": "",
+    "treasuryKey": "",
+    "orderNumber": "",
+    "transferNumber": ""
+  },
+  "beneficiaries": [
+    {
+      "id": 1,
+      "name": "oulefi abderrhamane",
+      "account": "11111111111",
+      "meter": "1111111"
+    },
+    {
+      "id": 2,
+      "name": "youssafi abdelhalim",
+      "account": "2222222",
+      "meter": "33333333"
+    },
+    {
+      "id": 3,
+      "name": "hamani mokhter",
+      "account": "2222222222",
+      "meter": "3333333"
+    }
+  ],
+  "compensations": [
+    {
+      "beneficiaryId": 1,
+      "q1": {
+        "nofees": 0,
+        "value": 0,
+        "contrib": 0,
+        "calculated": 0
+      },
+      "q2": {
+        "nofees": 0,
+        "value": 0,
+        "contrib": 0,
+        "calculated": 0
+      },
+      "q3": {
+        "nofees": 0,
+        "value": 0,
+        "contrib": 0,
+        "calculated": 0
+      },
+      "q4": {
+        "nofees": 0,
+        "value": 0,
+        "contrib": 0,
+        "calculated": 0
+      },
+      "netPayable": 0
+    },
+    {
+      "beneficiaryId": 3,
+      "q1": {
+        "nofees": 12547.25,
+        "value": 1254.36,
+        "contrib": 8698.45,
+        "calculated": 2551.58
+      },
+      "q2": {
+        "nofees": 5487.58,
+        "value": 4586.36,
+        "contrib": 2225.69,
+        "calculated": 3924.124999999999
+      },
+      "q3": {
+        "nofees": 4587.25,
+        "value": 458.63,
+        "contrib": 5598.36,
+        "calculated": 0
+      },
+      "q4": {
+        "nofees": 0,
+        "value": 0,
+        "contrib": 0,
+        "calculated": 0
+      },
+      "netPayable": 6475.7
+    },
+    {
+      "beneficiaryId": 2,
+      "q1": {
+        "nofees": 12547.25,
+        "value": 1252.36,
+        "contrib": 3658.28,
+        "calculated": 5070.665
+      },
+      "q2": {
+        "nofees": 4005.36,
+        "value": 545.36,
+        "contrib": 3258.36,
+        "calculated": 646.1800000000001
+      },
+      "q3": {
+        "nofees": 4587.25,
+        "value": 2258.48,
+        "contrib": 2354.58,
+        "calculated": 2245.575
+      },
+      "q4": {
+        "nofees": 4587.25,
+        "value": 1228.39,
+        "contrib": 1547.36,
+        "calculated": 2134.1400000000003
+      },
+      "netPayable": 10096.56
+    }
+  ]
+}

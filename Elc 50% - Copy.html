@@ -6,14 +6,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</title>
+
     <!-- Include SheetJS library for XLSX export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Optional: Include a Google Font for better typography -->
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Include Font Awesome for icons -->
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
+        /* --- Neumorphic Styles --- */
+        .neumorphic {
+            background: #e0e7eb;
+            border-radius: 18px;
+            box-shadow:  8px 8px 20px #bfc6cc, -8px -8px 20px #ffffff;
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+        .neumorphic:active {
+            box-shadow:  2px 2px 8px #bfc6cc, -2px -2px 8px #ffffff;
+            transform: scale(0.98);
+        }
+        .neumorphic-btn {
+            background: #e0e7eb;
+            border-radius: 12px;
+            box-shadow:  4px 4px 12px #bfc6cc, -4px -4px 12px #ffffff;
+            border: none;
+            color: #3a6ea5;
+            font-weight: 700;
+            transition: box-shadow 0.3s, transform 0.2s, background 0.3s;
+        }
+        .neumorphic-btn:hover {
+            background: #f5f8fa;
+            box-shadow:  2px 2px 8px #bfc6cc, -2px -2px 8px #ffffff;
+            transform: translateY(-2px) scale(1.03);
+        }
+        .neumorphic-btn:active {
+            background: #e0e7eb;
+            box-shadow:  1px 1px 4px #bfc6cc, -1px -1px 4px #ffffff;
+            transform: scale(0.97);
+        }
+        /* Neumorphic input */
+        .neumorphic-input {
+            background: #e0e7eb;
+            border-radius: 10px;
+            box-shadow:  2px 2px 6px #bfc6cc, -2px -2px 6px #ffffff;
+            border: 1px solid #c1ccd1;
+            padding: 12px;
+            transition: box-shadow 0.3s, border-color 0.2s;
+        }
+        .neumorphic-input:focus {
+            box-shadow:  1px 1px 3px #bfc6cc, -1px -1px 3px #ffffff;
+            border-color: #5b87b4;
+        }
+        /* --- Animations --- */
+        .fade-in {
+            animation: fadeIn 1.2s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bounce {
+            animation: bounce 0.7s;
+        }
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            50% { transform: scale(0.95); }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
         /* --- CSS Variables (Optional but Recommended for easier maintenance) --- */
         :root {
             /* Colors - Balanced Medium Theme */
@@ -925,79 +989,221 @@
 </head>
 <body>
 
-    <header>
-        <h1>برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
+    <header class="neumorphic fade-in">
+        <h1 class="fade-in">برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
         <nav>
-            <button onclick="showSection('institution-info-section')"><i class="fas fa-building"></i> معلومات المؤسسة</button>
-            <button onclick="showSection('beneficiary-management-section')"><i class="fas fa-users"></i> إدارة المستفيدين</button>
-            <button onclick="showSection('compensation-management-section')"><i class="fas fa-money-bill-wave"></i> إدارة التعويضات</button>
-            <button onclick="showSection('reporting-section')"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
-             <button onclick="showSection('backup-restore-section')"><i class="fas fa-database"></i> النسخ الاحتياطي والاستعادة</button>
+            <button class="neumorphic-btn fade-in" onclick="showSection('institution-info-section')"><i class="bi bi-building"></i> معلومات المؤسسة</button>
+            <button class="neumorphic-btn fade-in" onclick="showSection('beneficiary-management-section')"><i class="bi bi-people"></i> إدارة المستفيدين</button>
+            <button class="neumorphic-btn fade-in" onclick="showSection('compensation-management-section')"><i class="bi bi-cash-coin"></i> إدارة التعويضات</button>
+            <button class="neumorphic-btn fade-in" onclick="showSection('reporting-section')"><i class="bi bi-file-earmark-text"></i> التقارير والتصدير</button>
+            <button class="neumorphic-btn fade-in" onclick="showSection('backup-restore-section')"><i class="bi bi-database"></i> النسخ الاحتياطي والاستعادة</button>
         </nav>
     </header>
 
     <main>
         <!-- معلومات المؤسسة -->
-        <section id="institution-info-section" class="app-section">
-            <h2>معلومات المؤسسة</h2>
+        <section id="institution-info-section" class="app-section neumorphic fade-in">
+            <h2 class="fade-in">معلومات المؤسسة</h2>
             <form id="institution-info-form">
                 <!-- Grouping fields in rows -->
                 <div class="form-row">
                     <div>
                         <label for="republic">الجمهورية:</label>
-                        <input type="text" id="republic" value="الجمهورية الجزائرية الديمقراطية الشعبية">
+                        <input type="text" id="republic" class="neumorphic-input" value="الجمهورية الجزائرية الديمقراطية الشعبية">
                     </div>
                     <div>
                         <label for="ministry">الوزارة:</label>
-                        <input type="text" id="ministry" value="وزارة التربية الوطنية">
+                        <input type="text" id="ministry" class="neumorphic-input" value="وزارة التربية الوطنية">
                     </div>
                 </div>
                 <div class="form-row">
                     <div>
                         <label for="directorate">المديرية:</label>
-                        <input type="text" id="directorate" value="مديرية التربية لولاية أدرار">
+                        <input type="text" id="directorate" class="neumorphic-input" value="مديرية التربية لولاية أدرار">
                     </div>
                     <div>
                         <label for="institution">المؤسسة:</label>
-                        <input type="text" id="institution" value="متوسطة حكومي قدور بن علال">
+                        <input type="text" id="institution" class="neumorphic-input" value="متوسطة حكومي قدور بن علال">
                     </div>
                 </div>
                 <div class="form-row">
                     <div>
                         <label for="fiscal-year">السنة المالية (YYYY):</label>
-                        <input type="text" id="fiscal-year" value="2025" placeholder="مثال: 2025" maxlength="4">
+                        <input type="text" id="fiscal-year" class="neumorphic-input" value="2025" placeholder="مثال: 2025" maxlength="4">
                     </div>
                     <div>
                         <label for="financial-month">الشهر المالي (MM):</label>
-                        <input type="text" id="financial-month" value="" placeholder="مثال: 04" maxlength="2">
+                        <input type="text" id="financial-month" class="neumorphic-input" value="" placeholder="مثال: 04" maxlength="2">
                     </div>
                 </div>
                 <div class="form-row">
                     <div>
                         <label for="treasury-account">رقم الحساب البريدي لدى الخزينة (CCP):</label>
-                        <input type="text" id="treasury-account" value="" placeholder="حساب الخزينة CCP">
+                        <input type="text" id="treasury-account" class="neumorphic-input" value="" placeholder="حساب الخزينة CCP">
                     </div>
                     <div>
                         <label for="treasury-key">مفتاح الحساب البريدي لدى الخزينة (CLE):</label>
-                        <input type="text" id="treasury-key" value="" placeholder="مفتاح حساب الخزينة 02 رقم" maxlength="2">
+                        <input type="text" id="treasury-key" class="neumorphic-input" value="" placeholder="مفتاح حساب الخزينة 02 رقم" maxlength="2">
                     </div>
                 </div>
                 <!-- New row for Order and Transfer Numbers -->
                 <div class="form-row">
                      <div>
                          <label for="order-number">رقم الأمر بالصرف:</label>
-                         <input type="text" id="order-number" value="">
+                         <input type="text" id="order-number" class="neumorphic-input" value="">
                      </div>
                      <div>
                          <label for="transfer-number">رقم الحوالة:</label>
-                         <input type="text" id="transfer-number" value="">
+                         <input type="text" id="transfer-number" class="neumorphic-input" value="">
                      </div>
                 </div>
                  <!-- Button remains in its own div for spacing -->
                 <div>
-                    <button type="submit"><i class="fas fa-save"></i> حفظ المعلومات</button>
+                    <button type="submit" class="neumorphic-btn bounce"><i class="bi bi-save"></i> حفظ المعلومات</button>
                 </div>
             </form>
+        </section>
+
+        <!-- إدارة المستفيدين -->
+        <section id="beneficiary-management-section" class="app-section neumorphic fade-in">
+            <h2 class="fade-in">إدارة المستفيدين</h2>
+            <!-- مثال: نموذج إضافة مستفيد -->
+            <form id="add-beneficiary-form">
+                <div class="form-row">
+                    <div>
+                        <label for="beneficiary-name">اسم المستفيد:</label>
+                        <input type="text" id="beneficiary-name" class="neumorphic-input">
+                    </div>
+                    <div>
+                        <label for="beneficiary-account">رقم الحساب:</label>
+                        <input type="text" id="beneficiary-account" class="neumorphic-input">
+                    </div>
+                    <div>
+                        <label for="beneficiary-meter">رقم العداد:</label>
+                        <input type="text" id="beneficiary-meter" class="neumorphic-input">
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="neumorphic-btn bounce"><i class="bi bi-person-plus"></i> إضافة مستفيد</button>
+                </div>
+            </form>
+            <!-- جدول المستفيدين -->
+            <div class="fade-in">
+                <table class="neumorphic">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>اسم المستفيد</th>
+                            <th>رقم الحساب</th>
+                            <th>رقم العداد</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="beneficiaries-table-body">
+                        <!-- سيتم تعبئته ديناميكياً -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- إدارة التعويضات -->
+        <section id="compensation-management-section" class="app-section fade-in neumorphic-comp">
+            <h2 class="fade-in">إدارة التعويضات</h2>
+            <form id="manage-compensation-form">
+                <h3><i class="fas fa-calculator"></i> إدخال / تحديث تعويض لمستفيد</h3>
+                 <!-- Search input added -->
+                 <div class="beneficiary-search-container">
+                      <label for="beneficiary-search-input"><i class="fas fa-search"></i> البحث عن مستفيد:</label>
+                      <input type="text" id="beneficiary-search-input" class="neumorphic-input" placeholder="ابحث بالاسم أو رقم الحساب">
+                 </div>
+                 <div>
+                    <label for="select-beneficiary"><i class="fas fa-user-check"></i> اختيار المستفيد:</label>
+                    <select id="select-beneficiary" class="neumorphic-input" required>
+                        <option value="">-- اختر مستفيداً --</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Quarterly Compensation Inputs - Grouped Side-by-Side -->
+                <div class="quarter-group">
+                    <div class="quarter-inputs report-q1-bg neumorphic">
+                        <h4>الثلاثي الأول</h4>
+                        <div><label for="q1-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q1-amount-nofees" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q1-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q1-added-value" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q1-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q1-state-contrib" class="neumorphic-input" value="0.00"></div>
+                    </div>
+                     <div class="quarter-inputs report-q2-bg neumorphic">
+                        <h4>الثلاثي الثاني</h4>
+                        <div><label for="q2-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q2-amount-nofees" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q2-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q2-added-value" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q2-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q2-state-contrib" class="neumorphic-input" value="0.00"></div>
+                    </div>
+                </div>
+
+                <div class="quarter-group">
+                    <div class="quarter-inputs report-q3-bg neumorphic">
+                        <h4>الثلاثي الثالث</h4>
+                        <div><label for="q3-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q3-amount-nofees" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q3-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q3-added-value" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q3-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q3-state-contrib" class="neumorphic-input" value="0.00"></div>
+                    </div>
+                     <div class="quarter-inputs report-q4-bg neumorphic">
+                        <h4>الثلاثي الرابع</h4>
+                        <div><label for="q4-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q4-amount-nofees" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q4-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q4-added-value" class="neumorphic-input" value="0.00"></div>
+                        <div><label for="q4-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q4-state-contrib" class="neumorphic-input" value="0.00"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="neumorphic-btn bounce"><i class="fas fa-file-invoice-dollar"></i> حساب وحفظ التعويض</button>
+            </form>
+
+            <h3>ملخص التعويضات المدخلة</h3>
+             <table id="compensation-summary-table" class="neumorphic">
+                <thead>
+                    <tr>
+                        <th>الرقم</th>
+                        <th>اللقب و الاسم</th>
+                        <th>رقم العداد</th>
+                        <th>رقم RIP الكامل</th>
+                        <th>تعويض ث 1</th>
+                        <th>تعويض ث 2</th>
+                        <th>تعويض ث 3</th>
+                        <th>تعويض ث 4</th>
+                        <th>الصافي للدفع</th>
+                        <th>إجراء</th>
+                    </tr>
+                </thead>
+                <tbody id="compensation-summary-body">
+                    <!-- سيتم تعبئته ديناميكياً -->
+                </tbody>
+            </table>
+        </section>
+        </section>
+
+        <!-- التقارير والتصدير -->
+        <section id="reporting-section" class="app-section neumorphic fade-in">
+            <h2 class="fade-in">التقارير والتصدير</h2>
+            <div class="fade-in">
+                <button class="neumorphic-btn bounce"><i class="bi bi-file-earmark-excel"></i> تصدير Excel</button>
+                <button class="neumorphic-btn bounce"><i class="bi bi-printer"></i> طباعة التقرير</button>
+            </div>
+            <div class="report-output neumorphic fade-in" id="report-preview">
+                <!-- معاينة التقرير هنا -->
+            </div>
+        </section>
+
+        <!-- النسخ الاحتياطي والاستعادة -->
+        <section id="backup-restore-section" class="app-section neumorphic fade-in">
+            <h2 class="fade-in">النسخ الاحتياطي والاستعادة</h2>
+            <div class="fade-in">
+                <button class="neumorphic-btn bounce"><i class="bi bi-cloud-arrow-down"></i> تحميل نسخة احتياطية</button>
+                <button class="neumorphic-btn bounce"><i class="bi bi-cloud-arrow-up"></i> استعادة نسخة احتياطية</button>
+            </div>
+            <div class="fade-in explanation">
+                يمكنك هنا تحميل أو استعادة نسخة احتياطية من بيانات البرنامج.
+            </div>
+        </section>
         </section>
 
         <!-- إدارة المستفيدين -->
@@ -1073,13 +1279,13 @@
 
                 <!-- Quarterly Compensation Inputs - Grouped Side-by-Side -->
                 <div class="quarter-group">
-                    <div class="quarter-inputs">
+                    <div class="quarter-inputs report-q1-bg">
                         <h4>الثلاثي الأول</h4>
                         <div><label for="q1-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q1-amount-nofees" value="0.00"></div>
                         <div><label for="q1-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q1-added-value" value="0.00"></div>
                         <div><label for="q1-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q1-state-contrib" value="0.00"></div>
                     </div>
-                     <div class="quarter-inputs">
+                     <div class="quarter-inputs report-q2-bg">
                         <h4>الثلاثي الثاني</h4>
                         <div><label for="q2-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q2-amount-nofees" value="0.00"></div>
                         <div><label for="q2-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q2-added-value" value="0.00"></div>
@@ -1088,13 +1294,13 @@
                 </div>
 
                 <div class="quarter-group">
-                    <div class="quarter-inputs">
+                    <div class="quarter-inputs report-q3-bg">
                         <h4>الثلاثي الثالث</h4>
                         <div><label for="q3-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q3-amount-nofees" value="0.00"></div>
                         <div><label for="q3-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q3-added-value" value="0.00"></div>
                         <div><label for="q3-state-contrib">مساهمة الدولة:</label><input type="number" step="0.01" id="q3-state-contrib" value="0.00"></div>
                     </div>
-                     <div class="quarter-inputs">
+                     <div class="quarter-inputs report-q4-bg">
                         <h4>الثلاثي الرابع</h4>
                         <div><label for="q4-amount-nofees">المبلغ دون رسوم:</label><input type="number" step="0.01" id="q4-amount-nofees" value="0.00"></div>
                         <div><label for="q4-added-value">القيمة المضافة:</label><input type="number" step="0.01" id="q4-added-value" value="0.00"></div>
@@ -1158,6 +1364,47 @@
 
 
     </main>
+    <script>
+    // دالة طباعة التقرير
+    function printReport() {
+        var printContents = document.getElementById('report-preview').innerHTML;
+        var printWindow = window.open('', '', 'height=800,width=1200');
+        printWindow.document.write('<html><head><title>طباعة التقرير</title>');
+        // نسخ الأنماط
+        var styles = Array.from(document.getElementsByTagName('style'));
+        styles.forEach(function(style) {
+            printWindow.document.write('<style>' + style.innerHTML + '</style>');
+        });
+        printWindow.document.write('</head><body dir="rtl">');
+        printWindow.document.write(printContents);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(function() { printWindow.print(); printWindow.close(); }, 500);
+    }
+
+    // دالة تصدير ملف TXT (CCP)
+    function exportTxt() {
+        var rows = [];
+        var table = document.getElementById('compensation-summary-table');
+        if (!table) { alert('لا يوجد جدول تعويضات!'); return; }
+        var trs = table.querySelectorAll('tbody tr');
+        trs.forEach(function(tr) {
+            var tds = tr.querySelectorAll('td');
+            var row = [];
+            tds.forEach(function(td) { row.push(td.innerText.trim()); });
+            rows.push(row.join('\t'));
+        });
+        var txtContent = rows.join('\n');
+        var blob = new Blob([txtContent], { type: 'text/plain' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'compensations.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+    </script>
 
      <!-- Hidden section for print output -->
     <div id="print-report-content" class="report-output">
@@ -1312,8 +1559,8 @@
                             comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
                             comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
 
-                            // إعادة حساب الصافي للدفع
-                            comp.netPayable = comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated;
+                            // إعادة حساب الصافي للدفع مع التقريب لأقرب سنتيم
+                            comp.netPayable = Math.round((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) * 100) / 100;
                         });
                         compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                     } catch (e) {
@@ -2180,7 +2427,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
             const q3_calculated = calculateQuarterlyComp(q3_nofees, q3_value, q3_contrib);
             const q4_calculated = calculateQuarterlyComp(q4_nofees, q4_value, q4_contrib);
 
-            const netPayable = q1_calculated + q2_calculated + q3_calculated + q4_calculated;
+            const netPayable = Math.round((q1_calculated + q2_calculated + q3_calculated + q4_calculated) * 100) / 100;
 
             const newCompensationData = {
                 beneficiaryId: beneficiaryId,
@@ -2256,7 +2503,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
-                        netPayable: comp.netPayable
+                        netPayable: Math.round(comp.netPayable * 100) / 100
                     };
                  } catch (e) {
                      console.error(`Error preparing summary data for compensation ID ${comp.beneficiaryId}:`, e);
@@ -2338,7 +2585,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                         q2: comp.q2.calculated,
                         q3: comp.q3.calculated,
                         q4: comp.q4.calculated,
-                        netPayable: comp.netPayable
+                        netPayable: Math.round(comp.netPayable * 100) / 100
                     };
                  } catch (e) {
                      console.error(`Error preparing report data for compensation ID ${comp.beneficiaryId}:`, e);
@@ -2349,7 +2596,7 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
             reportData.sort((a, b) => a.id - b.id);
 
             const totalBeneficiaries = reportData.length;
-            const totalNetPayableNumeric = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const totalNetPayableNumeric = reportData.reduce((sum, item) => sum + Math.round(item.netPayable * 100) / 100, 0);
             const totalNetPayableText = numberToArabicText(totalNetPayableNumeric);
 
             let html = `
@@ -2383,10 +2630,10 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                                 <td>${item.name}</td>
                                 <td>${item.meter}</td>
                                 <td>${item.rip}</td>
-                                <td>${formatCurrency(item.q1)}</td>
-                                <td>${formatCurrency(item.q2)}</td>
-                                <td>${formatCurrency(item.q3)}</td>
-                                <td>${formatCurrency(item.q4)}</td>
+                                <td class="report-q1-bg">${formatCurrency(item.q1)}</td>
+                                <td class="report-q2-bg">${formatCurrency(item.q2)}</td>
+                                <td class="report-q3-bg">${formatCurrency(item.q3)}</td>
+                                <td class="report-q4-bg">${formatCurrency(item.q4)}</td>
                                 <td>${formatCurrency(item.netPayable)}</td>
                             </tr>
                         `).join('')}
@@ -2572,198 +2819,170 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
     }
 
     // --- Generate TXT Header Line ---
-    function generateTxtHeaderLine() {
-        try {
-            const inst = institutionInfo;
-
-            const startChar = '*'; // 1 char
-
-            // Calculate RIP for the Treasury Account
-            const treasuryRIP = calculateRIP(inst.treasuryAccount || '');
-
-            // Use the calculated RIP (20 chars) if valid, otherwise indicate error
-            const ripSection = (treasuryRIP && !treasuryRIP.includes('خطأ')) ? treasuryRIP : '*'.repeat(20); // 20 chars, use * if invalid RIP
-
-            if (ripSection.length !== 20) {
-                 console.error(`TXT Header Error: Calculated RIP for Treasury Account "${inst.treasuryAccount}" is not 20 characters long.`);
-                 // Fallback to 20 * if RIP calc had a length error
-                 const treasuryAccountCheck = String(inst.treasuryAccount || '').trim();
-                 if (!treasuryAccountCheck || !/^\d+$/.test(treasuryAccountCheck)) {
-                     // If treasury account itself is invalid, use a different indicator
-                      return '*'.padEnd(61, 'I') + '0'; // Indicate Invalid Info
-                 }
-                 return '*'.padEnd(61, 'R') + '0'; // Indicate RIP calculation error
+// totalNetPayableOverride: إذا تم تمريره، استخدمه بدلاً من إعادة الحساب
+function generateTxtHeaderLine(totalNetPayableOverride) {
+    try {
+        const inst = institutionInfo;
+        const startChar = '*'; // 1 char
+        // Calculate RIP for the Treasury Account
+        const treasuryRIP = calculateRIP(inst.treasuryAccount || '');
+        // Use the calculated RIP (20 chars) if valid, otherwise indicate error
+        const ripSection = (treasuryRIP && !treasuryRIP.includes('خطأ')) ? treasuryRIP : '*'.repeat(20); // 20 chars, use * if invalid RIP
+        if (ripSection.length !== 20) {
+            console.error(`TXT Header Error: Calculated RIP for Treasury Account "${inst.treasuryAccount}" is not 20 characters long.`);
+            // Fallback to 20 * if RIP calc had a length error
+            const treasuryAccountCheck = String(inst.treasuryAccount || '').trim();
+            if (!treasuryAccountCheck || !/^\d+$/.test(treasuryAccountCheck)) {
+                // If treasury account itself is invalid, use a different indicator
+                return '*'.padEnd(61, 'I') + '0'; // Indicate Invalid Info
             }
-
-
-            // Calculate Total Net Payable (13 chars, in cents)
-             const totalNetPayableNumeric = compensations.reduce((sum, comp) => {
-                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-                 // Only include compensation in total if beneficiary exists AND RIP can be calculated AND amount is valid number
-                 const beneficiaryRip = calculateRIP(beneficiary?.account || '');
-                 if (beneficiary && beneficiaryRip && !beneficiaryRip.includes('خطأ') && !isNaN(parseFloat(comp.netPayable))) {
-                     return sum + parseFloat(comp.netPayable);
-                 }
-                 return sum;
-            }, 0);
-
-            const totalPayableCentsString = String(Math.round(totalNetPayableNumeric * 100));
-            const finalPaddedTotalPayable = totalPayableCentsString.padStart(13, '0').substring(0, 13);
-
-
-            // Calculate Number of Beneficiaries for TXT body
-             // Count compensation records that have a corresponding beneficiary AND whose RIP can be calculated
-             // AND whose name is valid Latin (as these are the records included in the body)
-             const numberOfBeneficiariesForBody = compensations.filter(comp => {
-                 const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-                 const rip = calculateRIP(beneficiary?.account || '');
-                 const name = String(beneficiary?.name || '').trim();
-                 const latinPattern = /^[a-zA-Z\s\-]+$/;
-                 return beneficiary && rip && !rip.includes('خطأ') && name && latinPattern.test(name);
-             }).length;
-
-
-            const finalPaddedBeneficiaryCount = String(numberOfBeneficiariesForBody).padStart(7, '0').substring(0, 7);
-
-
-            // Financial Month (2 chars)
-            const financialMonth = String(inst.financialMonth || '').trim();
-             let finalPaddedFinancialMonth;
-             if (financialMonth === '' || !/^\d+$/.test(financialMonth)) {
-                  console.warn(`TXT Header Warning: Invalid or missing financial month: "${financialMonth}". Using "00".`);
-                  finalPaddedFinancialMonth = '00';
-             } else {
-                  finalPaddedFinancialMonth = financialMonth.padStart(2, '0').substring(0, 2);
-             }
-
-
-            // Fiscal Year (4 chars)
-            const fiscalYear = String(inst.fiscalYear || '').trim();
-            let finalPaddedFiscalYear;
-            if (fiscalYear === '' || !/^\d{4}$/.test(fiscalYear)) {
-                 console.warn(`TXT Header Warning: Invalid or missing fiscal year: "${fiscalYear}". Using "0000".`);
-                 finalPaddedFiscalYear = '0000';
-            } else {
-                 finalPaddedFiscalYear = fiscalYear.padStart(4, '0').substring(0, 4);
-            }
-
-            // Order Number (8 chars)
-            const orderNumber = String(inst.orderNumber || '').trim();
-            const paddedOrderNumber = orderNumber.padStart(8, '0').substring(0, 8);
-
-            // Transfer Number (6 chars)
-            const transferNumber = String(inst.transferNumber || '').trim();
-            const paddedTransferNumber = transferNumber.padStart(6, '0').substring(0, 6);
-
-
-            // Combined field (Order + Transfer) = 8 + 6 = 14 chars
-            const orderTransferSection = paddedOrderNumber + paddedTransferNumber;
-
-
-            // End char (1 char)
-            const endChar = '0';
-
-            // Combine all parts (1 + 20 + 13 + 7 + 2 + 4 + 14 + 1 = 62)
-            const headerLine = startChar +
-                               ripSection +              // 20 chars (Calculated RIP of Treasury CCP)
-                               finalPaddedTotalPayable + // 13 chars
-                               finalPaddedBeneficiaryCount + // 7 chars
-                               finalPaddedFinancialMonth + // 2 chars
-                               finalPaddedFiscalYear +     // 4 chars
-                               orderTransferSection +    // 14 chars (Order + Transfer)
-                               endChar;                     // 1 char
-
-            // Final length check (should already be 62)
-            if (headerLine.length !== 62) {
-                 console.error(`FATAL: Generated TXT header line has incorrect total length (${headerLine.length}). Generated: "${headerLine}"`);
-                 return '*'.padEnd(61, 'L') + '0'; // Indicate Length error
-            }
-
-            return headerLine;
-        } catch (e) {
-             console.error("Error generating TXT header line:", e);
-             return '*'.padEnd(61, 'E') + '0'; // Indicate general Error
+            return '*'.padEnd(61, 'R') + '0'; // Indicate RIP calculation error
         }
+        // استخدم المجموع الممرر إذا توفر، وإلا احسبه بالطريقة القديمة (للتوافق)
+        let totalNetPayableNumeric;
+        if (typeof totalNetPayableOverride === 'number') {
+            totalNetPayableNumeric = totalNetPayableOverride;
+        } else {
+            totalNetPayableNumeric = compensations.reduce((sum, comp) => {
+                const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                const beneficiaryRip = calculateRIP(beneficiary?.account || '');
+                if (beneficiary && beneficiaryRip && !beneficiaryRip.includes('خطأ') && !isNaN(parseFloat(comp.netPayable))) {
+                    return sum + parseFloat(comp.netPayable);
+                }
+                return sum;
+            }, 0);
+        }
+        const totalPayableCentsString = String(Math.round(totalNetPayableNumeric * 100));
+        const finalPaddedTotalPayable = totalPayableCentsString.padStart(13, '0').substring(0, 13);
+        // Calculate Number of Beneficiaries for TXT body
+        const numberOfBeneficiariesForBody = compensations.filter(comp => {
+            const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+            const rip = calculateRIP(beneficiary?.account || '');
+            const name = String(beneficiary?.name || '').trim();
+            const latinPattern = /^[a-zA-Z\s\-]+$/;
+            return beneficiary && rip && !rip.includes('خطأ') && name && latinPattern.test(name);
+        }).length;
+        const finalPaddedBeneficiaryCount = String(numberOfBeneficiariesForBody).padStart(7, '0').substring(0, 7);
+        // Financial Month (2 chars)
+        const financialMonth = String(inst.financialMonth || '').trim();
+        let finalPaddedFinancialMonth;
+        if (financialMonth === '' || !/^\d+$/.test(financialMonth)) {
+            console.warn(`TXT Header Warning: Invalid or missing financial month: "${financialMonth}". Using "00".`);
+            finalPaddedFinancialMonth = '00';
+        } else {
+            finalPaddedFinancialMonth = financialMonth.padStart(2, '0').substring(0, 2);
+        }
+        // Fiscal Year (4 chars)
+        const fiscalYear = String(inst.fiscalYear || '').trim();
+        let finalPaddedFiscalYear;
+        if (fiscalYear === '' || !/^\d{4}$/.test(fiscalYear)) {
+            console.warn(`TXT Header Warning: Invalid or missing fiscal year: "${fiscalYear}". Using "0000".`);
+            finalPaddedFiscalYear = '0000';
+        } else {
+            finalPaddedFiscalYear = fiscalYear.padStart(4, '0').substring(0, 4);
+        }
+        // Order Number (8 chars)
+        const orderNumber = String(inst.orderNumber || '').trim();
+        const paddedOrderNumber = orderNumber.padStart(8, '0').substring(0, 8);
+        // Transfer Number (6 chars)
+        const transferNumber = String(inst.transferNumber || '').trim();
+        const paddedTransferNumber = transferNumber.padStart(6, '0').substring(0, 6);
+        // Combined field (Order + Transfer) = 8 + 6 = 14 chars
+        const orderTransferSection = paddedOrderNumber + paddedTransferNumber;
+        // End char (1 char)
+        const endChar = '0';
+        // Combine all parts (1 + 20 + 13 + 7 + 2 + 4 + 14 + 1 = 62)
+        const headerLine = startChar +
+            ripSection +              // 20 chars (Calculated RIP of Treasury CCP)
+            finalPaddedTotalPayable + // 13 chars
+            finalPaddedBeneficiaryCount + // 7 chars
+            finalPaddedFinancialMonth + // 2 chars
+            finalPaddedFiscalYear +     // 4 chars
+            orderTransferSection +    // 14 chars (Order + Transfer)
+            endChar;                     // 1 char
+        // Final length check (should already be 62)
+        if (headerLine.length !== 62) {
+            console.error(`FATAL: Generated TXT header line has incorrect total length (${headerLine.length}). Generated: "${headerLine}"`);
+            return '*'.padEnd(61, 'L') + '0'; // Indicate Length error
+        }
+        return headerLine;
+    } catch (e) {
+        console.error("Error generating TXT header line:", e);
+        return '*'.padEnd(61, 'E') + '0'; // Indicate general Error
     }
+}
 
 
     // --- Export TXT ---
     async function exportTxt() {
         try {
-             // Generate the header line first
-             const headerLine = generateTxtHeaderLine();
-             // Check if header line generation failed critically
-             if (headerLine.length !== 62 || headerLine.includes('I') || headerLine.includes('L') || headerLine.includes('E')) { // Check for error indicators
-                  alert("لا يمكن تصدير ملف TXT.\nالرجاء التأكد من صحة واكتمال معلومات المؤسسة (حساب الخزينة، الشهر، السنة المالية، رقم الأمر بالصرف، رقم الحوالة) وأنها تحتوي على أرقام فقط حيث يجب، وأن حساب الخزينة صالح لحساب رقم RIP.");
-                  console.error("TXT export aborted due to malformed header line.");
-                  return;
-             }
+            // 1. بناء بيانات المستفيدين مع التقريب
+            let roundedNetPayables = [];
+            const txtData = compensations.map(comp => {
+                try {
+                    const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
+                    if (!beneficiary) {
+                        console.warn(`Skipping TXT export record for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
+                        return null;
+                    }
+                    const account = String(beneficiary.account || '').trim();
+                    const name = String(beneficiary.name || '').trim();
+                    const latinPattern = /^[a-zA-Z\s\-]+$/;
+                    if (account === '' || !latinPattern.test(name)) {
+                        console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Invalid account "${account}" or non-Latin name "${name}".`);
+                        return null;
+                    }
+                    // Calculate RIP for the TXT line
+                    const fullRIP = calculateRIP(account);
+                    if (!fullRIP || fullRIP.includes('خطأ')) {
+                        console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Failed RIP calculation for CCP "${account}" (Result: ${fullRIP}).`);
+                        return null;
+                    }
+                    // --- التقريب ---
+                    const netPayableRounded = Math.round((parseFloat(comp.netPayable) || 0) * 100) / 100;
+                    roundedNetPayables.push(netPayableRounded);
+                    // --- Build the 62-character string ---
+                    const startChar = '*';
+                    const ripSection = fullRIP; // 20 chars, should be valid now
+                    const netPayableCentsString = String(Math.round(netPayableRounded * 100));
+                    const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
+                    const nameLength = name.length;
+                    const spacesNeededForName = 27 - nameLength;
+                    const finalNameField = (name + (spacesNeededForName > 0 ? ' '.repeat(spacesNeededForName) : '')).substring(0, 27);
+                    const endChar = '1';
+                    const txtRecord = startChar + ripSection + finalPaddedNetPayable + finalNameField + endChar; // Total 62 chars
+                    if (txtRecord.length !== 62) {
+                        console.error(`FATAL: Generated TXT record has incorrect length (${txtRecord.length}) for beneficiary ID ${beneficiary.id}. Record: "${txtRecord}". This should not happen if RIP calculation is correct.`);
+                        return null; // Fatal error for this record
+                    }
+                    return txtRecord;
+                } catch (e) {
+                    console.error(`Error generating TXT record for compensation ID ${comp.beneficiaryId}:`, e);
+                    return null; // Skip record on error
+                }
+            }).filter(record => record !== null);
 
+            // 2. حساب مجموع الصافي بعد التقريب فقط
+            const totalRoundedNetPayable = roundedNetPayables.reduce((sum, val) => sum + val, 0);
 
-             // Generate the beneficiary data lines, filtering invalid ones
-             const txtData = compensations.map(comp => {
-                 try {
-                     const beneficiary = beneficiaries.find(b => b.id === comp.beneficiaryId);
-                      if (!beneficiary) {
-                           console.warn(`Skipping TXT export record for compensation ID ${comp.beneficiaryId}: Beneficiary not found.`);
-                           return null;
-                      }
+            // 3. توليد السطر الأول (header) باستخدام المجموع بعد التقريب
+            const headerLine = generateTxtHeaderLine(totalRoundedNetPayable);
+            if (headerLine.length !== 62 || headerLine.includes('I') || headerLine.includes('L') || headerLine.includes('E')) {
+                alert("لا يمكن تصدير ملف TXT.\nالرجاء التأكد من صحة واكتمال معلومات المؤسسة (حساب الخزينة، الشهر، السنة المالية، رقم الأمر بالصرف، رقم الحوالة) وأنها تحتوي على أرقام فقط حيث يجب، وأن حساب الخزينة صالح لحساب رقم RIP.");
+                console.error("TXT export aborted due to malformed header line.");
+                return;
+            }
 
-                     const account = String(beneficiary.account || '').trim(); // Use CCP for TXT export
-                     const name = String(beneficiary.name || '').trim();
+            // 4. بناء الملف
+            let txtContent = headerLine;
+            if (txtData.length > 0) {
+                txtContent += '\n' + txtData.join('\n');
+            } else {
+                alert("تم إنشاء ملف TXT بالسطر الأول (معلومات الدفعة) فقط.\n\nلا توجد بيانات تعويضات صالحة للمستفيدين ليتم تضمينها في جسم الملف.\nالرجاء التأكد من وجود مستفيدين ببيانات حساب (CCP) يسمح بحساب رقم RIP، وأن الاسم مكتوب بالأحرف اللاتينية فقط، ووجود تعويضات محفوظة لهم.");
+            }
 
-                      const latinPattern = /^[a-zA-Z\s\-]+$/;
-                      if (account === '' || !latinPattern.test(name)) {
-                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Invalid account "${account}" or non-Latin name "${name}".`);
-                           return null;
-                      }
-
-                     // Calculate RIP for the TXT line
-                     const fullRIP = calculateRIP(account);
-                     if (!fullRIP || fullRIP.includes('خطأ')) {
-                          console.warn(`Skipping TXT export record for beneficiary ID ${beneficiary.id}: Failed RIP calculation for CCP "${account}" (Result: ${fullRIP}).`);
-                          return null;
-                     }
-
-                     // --- Build the 62-character string ---
-                     const startChar = '*';
-                     const ripSection = fullRIP; // 20 chars, should be valid now
-                     const netPayableCentsString = String(Math.round((parseFloat(comp.netPayable) || 0) * 100));
-                     const finalPaddedNetPayable = netPayableCentsString.padStart(13, '0').substring(0, 13);
-                     const nameLength = name.length;
-                     const spacesNeededForName = 27 - nameLength;
-                     const finalNameField = (name + (spacesNeededForName > 0 ? ' '.repeat(spacesNeededForName) : '')).substring(0, 27);
-                     const endChar = '1';
-
-                     const txtRecord = startChar + ripSection + finalPaddedNetPayable + finalNameField + endChar; // Total 62 chars
-
-                     if (txtRecord.length !== 62) {
-                          console.error(`FATAL: Generated TXT record has incorrect length (${txtRecord.length}) for beneficiary ID ${beneficiary.id}. Record: "${txtRecord}". This should not happen if RIP calculation is correct.`);
-                         return null; // Fatal error for this record
-                     }
-
-                     return txtRecord;
-
-                 } catch (e) {
-                     console.error(`Error generating TXT record for compensation ID ${comp.beneficiaryId}:`, e);
-                     return null; // Skip record on error
-                 }
-             }).filter(record => record !== null); // Filter out any null records
-
-
-             // Combine header and data lines
-             let txtContent = headerLine; // Start with the validated header
-
-             if (txtData.length > 0) {
-                 txtContent += '\n' + txtData.join('\n');
-             } else {
-                 alert("تم إنشاء ملف TXT بالسطر الأول (معلومات الدفعة) فقط.\n\nلا توجد بيانات تعويضات صالحة للمستفيدين ليتم تضمينها في جسم الملف.\nالرجاء التأكد من وجود مستفيدين ببيانات حساب (CCP) يسمح بحساب رقم RIP، وأن الاسم مكتوب بالأحرف اللاتينية فقط، ووجود تعويضات محفوظة لهم.");
-             }
-
-
-             const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
-             const filename = `Payment_File_${institutionInfo.fiscalYear}.txt`;
-
+            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+            const filename = `Payment_File_${institutionInfo.fiscalYear}.txt`;
             try {
                 if (window.showSaveFilePicker) {
                     const options = {
@@ -2773,13 +2992,10 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                             accept: {'text/plain': ['.txt']}
                         }]
                     };
-
                     const fileHandle = await window.showSaveFilePicker(options);
-
                     const writableStream = await fileHandle.createWritable();
                     await writableStream.write(blob);
                     await writableStream.close();
-
                     alert('تم حفظ ملف TXT في المكان الذي اخترته.');
                     return;
                 }
@@ -2787,15 +3003,12 @@ function calculateQuarterlyComp(amountNoFees, addedValue, stateContrib) {
                 console.error("Error using File System Access API for TXT export:", error);
                 // Fallback
             }
-
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = filename;
-
             document.body.appendChild(a);
             a.click();
-
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 

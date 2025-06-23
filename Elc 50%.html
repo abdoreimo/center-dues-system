@@ -1444,66 +1444,32 @@
          function calculateRIP(ccpNumberString) {
              try {
                  if (!ccpNumberString || typeof ccpNumberString !== 'string' || ccpNumberString.trim() === '') {
-                     return 'CCP فارغ'; // Indicate empty input
+                     return 'CCP فارغ';
                  }
-
                  const ccpValue = ccpNumberString.trim();
-
-                 // Ensure CCP is numeric before attempting BigInt conversion and calculations
                  if (!/^\d+$/.test(ccpValue)) {
-                      console.warn(`RIP Calc Warning: Non-numeric CCP input "${ccpValue}".`);
-                      return 'رقم CCP غير صالح'; // Return error indicator for non-numeric input
+                     return 'رقم CCP غير صالح';
                  }
-
-                 let ccpBigIntValue;
-                 try {
-                      ccpBigIntValue = BigInt(ccpValue);
-                 } catch (e) {
-                     console.error(`RIP Calc Error: Cannot convert CCP "${ccpValue}" to BigInt.`, e);
-                      return 'خطأ في التحويل'; // Return error indicator if conversion fails
+                 // 1. مكمل إلى 10 أرقام
+                 const ccpPadded = ccpValue.padStart(10, '0');
+                 // 2. حساب clé
+                 let ccpNum = parseInt(ccpValue, 10);
+                 let ripKey = ccpNum * 100;
+                 ripKey = ripKey % 97;
+                 ripKey = ripKey + 85;
+                 if (ripKey >= 97) {
+                     ripKey = ripKey - 97;
                  }
-
-
-                 // Calculate ripKey (0-96 range, based on the original code logic)
-                 // Using BigInt for intermediate steps for precision
-                 const ccpTimes100BigInt = ccpBigIntValue * BigInt(100);
-                 const remainder97BigInt = ccpTimes100BigInt % BigInt(97);
-                 let ripKeyCalcBigInt = BigInt(85) + remainder97BigInt;
-                 let finalRipKeyBigInt = ripKeyCalcBigInt;
-
-                 if (finalRipKeyBigInt > BigInt(97)) {
-                     finalRipKeyBigInt = BigInt(97) - (finalRipKeyBigInt - BigInt(97));
-                 } else {
-                     finalRipKeyBigInt = BigInt(97) - finalRipKeyBigInt;
+                 ripKey = 97 - ripKey;
+                 let ripKeyStr = ripKey.toString().padStart(2, '0');
+                 // 3. بناء RIP النهائي
+                 const rip = '00799999' + ccpPadded + ripKeyStr;
+                 if (rip.length !== 20) {
+                     return 'خطأ في الطول';
                  }
-
-                 // Calculate the 'r' part (13 digits) using BigInt
-                 const constantToAddBigInt = BigInt('9000000000000'); // The large constant from the external page
-                 const r_part_bigint = (ccpBigIntValue * BigInt(100)) + finalRipKeyBigInt + constantToAddBigInt;
-
-                 // Convert r_part_bigint to string and pad/truncate to exactly 13 digits
-                 const r_part_string = r_part_bigint.toString();
-                 // Pad with leading zeros to ensure a minimum length of 13 characters
-                 const padded_r_part_string = r_part_string.padStart(13, '0');
-                 // Take the rightmost 13 characters (handles cases where the number might become slightly longer than 13 after calculation)
-                 const final_r_part_string = padded_r_part_string.substring(padded_r_part_string.length - 13);
-
-
-                 // Concatenate fixed prefix and padded r_part_string
-                 const fixedPrefix = "0079999"; // Bank and Branch codes (7 chars)
-                 const fullRIP = fixedPrefix + final_r_part_string;
-
-                 // Final length check (should be 7 + 13 = 20)
-                 if (fullRIP.length !== 20) {
-                      console.error(`RIP Calc Error: Generated RIP "${fullRIP}" has incorrect length (${fullRIP.length}) for CCP: "${ccpValue}".`);
-                      return 'خطأ في الطول'; // Return specific error indicator for length mismatch
-                 }
-
-                 return fullRIP; // Return the calculated 20-character RIP
-
+                 return rip;
              } catch (e) {
-                 console.error(`An unexpected error occurred during RIP calculation for CCP "${ccpNumberString}".`, e);
-                 return 'خطأ غير متوقع'; // Return generic error indicator for unexpected errors
+                 return 'خطأ غير متوقع';
              }
          }
 

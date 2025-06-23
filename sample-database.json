@@ -1,0 +1,1050 @@
+[
+  {
+    "id": 1,
+    "name": "Employee 1",
+    "account": "10000001",
+    "meter": "MTR0001",
+    "compensation": {
+      "q1": { "nofees": 10234.55, "value": 1875.20, "contrib": 712.40, "calculated": 12822.15 },
+      "q2": { "nofees": 11012.30, "value": 2100.00, "contrib": 800.00, "calculated": 13912.30 },
+      "q3": { "nofees": 9500.00, "value": 1500.50, "contrib": 600.00, "calculated": 11600.50 },
+      "q4": { "nofees": 12000.00, "value": 2200.00, "contrib": 900.00, "calculated": 15100.00 },
+      "netPayable": 53435.95
+    }
+  },
+  {
+    "id": 2,
+    "name": "Employee 2",
+    "account": "10000002",
+    "meter": "MTR0002",
+    "compensation": {
+      "q1": { "nofees": 9800.00, "value": 2000.00, "contrib": 500.00, "calculated": 12300.00 },
+      "q2": { "nofees": 10500.00, "value": 1800.00, "contrib": 700.00, "calculated": 13000.00 },
+      "q3": { "nofees": 8700.00, "value": 1200.00, "contrib": 400.00, "calculated": 10300.00 },
+      "q4": { "nofees": 11500.00, "value": 2100.00, "contrib": 850.00, "calculated": 14450.00 },
+      "netPayable": 50050.00
+    }
+  },
+  {
+    "id": 3,
+    "name": "Employee 3",
+    "account": "10000003",
+    "meter": "MTR0003",
+    "compensation": {
+      "q1": { "nofees": 9000.00, "value": 1500.00, "contrib": 350.00, "calculated": 10850.00 },
+      "q2": { "nofees": 10000.00, "value": 1700.00, "contrib": 600.00, "calculated": 12300.00 },
+      "q3": { "nofees": 9500.00, "value": 1300.00, "contrib": 500.00, "calculated": 11300.00 },
+      "q4": { "nofees": 10500.00, "value": 2000.00, "contrib": 800.00, "calculated": 13300.00 },
+      "netPayable": 47750.00
+    }
+  },
+  {
+    "id": 4,
+    "name": "Employee 4",
+    "account": "10000004",
+    "meter": "MTR0004",
+    "compensation": {
+      "q1": { "nofees": 11000.00, "value": 2100.00, "contrib": 900.00, "calculated": 14000.00 },
+      "q2": { "nofees": 9500.00, "value": 1200.00, "contrib": 400.00, "calculated": 11100.00 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 5,
+    "name": "موظف 5",
+    "account": "10000005",
+    "meter": "MTR0005",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 6,
+    "name": "موظف 6",
+    "account": "10000006",
+    "meter": "MTR0006",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 7,
+    "name": "موظف 7",
+    "account": "10000007",
+    "meter": "MTR0007",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 8,
+    "name": "موظف 8",
+    "account": "10000008",
+    "meter": "MTR0008",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 9,
+    "name": "موظف 9",
+    "account": "10000009",
+    "meter": "MTR0009",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 10,
+    "name": "موظف 10",
+    "account": "10000010",
+    "meter": "MTR0010",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 11,
+    "name": "موظف 11",
+    "account": "10000011",
+    "meter": "MTR0011",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 12,
+    "name": "موظف 12",
+    "account": "10000012",
+    "meter": "MTR0012",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 13,
+    "name": "موظف 13",
+    "account": "10000013",
+    "meter": "MTR0013",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 14,
+    "name": "موظف 14",
+    "account": "10000014",
+    "meter": "MTR0014",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 15,
+    "name": "موظف 15",
+    "account": "10000015",
+    "meter": "MTR0015",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 16,
+    "name": "موظف 16",
+    "account": "10000016",
+    "meter": "MTR0016",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 17,
+    "name": "موظف 17",
+    "account": "10000017",
+    "meter": "MTR0017",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 18,
+    "name": "موظف 18",
+    "account": "10000018",
+    "meter": "MTR0018",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 19,
+    "name": "موظف 19",
+    "account": "10000019",
+    "meter": "MTR0019",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 20,
+    "name": "موظف 20",
+    "account": "10000020",
+    "meter": "MTR0020",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 21,
+    "name": "موظف 21",
+    "account": "10000021",
+    "meter": "MTR0021",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 22,
+    "name": "موظف 22",
+    "account": "10000022",
+    "meter": "MTR0022",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 23,
+    "name": "موظف 23",
+    "account": "10000023",
+    "meter": "MTR0023",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 24,
+    "name": "موظف 24",
+    "account": "10000024",
+    "meter": "MTR0024",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 25,
+    "name": "موظف 25",
+    "account": "10000025",
+    "meter": "MTR0025",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 26,
+    "name": "موظف 26",
+    "account": "10000026",
+    "meter": "MTR0026",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 27,
+    "name": "موظف 27",
+    "account": "10000027",
+    "meter": "MTR0027",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 28,
+    "name": "موظف 28",
+    "account": "10000028",
+    "meter": "MTR0028",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 29,
+    "name": "موظف 29",
+    "account": "10000029",
+    "meter": "MTR0029",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 30,
+    "name": "موظف 30",
+    "account": "10000030",
+    "meter": "MTR0030",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 31,
+    "name": "موظف 31",
+    "account": "10000031",
+    "meter": "MTR0031",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 32,
+    "name": "موظف 32",
+    "account": "10000032",
+    "meter": "MTR0032",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 33,
+    "name": "موظف 33",
+    "account": "10000033",
+    "meter": "MTR0033",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 34,
+    "name": "موظف 34",
+    "account": "10000034",
+    "meter": "MTR0034",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 35,
+    "name": "موظف 35",
+    "account": "10000035",
+    "meter": "MTR0035",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 36,
+    "name": "موظف 36",
+    "account": "10000036",
+    "meter": "MTR0036",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 37,
+    "name": "موظف 37",
+    "account": "10000037",
+    "meter": "MTR0037",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 38,
+    "name": "موظف 38",
+    "account": "10000038",
+    "meter": "MTR0038",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 39,
+    "name": "موظف 39",
+    "account": "10000039",
+    "meter": "MTR0039",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 40,
+    "name": "موظف 40",
+    "account": "10000040",
+    "meter": "MTR0040",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 41,
+    "name": "موظف 41",
+    "account": "10000041",
+    "meter": "MTR0041",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 42,
+    "name": "موظف 42",
+    "account": "10000042",
+    "meter": "MTR0042",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 43,
+    "name": "موظف 43",
+    "account": "10000043",
+    "meter": "MTR0043",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 44,
+    "name": "موظف 44",
+    "account": "10000044",
+    "meter": "MTR0044",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 45,
+    "name": "موظف 45",
+    "account": "10000045",
+    "meter": "MTR0045",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 46,
+    "name": "موظف 46",
+    "account": "10000046",
+    "meter": "MTR0046",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 47,
+    "name": "موظف 47",
+    "account": "10000047",
+    "meter": "MTR0047",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 48,
+    "name": "موظف 48",
+    "account": "10000048",
+    "meter": "MTR0048",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 49,
+    "name": "موظف 49",
+    "account": "10000049",
+    "meter": "MTR0049",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 50,
+    "name": "موظف 50",
+    "account": "10000050",
+    "meter": "MTR0050",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 51,
+    "name": "موظف 51",
+    "account": "10000051",
+    "meter": "MTR0051",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 52,
+    "name": "موظف 52",
+    "account": "10000052",
+    "meter": "MTR0052",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 53,
+    "name": "موظف 53",
+    "account": "10000053",
+    "meter": "MTR0053",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 54,
+    "name": "موظف 54",
+    "account": "10000054",
+    "meter": "MTR0054",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 55,
+    "name": "موظف 55",
+    "account": "10000055",
+    "meter": "MTR0055",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 56,
+    "name": "موظف 56",
+    "account": "10000056",
+    "meter": "MTR0056",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 57,
+    "name": "موظف 57",
+    "account": "10000057",
+    "meter": "MTR0057",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 58,
+    "name": "موظف 58",
+    "account": "10000058",
+    "meter": "MTR0058",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 59,
+    "name": "موظف 59",
+    "account": "10000059",
+    "meter": "MTR0059",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 60,
+    "name": "موظف 60",
+    "account": "10000060",
+    "meter": "MTR0060",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 61,
+    "name": "موظف 61",
+    "account": "10000061",
+    "meter": "MTR0061",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 62,
+    "name": "موظف 62",
+    "account": "10000062",
+    "meter": "MTR0062",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 63,
+    "name": "موظف 63",
+    "account": "10000063",
+    "meter": "MTR0063",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 64,
+    "name": "موظف 64",
+    "account": "10000064",
+    "meter": "MTR0064",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 65,
+    "name": "موظف 65",
+    "account": "10000065",
+    "meter": "MTR0065",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 66,
+    "name": "موظف 66",
+    "account": "10000066",
+    "meter": "MTR0066",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 67,
+    "name": "موظف 67",
+    "account": "10000067",
+    "meter": "MTR0067",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 68,
+    "name": "موظف 68",
+    "account": "10000068",
+    "meter": "MTR0068",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 69,
+    "name": "موظف 69",
+    "account": "10000069",
+    "meter": "MTR0069",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 70,
+    "name": "موظف 70",
+    "account": "10000070",
+    "meter": "MTR0070",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 71,
+    "name": "موظف 71",
+    "account": "10000071",
+    "meter": "MTR0071",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 72,
+    "name": "موظف 72",
+    "account": "10000072",
+    "meter": "MTR0072",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 73,
+    "name": "موظف 73",
+    "account": "10000073",
+    "meter": "MTR0073",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 74,
+    "name": "موظف 74",
+    "account": "10000074",
+    "meter": "MTR0074",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 75,
+    "name": "موظف 75",
+    "account": "10000075",
+    "meter": "MTR0075",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 76,
+    "name": "موظف 76",
+    "account": "10000076",
+    "meter": "MTR0076",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 77,
+    "name": "موظف 77",
+    "account": "10000077",
+    "meter": "MTR0077",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 78,
+    "name": "موظف 78",
+    "account": "10000078",
+    "meter": "MTR0078",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 79,
+    "name": "موظف 79",
+    "account": "10000079",
+    "meter": "MTR0079",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 80,
+    "name": "موظف 80",
+    "account": "10000080",
+    "meter": "MTR0080",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q4": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "netPayable": 49600
+    }
+  },
+  {
+    "id": 81,
+    "name": "موظف 81",
+    "account": "10000081",
+    "meter": "MTR0081",
+    "compensation": {
+      "q1": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q2": { "nofees": 10000, "value": 1900, "contrib": 500, "calculated": 12400 },
+      "q3": { "nofees": 10000, "value": 1900, "contrib":
