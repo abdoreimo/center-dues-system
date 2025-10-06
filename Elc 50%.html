@@ -469,6 +469,37 @@
             display: none; /* Managed by JS */
             flex-direction: column;
         }
+        .credit-summary-container {
+            display: flex;
+            justify-content: space-around;
+            gap: var(--space-md);
+            background-color: var(--light-color);
+            padding: var(--space-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--primary-color);
+            box-shadow: var(--shadow-inset);
+            text-align: center;
+            flex-wrap: wrap;
+        }
+        .credit-summary-container div {
+            flex: 1;
+            font-size: 1.1em;
+            color: var(--text-secondary-color);
+            min-width: 200px;
+        }
+        .credit-summary-container strong {
+            color: var(--dark-color);
+        }
+        .credit-summary-container .remaining-credit-value {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--success-color);
+            transition: color 0.3s ease;
+        }
+        .credit-summary-container .remaining-credit-value.negative {
+            color: var(--danger-color);
+        }
         .compensation-grid-toolbar {
             display: flex;
             justify-content: space-between;
@@ -745,6 +776,10 @@
                      </div>
                 </div>
                 <div>
+                    <label for="open-credit">الاعتماد المفتوح (دج):</label>
+                    <input type="number" id="open-credit" value="0" step="0.01" placeholder="أدخل المبلغ الإجمالي للاعتماد">
+                </div>
+                <div>
                     <button type="submit"><i class="fas fa-save"></i> حفظ المعلومات</button>
                 </div>
             </form>
@@ -755,6 +790,11 @@
 
         <!-- إدارة التعويضات (NEW GRID UI) -->
         <section id="compensation-management-section" class="app-section">
+            <div class="credit-summary-container">
+                <div><strong>الاعتماد المفتوح:</strong> <span id="display-open-credit">0,00 دج</span></div>
+                <div><strong>المبلغ المصروف:</strong> <span id="display-amount-spent">0,00 دج</span></div>
+                <div><strong>الاعتماد المتبقي:</strong> <span id="display-remaining-credit" class="remaining-credit-value">0,00 دج</span></div>
+            </div>
             <div class="compensation-grid-toolbar">
                 <div class="search-container">
                     <i class="fas fa-search"></i>
@@ -902,7 +942,8 @@
             treasuryAccount: "",
             treasuryKey: "",
             orderNumber: "",
-            transferNumber: ""
+            transferNumber: "",
+            openCredit: 0
         };
 
         let beneficiaries = [];
@@ -922,6 +963,7 @@
                          ...institutionInfo,
                          ...tempInfo
                      };
+                     institutionInfo.openCredit = parseFloat(institutionInfo.openCredit) || 0;
                 }
 
                 if (savedBeneficiaries) {
@@ -1072,21 +1114,42 @@
                 }
             } else if (sectionId === 'compensation-management-section') {
                 renderCompensationGrid();
+                updateCreditDisplay();
             } else if (sectionId === 'reporting-section') {
                 generateReportPreview();
             }
         }
 
+        function updateCreditDisplay() {
+            const totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            const openCredit = institutionInfo.openCredit || 0;
+            const remainingCredit = openCredit - totalSpent;
+
+            document.getElementById('display-open-credit').textContent = `${formatCurrency(openCredit)} دج`;
+            document.getElementById('display-amount-spent').textContent = `${formatCurrency(totalSpent)} دج`;
+            
+            const remainingEl = document.getElementById('display-remaining-credit');
+            remainingEl.textContent = `${formatCurrency(remainingCredit)} دج`;
+            
+            if (remainingCredit < 0) {
+                remainingEl.classList.add('negative');
+            } else {
+                remainingEl.classList.remove('negative');
+            }
+        }
 
         // --- Institution Info Management ---
         function saveInstitutionInfo(event) {
             event.preventDefault();
             for (const key in institutionInfo) {
+                 if (key === 'openCredit') continue; // Skip openCredit here
                 const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                 if (element) institutionInfo[key] = element.value.trim();
             }
+            institutionInfo.openCredit = parseFloat(document.getElementById('open-credit').value) || 0;
             saveData();
             alert('تم حفظ معلومات المؤسسة.');
+            updateCreditDisplay();
             if (document.getElementById('reporting-section').style.display === 'block') {
                  generateReportPreview();
             }
@@ -1173,6 +1236,7 @@
 
                 saveData();
                 renderCompensationGrid();
+                updateCreditDisplay();
                 alert('تم حذف المستفيد وتحديث الترقيم.');
             }
         }
@@ -1321,6 +1385,7 @@
             compData.netPayable = totalComp - compData.discount;
 
             saveData();
+            updateCreditDisplay();
 
             // Part 3: Update row status
             rowElement.classList.remove('is-dirty');
@@ -1476,11 +1541,12 @@
             };
             reader.readAsText(file);
         }
-
+ 
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
             showSection('institution-info-section');
+            updateCreditDisplay();
 
             // Main forms
             document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
