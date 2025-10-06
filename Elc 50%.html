@@ -249,6 +249,7 @@
              align-items: center;
              gap: var(--space-sm);
              margin-top: var(--space-md);
+             flex-wrap: wrap;
         }
         .button-group button {
             margin-left: 0;
@@ -713,10 +714,10 @@
     <header>
         <h1><i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
         <nav>
-            <button onclick="showSection('institution-info-section')"><i class="fas fa-building"></i> معلومات المؤسسة</button>
-            <button onclick="showSection('compensation-management-section')"><i class="fas fa-users"></i> إدارة التعويضات والمستفيدين</button>
-            <button onclick="showSection('reporting-section')"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
-            <button onclick="showSection('backup-restore-section')"><i class="fas fa-database"></i> النسخ الاحتياطي</button>
+            <button data-section="institution-info-section"><i class="fas fa-building"></i> معلومات المؤسسة</button>
+            <button data-section="compensation-management-section"><i class="fas fa-users"></i> إدارة التعويضات والمستفيدين</button>
+            <button data-section="reporting-section"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
+            <button data-section="backup-restore-section"><i class="fas fa-database"></i> النسخ الاحتياطي</button>
         </nav>
     </header>
 
@@ -832,9 +833,10 @@
              <h2>التقارير والتصدير</h2>
              <p>التقرير سيتم إنشاؤه بناءً على معلومات المؤسسة وقائمة المستفيدين وتعويضاتهم.</p>
              <div class="button-group">
-                 <button onclick="printReport()"><i class="fas fa-print"></i> طباعة التقرير</button>
-                 <button onclick="exportXLSX()"><i class="fas fa-file-excel"></i> تصدير XLSX</button>
-                 <button onclick="exportTxt()"><i class="fas fa-file-code"></i> تصدير ملف TXT</button>
+                 <button id="print-report-btn"><i class="fas fa-print"></i> طباعة التقرير</button>
+                 <button id="export-xlsx-btn"><i class="fas fa-file-excel"></i> تصدير XLSX</button>
+                 <button id="export-txt-btn"><i class="fas fa-file-code"></i> تصدير ملف TXT</button>
+                 <button id="print-cdrom-btn"><i class="fas fa-compact-disc"></i> طباعة جدول الدفع CD-ROM</button>
              </div>
              <p class="explanation">ملاحظة: يعرض المتصفح غالباً نافذة لاختيار مكان حفظ ملف التصدير.</p>
              
@@ -847,9 +849,9 @@
              <h2>النسخ الاحتياطي والاستعادة</h2>
              <p>يمكنك إنشاء نسخة احتياطية لبياناتك الحالية أو استعادة بيانات من ملف نسخة احتياطية سابق.</p>
              <div class="button-group">
-                 <button onclick="createBackup()"><i class="fas fa-download"></i> إنشاء نسخة احتياطية</button>
+                 <button id="create-backup-btn"><i class="fas fa-download"></i> إنشاء نسخة احتياطية</button>
                  <input type="file" id="restore-file-input" accept=".json" style="display: none;">
-                 <button onclick="restoreBackup()"><i class="fas fa-upload"></i> استعادة من نسخة</button>
+                 <button id="restore-backup-btn"><i class="fas fa-upload"></i> استعادة من نسخة</button>
              </div>
              <p class="explanation">ملاحظة: عند إنشاء نسخة احتياطية، سيتم حفظ ملف بامتداد .json على جهازك.</p>
          </section>
@@ -884,7 +886,7 @@
                 </div>
                  <div class="modal-buttons">
                     <button type="submit" class="save-button"><i class="fas fa-save"></i> حفظ</button>
-                    <button type="button" class="cancel-button" onclick="cancelBeneficiaryEdit()"><i class="fas fa-times-circle"></i> إلغاء</button>
+                    <button type="button" class="cancel-button" id="cancel-beneficiary-btn"><i class="fas fa-times-circle"></i> إلغاء</button>
                  </div>
             </form>
         </div>
@@ -913,7 +915,7 @@
                  </div>
                 <div class="modal-buttons">
                     <button type="submit" class="save-button"><i class="fas fa-check"></i> تأكيد</button>
-                    <button type="button" class="cancel-button" onclick="closeQuarterlyModal()"><i class="fas fa-times"></i> إلغاء</button>
+                    <button type="button" class="cancel-button" id="cancel-quarterly-btn"><i class="fas fa-times"></i> إلغاء</button>
                 </div>
             </form>
         </div>
@@ -1084,7 +1086,7 @@
         function showSection(sectionId) {
             document.querySelectorAll('nav button').forEach(button => {
                 button.classList.remove('active');
-                if (button.getAttribute('onclick') === `showSection('${sectionId}')`) {
+                if (button.dataset.section === sectionId) {
                     button.classList.add('active');
                 }
             });
@@ -1274,8 +1276,8 @@
                     <td class="beneficiary-name-cell">
                         <span>${b.name}</span>
                         <div class="beneficiary-actions">
-                             <button class="edit-btn-inline" onclick="openBeneficiaryModal(${b.id})" title="تعديل"><i class="fas fa-edit"></i></button>
-                             <button class="delete-btn-inline" onclick="deleteBeneficiary(${b.id})" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                             <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                             <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
                         </div>
                     </td>
                     <td class="editable-cell" data-quarter="1">${formatCurrency(compData.q1.calculated)}</td>
@@ -1447,21 +1449,163 @@
         }
 
         function exportXLSX() {
-            const exportData = compensations.map(comp => {
-                 const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
-                 if (!b) return null;
-                 return {
-                    "الرقم": b.id, "اسم المستفيد": b.name, "رقم العداد": b.meter, "رقم RIP الكامل": calculateRIP(b.account),
-                    "تعويض ث 1": comp.q1.calculated, "تعويض ث 2": comp.q2.calculated, "تعويض ث 3": comp.q3.calculated, "تعويض ث 4": comp.q4.calculated,
-                    "الخصم": comp.discount, "الصافي للدفع": comp.netPayable
-                 };
-            }).filter(Boolean).sort((a,b) => a["الرقم"] - b["الرقم"]);
-            if (exportData.length === 0) return alert("لا توجد بيانات للتصدير.");
+            // 1. DATA PREPARATION
+            const reportData = compensations.map(comp => {
+                const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                if (!b) return null;
+                return {
+                    id: b.id,
+                    name: b.name,
+                    meter: b.meter,
+                    rip: calculateRIP(b.account),
+                    q1: comp.q1.calculated,
+                    q2: comp.q2.calculated,
+                    q3: comp.q3.calculated,
+                    q4: comp.q4.calculated,
+                    discount: comp.discount,
+                    netPayable: comp.netPayable
+                };
+            }).filter(Boolean).sort((a, b) => a.id - b.id);
 
-            const ws = XLSX.utils.json_to_sheet(exportData);
+            if (reportData.length === 0) return alert("لا توجد بيانات للتصدير.");
+
+            const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+            const totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+
+            // 2. WORKSHEET STRUCTURE (Array of Arrays)
+            let worksheetData = [
+                // Report Headers
+                [`الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز`],
+                [`${institutionInfo.republic} - ${institutionInfo.ministry}`],
+                [`${institutionInfo.directorate} - ${institutionInfo.institution}`],
+                [`السنة المالية: ${institutionInfo.fiscalYear}`],
+                [null], // Spacer row
+
+                // Table Headers
+                ["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "الخصم", "الصافي للدفع"]
+            ];
+
+            // Table Data
+            reportData.forEach(item => {
+                worksheetData.push([
+                    item.id, item.name, item.meter, item.rip,
+                    item.q1, item.q2, item.q3, item.q4,
+                    item.discount, item.netPayable
+                ]);
+            });
+            const dataEndRow = worksheetData.length;
+
+            // Table Footer (Total Row)
+            worksheetData.push([
+                "المجموع", null, null, null, null, null, null, null, totalDiscount, totalNetPayable
+            ]);
+            const totalRow = worksheetData.length;
+
+            // Report Footer
+            worksheetData.push([null]); // Spacer row
+            worksheetData.push([`أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}`]);
+            worksheetData.push([`أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج`]);
+            worksheetData.push([`أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}`]);
+            
+            // 3. CREATE WORKSHEET AND WORKBOOK
+            const ws = XLSX.utils.aoa_to_sheet(worksheetData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "تقرير التعويضات");
-            XLSX.writeFile(wb, `تقرير_التعويضات_${institutionInfo.fiscalYear}.xlsx`);
+
+            // 4. STYLING
+            const currencyFormat = "#,##0.00";
+            const centerAlign = { alignment: { horizontal: "center", vertical: "center" } };
+            const rightAlign = { alignment: { horizontal: "right", vertical: "center" } };
+
+            const headerStyle = { font: { name: "Cairo", bold: true, sz: 16, color: { rgb: "4E342E" } }, ...centerAlign };
+            const subHeaderStyle = { font: { name: "Cairo", bold: true, sz: 12, color: { rgb: "4E342E" } }, ...centerAlign };
+            const tableHeaderStyle = {
+                font: { name: "Cairo", bold: true, color: { rgb: "FFFFFF" } },
+                fill: { fgColor: { rgb: "C77700" } }, // --primary-dark-color
+                ...centerAlign,
+                border: {
+                    top: { style: "thin", color: { auto: 1 } }, bottom: { style: "thin", color: { auto: 1 } },
+                    left: { style: "thin", color: { auto: 1 } }, right: { style: "thin", color: { auto: 1 } }
+                }
+            };
+            const totalStyle = {
+                font: { name: "Cairo", bold: true },
+                fill: { fgColor: { rgb: "D7CCC8" } }, // --border-color
+                border: { top: { style: "thin" }, bottom: { style: "thin" } }
+            };
+            const footerTextStyle = { font: { name: "Cairo", bold: true }, ...rightAlign };
+
+            // Apply styles by iterating through cells, as ws['A1'].s is the correct method
+            // Header Styles
+            ws[XLSX.utils.encode_cell({r:0, c:0})].s = headerStyle;
+            ws[XLSX.utils.encode_cell({r:1, c:0})].s = subHeaderStyle;
+            ws[XLSX.utils.encode_cell({r:2, c:0})].s = subHeaderStyle;
+            ws[XLSX.utils.encode_cell({r:3, c:0})].s = subHeaderStyle;
+
+            // Table Header Styles (Row 5)
+            for (let C = 0; C < 10; C++) {
+                ws[XLSX.utils.encode_cell({r:5, c:C})].s = tableHeaderStyle;
+            }
+
+            // Data Rows Formatting (from row 6 to dataEndRow-1)
+            for (let R = 6; R < dataEndRow; R++) {
+                ws[XLSX.utils.encode_cell({r:R, c:0})].s = centerAlign; // ID
+                ws[XLSX.utils.encode_cell({r:R, c:1})].s = rightAlign;  // Name
+                ws[XLSX.utils.encode_cell({r:R, c:2})].s = centerAlign; // Meter
+                ws[XLSX.utils.encode_cell({r:R, c:3})].s = centerAlign; // RIP
+                for (let C = 4; C <= 9; C++) { // Currency columns
+                    const cell = ws[XLSX.utils.encode_cell({r:R, c:C})];
+                    if (cell) {
+                        cell.t = 'n';
+                        cell.s = { numFmt: currencyFormat, ...centerAlign };
+                    }
+                }
+            }
+
+            // Total Row Styles
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:0})].s = { ...totalStyle, ...rightAlign }; // "المجموع" label
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:8})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Discount
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:9})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Net Payable
+
+            // Footer Text Styles
+            ws[XLSX.utils.encode_cell({r:totalRow+1, c:0})].s = footerTextStyle;
+            ws[XLSX.utils.encode_cell({r:totalRow+2, c:0})].s = footerTextStyle;
+            ws[XLSX.utils.encode_cell({r:totalRow+3, c:0})].s = footerTextStyle;
+            
+            // 5. MERGES & COLUMN WIDTHS
+            ws['!merges'] = [
+                // Headers
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 9 } },
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 9 } },
+                { s: { r: 3, c: 0 }, e: { r: 3, c: 9 } },
+                // Total row label
+                { s: { r: totalRow - 1, c: 0 }, e: { r: totalRow - 1, c: 7 } },
+                // Footer text
+                { s: { r: totalRow + 1, c: 0 }, e: { r: totalRow + 1, c: 9 } },
+                { s: { r: totalRow + 2, c: 0 }, e: { r: totalRow + 2, c: 9 } },
+                { s: { r: totalRow + 3, c: 0 }, e: { r: totalRow + 3, c: 9 } }
+            ];
+
+            ws['!cols'] = [
+                { wch: 5 },   // الرقم
+                { wch: 35 },  // اسم المستفيد
+                { wch: 15 },  // رقم العداد
+                { wch: 25 },  // رقم RIP الكامل
+                { wch: 15 },  // تعويض ث 1
+                { wch: 15 },  // تعويض ث 2
+                { wch: 15 },  // تعويض ث 3
+                { wch: 15 },  // تعويض ث 4
+                { wch: 15 },  // الخصم
+                { wch: 18 }   // الصافي للدفع
+            ];
+
+            // Set RTL property for the sheet
+            if(!ws['!props']) ws['!props'] = {};
+            ws['!props'].rtl = true;
+
+            // 6. WRITE FILE
+            XLSX.writeFile(wb, `تقرير_التعويضات_${institutionInfo.fiscalYear || 'YYYY'}.xlsx`);
         }
 
         function exportTxt() {
@@ -1502,6 +1646,127 @@
             a.click();
             URL.revokeObjectURL(url);
         }
+
+        function printCDRomReport() {
+            // 1. Prepare data
+            const reportData = compensations
+                .map(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (!b) return null;
+                    const rip = calculateRIP(b.account);
+                    // Also check that name is latin as per other export function
+                    if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                        console.warn(`Skipping beneficiary ${b.name} due to invalid CCP or name format.`);
+                        return null;
+                    }
+                    return {
+                        id: b.id,
+                        name: b.name,
+                        accountPart: rip.substring(0, 18),
+                        keyPart: rip.substring(18),
+                        netPayable: comp.netPayable
+                    };
+                })
+                .filter(Boolean)
+                .sort((a, b) => a.id - b.id);
+            
+            if (reportData.length === 0) {
+                alert("لا توجد بيانات صالحة لطباعة التقرير (تحقق من أسماء المستفيدين وأرقام CCP).");
+                return;
+            }
+
+            // 2. Gather header/footer info
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const monthName = months[parseInt(institutionInfo.financialMonth, 10) - 1] || 'N/A';
+            const year = institutionInfo.fiscalYear || 'YYYY';
+            const orgAccount = institutionInfo.treasuryAccount || 'N/A';
+            const orgKey = institutionInfo.treasuryKey || 'N/A';
+            const totalAmount = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const beneficiaryCount = reportData.length;
+
+            // 3. Generate table rows
+            const beneficiaryRows = reportData.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.accountPart} / ${item.keyPart}</td>
+                    <td>${formatCurrency(item.netPayable)}</td>
+                </tr>
+            `).join('');
+
+            // 4. Generate full HTML
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Etat de virement sur le CD-ROM</title>
+                    <style>
+                        body { font-family: "Times New Roman", serif; margin: 40px; color: #000; }
+                        h2 { text-align: center; text-decoration: underline; margin-bottom: 5px; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .details { margin-bottom: 20px; line-height: 1.8; }
+                        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+                        th, td { border: 1px solid #000; padding: 6px; text-align: center; }
+                        th { background-color: #f2f2f2; }
+                        .footer { margin-top: 10px; font-weight: bold; }
+                        @media print {
+                            body { margin: 20px; }
+                            button { display: none; }
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>Etat de virement sur le CD-ROM</h2>
+                    <div class="header">
+                        <strong>Mois :</strong> ${monthName} &nbsp;&nbsp;&nbsp;
+                        <strong>Année :</strong> ${year}
+                    </div>
+                    <div class="details">
+                        <strong>Numéro de compte de l’organisme :</strong> ${orgAccount} &nbsp;&nbsp; <strong>Clé :</strong> ${orgKey}<br>
+                        <strong>Montant global de virement :</strong> ${formatCurrency(totalAmount)}<br>
+                        <strong>L’Effectif :</strong> ${beneficiaryCount}<br>
+                        <strong>Code Ordonnateur :</strong> 0<br>
+                        <strong>N° Mandat :</strong> 0
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N</th>
+                                <th>Nom et Prénom</th>
+                                <th>Compte / Clé</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${beneficiaryRows}
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        Nombre de titres : ${beneficiaryCount} &nbsp;&nbsp;&nbsp; Montant global de détail : ${formatCurrency(totalAmount)}
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            window.onafterprint = function() { window.close(); };
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            // 5. Open print window
+            const printWindow = window.open('', '_blank', 'height=700,width=900,scrollbars=yes');
+            if (printWindow) {
+                printWindow.document.write(reportHTML);
+                printWindow.document.close();
+            } else {
+                alert("فشل فتح نافذة الطباعة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.");
+            }
+        }
+
 
         // --- Backup and Restore ---
         function createBackup() {
@@ -1552,6 +1817,23 @@
             document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
             document.getElementById('beneficiary-form').addEventListener('submit', saveBeneficiary);
             document.getElementById('restore-file-input').addEventListener('change', handleFileSelect);
+
+            // Refactored Event Listeners (to replace onclick attributes)
+            // Navigation
+            document.querySelectorAll('nav button').forEach(button => {
+                button.addEventListener('click', () => showSection(button.dataset.section));
+            });
+            // Reporting
+            document.getElementById('print-report-btn').addEventListener('click', printReport);
+            document.getElementById('export-xlsx-btn').addEventListener('click', exportXLSX);
+            document.getElementById('export-txt-btn').addEventListener('click', exportTxt);
+            document.getElementById('print-cdrom-btn').addEventListener('click', printCDRomReport);
+            // Backup/Restore
+            document.getElementById('create-backup-btn').addEventListener('click', createBackup);
+            document.getElementById('restore-backup-btn').addEventListener('click', restoreBackup);
+            // Modals
+            document.getElementById('cancel-beneficiary-btn').addEventListener('click', cancelBeneficiaryEdit);
+            document.getElementById('cancel-quarterly-btn').addEventListener('click', closeQuarterlyModal);
             
             // Compensation Grid Listeners
             document.getElementById('add-beneficiary-btn').addEventListener('click', () => openBeneficiaryModal());
@@ -1561,11 +1843,16 @@
             // Event delegation for the compensation grid
             const gridBody = document.querySelector('#compensation-grid-table tbody');
             gridBody.addEventListener('click', (e) => {
-                const editableCell = e.target.closest('.editable-cell');
-                if (editableCell) {
-                    const row = editableCell.closest('tr');
-                    const beneficiaryId = parseInt(row.dataset.beneficiaryId);
-                    const quarterIndex = parseInt(editableCell.dataset.quarter);
+                const row = e.target.closest('tr');
+                if (!row || !row.dataset.beneficiaryId) return;
+                const beneficiaryId = parseInt(row.dataset.beneficiaryId);
+
+                if (e.target.closest('.edit-btn-inline')) {
+                    openBeneficiaryModal(beneficiaryId);
+                } else if (e.target.closest('.delete-btn-inline')) {
+                    deleteBeneficiary(beneficiaryId);
+                } else if (e.target.closest('.editable-cell')) {
+                    const quarterIndex = parseInt(e.target.closest('.editable-cell').dataset.quarter);
                     openQuarterlyModal(beneficiaryId, quarterIndex);
                 }
             });
