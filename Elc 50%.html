@@ -926,6 +926,10 @@
                         <label for="section-name">القسم:</label>
                         <input type="text" id="section-name" placeholder="القسم التربوي أو الإداري">
                     </div>
+                    <div id="rank-field-group" style="display: none;">
+                        <label for="rank-name">الرتبة:</label>
+                        <input type="text" id="rank-name" placeholder="مثال: أستاذ، مقتصد...">
+                    </div>
                     <div>
                         <label for="calculated-rip">رقم RIP الكامل (20 رقم):</label>
                         <input type="text" id="calculated-rip" value="" readonly placeholder="يتم حسابه تلقائياً">
@@ -982,6 +986,14 @@
                 <i class="fas fa-chair"></i>
                 تعويضات منحة التجهيز
             </button>
+            <button class="mode-btn" onclick="selectMode('transport')">
+                <i class="fas fa-bus"></i>
+                تعويض مصاريف التنقل
+            </button>
+            <button class="mode-btn" onclick="selectMode('training')">
+                <i class="fas fa-chalkboard-teacher"></i>
+                تعويض مصاريف العمليات التكوينية
+            </button>
         </div>
     </div>
 
@@ -1017,6 +1029,8 @@
         let beneficiaries = [];
         let compensations = []; // Electricity compensations
         let compensationsEquipment = []; // Equipment compensations
+        let compensationsTransport = []; // Transport compensations
+        let compensationsTraining = []; // Training compensations
 
 
         // --- Helper Functions ---
@@ -1026,6 +1040,8 @@
                 const savedBeneficiaries = localStorage.getItem('beneficiaries');
                 const savedCompensations = localStorage.getItem('compensations');
                 const savedCompensationsEquipment = localStorage.getItem('compensationsEquipment');
+                const savedCompensationsTransport = localStorage.getItem('compensationsTransport');
+                const savedCompensationsTraining = localStorage.getItem('compensationsTraining');
 
                 if (savedInstitutionInfo) {
                     const tempInfo = JSON.parse(savedInstitutionInfo);
@@ -1078,6 +1094,24 @@
                     compensationsEquipment = compensationsEquipment.filter(comp => comp.beneficiaryId > 0);
                 }
 
+                if (savedCompensationsTransport) {
+                    compensationsTransport = JSON.parse(savedCompensationsTransport);
+                    compensationsTransport.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsTransport = compensationsTransport.filter(comp => comp.beneficiaryId > 0);
+                }
+
+                if (savedCompensationsTraining) {
+                    compensationsTraining = JSON.parse(savedCompensationsTraining);
+                    compensationsTraining.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsTraining = compensationsTraining.filter(comp => comp.beneficiaryId > 0);
+                }
+
                 // --- MIGRATION: Assign types to legacy beneficiaries ---
                 beneficiaries.forEach(b => {
                     if (!b.type) {
@@ -1097,6 +1131,8 @@
                  // Filter out compensations for deleted beneficiaries
                  compensations = compensations.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
                  compensationsEquipment = compensationsEquipment.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsTransport = compensationsTransport.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsTraining = compensationsTraining.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
 
             } catch (e) {
                 console.error("An error occurred during data loading:", e);
@@ -1110,6 +1146,8 @@
                 localStorage.setItem('beneficiaries', JSON.stringify(beneficiaries));
                 localStorage.setItem('compensations', JSON.stringify(compensations));
                 localStorage.setItem('compensationsEquipment', JSON.stringify(compensationsEquipment));
+                localStorage.setItem('compensationsTransport', JSON.stringify(compensationsTransport));
+                localStorage.setItem('compensationsTraining', JSON.stringify(compensationsTraining));
             } catch (e) {
                 console.error("An error occurred during data saving:", e);
                 alert("حدث خطأ أثناء حفظ البيانات.");
@@ -1129,9 +1167,15 @@
             if (mode === 'electricity') {
                 titleEl.innerHTML = '<i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز';
                 equipmentField.style.display = 'none';
-            } else {
+            } else if (mode === 'equipment') {
                 titleEl.innerHTML = '<i class="fas fa-chair"></i> برنامج تسديد منحة التجهيز';
                 equipmentField.style.display = 'block';
+            } else if (mode === 'transport') {
+                titleEl.innerHTML = '<i class="fas fa-bus"></i> برنامج تعويض مصاريف التنقل';
+                equipmentField.style.display = 'none';
+            } else if (mode === 'training') {
+                titleEl.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> برنامج تعويض مصاريف العمليات التكوينية';
+                equipmentField.style.display = 'none';
             }
             
             // Refresh views
@@ -1256,8 +1300,12 @@
             let totalSpent = 0;
             if (currentMode === 'electricity') {
                 totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
-            } else {
+            } else if (currentMode === 'equipment') {
                 totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else if (currentMode === 'transport') {
+                totalSpent = compensationsTransport.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else if (currentMode === 'training') {
+                totalSpent = compensationsTraining.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
             }
             
             const openCredit = institutionInfo.openCredit || 0;
@@ -1307,13 +1355,18 @@
             // Toggle fields based on mode
             const meterGroup = document.getElementById('meter-field-group');
             const sectionGroup = document.getElementById('section-field-group');
+            const rankGroup = document.getElementById('rank-field-group');
             
+            meterGroup.style.display = 'none';
+            sectionGroup.style.display = 'none';
+            rankGroup.style.display = 'none';
+
             if (currentMode === 'electricity') {
                 meterGroup.style.display = 'block';
-                sectionGroup.style.display = 'none';
-            } else {
-                meterGroup.style.display = 'none';
+            } else if (currentMode === 'equipment') {
                 sectionGroup.style.display = 'block';
+            } else if (currentMode === 'transport' || currentMode === 'training') {
+                rankGroup.style.display = 'block';
             }
 
             if (id) { 
@@ -1325,6 +1378,7 @@
                 document.getElementById('account-number').value = beneficiary.account;
                 document.getElementById('meter-number').value = beneficiary.meter || '';
                 document.getElementById('section-name').value = beneficiary.section || '';
+                document.getElementById('rank-name').value = beneficiary.rank || '';
             } else { 
                 title.innerHTML = '<i class="fas fa-user-plus"></i> إضافة مستفيد جديد';
                 document.getElementById('beneficiary-id').value = '';
@@ -1348,6 +1402,7 @@
             const account = document.getElementById('account-number').value.trim();
             const meter = document.getElementById('meter-number').value.trim();
             const section = document.getElementById('section-name').value.trim();
+            const rank = document.getElementById('rank-name').value.trim();
             
             if (!name || !account) return alert('الرجاء ملء الاسم والحساب.');
             if (!/^[a-zA-Z\s\-]+$/.test(name)) return alert('الرجاء إدخال الاسم بالأحرف اللاتينية.');
@@ -1361,10 +1416,11 @@
                     beneficiary.account = account;
                     beneficiary.meter = meter;
                     beneficiary.section = section;
+                    beneficiary.rank = rank;
                 }
                 alert('تم حفظ التعديلات.');
             } else { 
-                beneficiaries.push({ id: getNextBeneficiaryId(), name, account, meter, section, type: currentMode });
+                beneficiaries.push({ id: getNextBeneficiaryId(), name, account, meter, section, rank, type: currentMode });
                 alert('تم إضافة المستفيد بنجاح.');
             }
 
@@ -1379,6 +1435,8 @@
                 beneficiaries = beneficiaries.filter(b => b.id !== id);
                 compensations = compensations.filter(c => c.beneficiaryId !== id);
                 compensationsEquipment = compensationsEquipment.filter(c => c.beneficiaryId !== id);
+                compensationsTransport = compensationsTransport.filter(c => c.beneficiaryId !== id);
+                compensationsTraining = compensationsTraining.filter(c => c.beneficiaryId !== id);
                 
                 beneficiaries.sort((a, b) => a.id - b.id).forEach((b, index) => {
                     const oldId = b.id;
@@ -1386,6 +1444,8 @@
                     if (oldId !== newId) {
                         compensations.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
                         compensationsEquipment.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
+                        compensationsTransport.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
+                        compensationsTraining.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
                         b.id = newId;
                     }
                 });
@@ -1422,12 +1482,20 @@
                     <th>الصافي للدفع</th>
                     <th class="status-column">الحالة</th>
                 `;
-            } else {
+            } else if (currentMode === 'equipment') {
                 tableHead.innerHTML = `
                     <th>#</th>
                     <th>اللقب و الاسم</th>
                     <th>القسم</th>
                     <th>الصافي للدفع</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            } else if (currentMode === 'transport' || currentMode === 'training') {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>الرتبة</th>
+                    <th>مبلغ التعويض</th>
                     <th class="status-column">الحالة</th>
                 `;
             }
@@ -1470,7 +1538,7 @@
                         <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
                         <td class="status-column"><span class="status-badge ${hasData ? 'saved' : 'empty'}">${hasData ? 'محفوظ' : 'فارغ'}</span></td>
                     `;
-                } else {
+                } else if (currentMode === 'equipment') {
                     // Equipment Mode
                     const compData = compensationsEquipment.find(c => c.beneficiaryId === b.id);
                     const hasData = !!compData;
@@ -1490,6 +1558,32 @@
                         <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
                         <td class="status-column">
                             <button class="save-equipment-btn" style="background:none; border:none; cursor:pointer;">
+                                <span class="status-badge ${hasData ? 'saved' : 'unsaved'}">${hasData ? 'محفوظ' : 'حفظ'}</span>
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    // Transport & Training Mode
+                    let compData;
+                    if (currentMode === 'transport') compData = compensationsTransport.find(c => c.beneficiaryId === b.id);
+                    else compData = compensationsTraining.find(c => c.beneficiaryId === b.id);
+                    
+                    const hasData = !!compData;
+                    const netPayable = hasData ? compData.netPayable : 0;
+
+                    row.innerHTML = `
+                        <td>${b.id}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td>${b.rank || ''}</td>
+                        <td><input type="number" class="grid-input manual-amount-input" value="${netPayable.toFixed(2)}" step="0.01"></td>
+                        <td class="status-column">
+                            <button class="save-manual-btn" style="background:none; border:none; cursor:pointer;">
                                 <span class="status-badge ${hasData ? 'saved' : 'unsaved'}">${hasData ? 'محفوظ' : 'حفظ'}</span>
                             </button>
                         </td>
@@ -1596,7 +1690,7 @@
                 statusBadge.className = 'status-badge saved';
                 statusBadge.textContent = 'محفوظ';
 
-            } else {
+            } else if (currentMode === 'equipment') {
                 // Equipment Mode
                 // In this mode, we just confirm the grant value
                 const grantValue = institutionInfo.equipmentGrantValue;
@@ -1611,6 +1705,24 @@
                 
                 // Update UI
                 rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(grantValue);
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
+            } else {
+                // Transport & Training Mode
+                const amountInput = rowElement.querySelector('.manual-amount-input');
+                const amount = parseFloat(amountInput.value) || 0;
+                
+                let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                let compData = targetArray.find(c => c.beneficiaryId === beneficiaryId);
+                
+                if (!compData) {
+                    compData = { beneficiaryId, netPayable: amount };
+                    targetArray.push(compData);
+                } else {
+                    compData.netPayable = amount;
+                }
+                
                 const statusBadge = rowElement.querySelector('.status-badge');
                 statusBadge.className = 'status-badge saved';
                 statusBadge.textContent = 'محفوظ';
@@ -1636,7 +1748,7 @@
                 totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
                 totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
                 totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
-            } else {
+            } else if (currentMode === 'equipment') {
                 reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
                     const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
                     const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
@@ -1644,6 +1756,22 @@
                         id: b.id, 
                         name: b.name, 
                         section: b.section || '', 
+                        rip: calculateRIP(b.account), 
+                        netPayable: netPayable 
+                    };
+                }).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            } else {
+                // Transport & Training
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode).map(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    return { 
+                        id: b.id, 
+                        name: b.name, 
+                        rank: b.rank || '', 
                         rip: calculateRIP(b.account), 
                         netPayable: netPayable 
                     };
@@ -1678,7 +1806,7 @@
                         <td>${formatCurrency(totalNetPayable)}</td>
                     </tr>
                 </tbody></table>`;
-            } else {
+            } else if (currentMode === 'equipment') {
                 tableContent = `
                 <table><thead><tr>
                     <th>الرقم</th><th>اسم المستفيد</th><th>القسم</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
@@ -1693,9 +1821,28 @@
                         <td>${formatCurrency(totalNetPayable)}</td>
                     </tr>
                 </tbody></table>`;
+            } else {
+                tableContent = `
+                <table><thead><tr>
+                    <th>الرقم</th><th>اسم المستفيد</th><th>الرتبة</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
+                </tr></thead><tbody>
+                    ${reportData.map(item => `
+                        <tr>
+                            <td>${item.id}</td><td>${item.name}</td><td>${item.rank || ''}</td><td>${item.rip}</td>
+                            <td>${formatCurrency(item.netPayable)}</td>
+                        </tr>`).join('')}
+                    <tr class="total-row">
+                        <td colspan="4">المجموع</td>
+                        <td>${formatCurrency(totalNetPayable)}</td>
+                    </tr>
+                </tbody></table>`;
             }
 
-            const title = currentMode === 'electricity' ? 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز' : 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+            let title = '';
+            if (currentMode === 'electricity') title = 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز';
+            else if (currentMode === 'equipment') title = 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+            else if (currentMode === 'transport') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف التنقل';
+            else if (currentMode === 'training') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف العمليات التكوينية';
 
             return `
                 <div class="report-header" style="text-align: center; margin-bottom: 20px;">
@@ -1735,7 +1882,7 @@
                         discount: comp.discount, netPayable: comp.netPayable
                     };
                 }).filter(Boolean).sort((a, b) => a.id - b.id);
-            } else {
+            } else if (currentMode === 'equipment') {
                 reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
                     const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
                     const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
@@ -1744,12 +1891,28 @@
                         netPayable: netPayable
                     };
                 }).sort((a, b) => a.id - b.id);
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode).map(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    return {
+                        id: b.id, name: b.name, rank: b.rank || '', rip: calculateRIP(b.account),
+                        netPayable: netPayable
+                    };
+                }).sort((a, b) => a.id - b.id);
             }
 
             if (reportData.length === 0) return alert("لا توجد بيانات للتصدير.");
 
+            let title = '';
+            if (currentMode === 'electricity') title = 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز';
+            else if (currentMode === 'equipment') title = 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+            else if (currentMode === 'transport') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف التنقل';
+            else if (currentMode === 'training') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف العمليات التكوينية';
+
             let worksheetData = [
-                [`${currentMode === 'electricity' ? 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز' : 'الجدول التفصيلي للمستفيدين من منحة التجهيز'}`],
+                [title],
                 [`${institutionInfo.republic} - ${institutionInfo.ministry}`],
                 [`${institutionInfo.directorate} - ${institutionInfo.institution}`],
                 [`السنة المالية: ${institutionInfo.fiscalYear}`],
@@ -1772,10 +1935,17 @@
                 const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
                 const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
                 worksheetData.push(["المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable]);
-            } else {
+            } else if (currentMode === 'equipment') {
                 worksheetData.push(["الرقم", "اسم المستفيد", "القسم", "رقم RIP الكامل", "الصافي للدفع"]);
                 reportData.forEach(item => {
                     worksheetData.push([item.id, item.name, item.section, item.rip, item.netPayable]);
+                    totalNetPayable += item.netPayable;
+                });
+                worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
+            } else {
+                worksheetData.push(["الرقم", "اسم المستفيد", "الرتبة", "رقم RIP الكامل", "الصافي للدفع"]);
+                reportData.forEach(item => {
+                    worksheetData.push([item.id, item.name, item.rank, item.rip, item.netPayable]);
                     totalNetPayable += item.netPayable;
                 });
                 worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
@@ -1812,10 +1982,25 @@
                         }
                     }
                 });
-            } else {
+            } else if (currentMode === 'equipment') {
                 beneficiaries.filter(b => b.type === 'equipment').forEach(b => {
                     const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
                     const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    const rip = calculateRIP(b.account);
+                    
+                    if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                        const netPayableRounded = Math.round(netPayable * 100) / 100;
+                        totalRoundedNetPayable += netPayableRounded;
+                        const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                        const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                        validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    }
+                });
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                beneficiaries.filter(b => b.type === currentMode).forEach(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
                     const rip = calculateRIP(b.account);
                     
                     if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
@@ -1873,11 +2058,31 @@
                     })
                     .filter(Boolean)
                     .sort((a, b) => a.id - b.id);
-            } else {
+            } else if (currentMode === 'equipment') {
                 reportData = beneficiaries.filter(b => b.type === 'equipment')
                     .map(b => {
                         const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
                         const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode)
+                    .map(b => {
+                        const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                        const netPayable = comp ? comp.netPayable : 0;
                         const rip = calculateRIP(b.account);
                         if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
                             return null;
@@ -1990,7 +2195,14 @@
 
         // --- Backup and Restore ---
         function createBackup() {
-            const backupData = { institutionInfo, beneficiaries, compensations, compensationsEquipment };
+            const backupData = { 
+                institutionInfo, 
+                beneficiaries, 
+                compensations, 
+                compensationsEquipment,
+                compensationsTransport,
+                compensationsTraining
+            };
             const jsonString = JSON.stringify(backupData, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
             const now = new Date();
@@ -2020,6 +2232,8 @@
                             localStorage.setItem('beneficiaries', JSON.stringify(data.beneficiaries));
                             localStorage.setItem('compensations', JSON.stringify(data.compensations || []));
                             localStorage.setItem('compensationsEquipment', JSON.stringify(data.compensationsEquipment || []));
+                            localStorage.setItem('compensationsTransport', JSON.stringify(data.compensationsTransport || []));
+                            localStorage.setItem('compensationsTraining', JSON.stringify(data.compensationsTraining || []));
                             location.reload();
                         }
                     } else { alert('ملف النسخة الاحتياطية غير صالح.'); }
