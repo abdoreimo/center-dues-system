@@ -684,15 +684,16 @@
             }
             /* Defining column widths for better layout control */
             #print-report-content th:nth-child(1), #print-report-content td:nth-child(1) { width: 4%; }
-            #print-report-content th:nth-child(2), #print-report-content td:nth-child(2) { width: 22%; text-align: right; padding-right: 8px; }
+            #print-report-content th:nth-child(2), #print-report-content td:nth-child(2) { width: 20%; text-align: right; padding-right: 8px; }
             #print-report-content th:nth-child(3), #print-report-content td:nth-child(3) { width: 8%; }
-            #print-report-content th:nth-child(4), #print-report-content td:nth-child(4) { width: 18%; }
-            #print-report-content th:nth-child(5), #print-report-content td:nth-child(5) { width: 7%; }
-            #print-report-content th:nth-child(6), #print-report-content td:nth-child(6) { width: 7%; }
-            #print-report-content th:nth-child(7), #print-report-content td:nth-child(7) { width: 7%; }
-            #print-report-content th:nth-child(8), #print-report-content td:nth-child(8) { width: 7%; }
-            #print-report-content th:nth-child(9), #print-report-content td:nth-child(9) { width: 8%; }
-            #print-report-content th:nth-child(10), #print-report-content td:nth-child(10) { width: 12%; font-weight: bold; }
+            #print-report-content th:nth-child(4), #print-report-content td:nth-child(4) { width: 16%; }
+            #print-report-content th:nth-child(5), #print-report-content td:nth-child(5) { width: 6%; }
+            #print-report-content th:nth-child(6), #print-report-content td:nth-child(6) { width: 6%; }
+            #print-report-content th:nth-child(7), #print-report-content td:nth-child(7) { width: 6%; }
+            #print-report-content th:nth-child(8), #print-report-content td:nth-child(8) { width: 6%; }
+            #print-report-content th:nth-child(9), #print-report-content td:nth-child(9) { width: 8%; font-weight: bold; }
+            #print-report-content th:nth-child(10), #print-report-content td:nth-child(10) { width: 8%; }
+            #print-report-content th:nth-child(11), #print-report-content td:nth-child(11) { width: 12%; font-weight: bold; }
             
             #print-report-content th { 
                 background-color: #E0E0E0 !important; 
@@ -1023,7 +1024,9 @@
         }
 
         function formatCurrency(amount) {
-            return (parseFloat(amount) || 0).toFixed(2).replace('.', ',');
+            let parts = (parseFloat(amount) || 0).toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return parts.join(',');
         }
         
         function numberToArabicText(amount) {
@@ -1404,6 +1407,7 @@
             }).filter(Boolean).sort((a,b) => a.id - b.id);
             
             const totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
             
             return `
                 <div class="report-header" style="text-align: center; margin-bottom: 20px;">
@@ -1415,17 +1419,22 @@
                 <table><thead><tr>
                     <th>الرقم</th><th>اسم المستفيد</th><th>رقم العداد</th><th>رقم RIP الكامل</th>
                     <th>تعويض ث 1</th><th>تعويض ث 2</th><th>تعويض ث 3</th><th>تعويض ث 4</th>
-                    <th>الخصم</th><th>الصافي للدفع</th>
+                    <th>المجموع</th><th>الخصم</th><th>الصافي للدفع</th>
                 </tr></thead><tbody>
-                    ${reportData.map(item => `
+                    ${reportData.map(item => {
+                        const totalBeforeDiscount = item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated;
+                        return `
                         <tr>
                             <td>${item.id}</td><td>${item.name}</td><td>${item.meter}</td><td>${item.rip}</td>
                             <td>${formatCurrency(item.q1.calculated)}</td><td>${formatCurrency(item.q2.calculated)}</td>
                             <td>${formatCurrency(item.q3.calculated)}</td><td>${formatCurrency(item.q4.calculated)}</td>
+                            <td>${formatCurrency(totalBeforeDiscount)}</td>
                             <td>${formatCurrency(item.discount)}</td><td>${formatCurrency(item.netPayable)}</td>
-                        </tr>`).join('')}
+                        </tr>`;
+                    }).join('')}
                     <tr class="total-row">
                         <td colspan="8">المجموع</td>
+                        <td>${formatCurrency(totalSum)}</td>
                         <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.discount, 0))}</td>
                         <td>${formatCurrency(totalNetPayable)}</td>
                     </tr>
@@ -1471,6 +1480,7 @@
 
             const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
             const totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
 
             // 2. WORKSHEET STRUCTURE (Array of Arrays)
             let worksheetData = [
@@ -1482,14 +1492,16 @@
                 [null], // Spacer row
 
                 // Table Headers
-                ["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "الخصم", "الصافي للدفع"]
+                ["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "المجموع", "الخصم", "الصافي للدفع"]
             ];
 
             // Table Data
             reportData.forEach(item => {
+                const totalBeforeDiscount = item.q1 + item.q2 + item.q3 + item.q4;
                 worksheetData.push([
                     item.id, item.name, item.meter, item.rip,
                     item.q1, item.q2, item.q3, item.q4,
+                    totalBeforeDiscount,
                     item.discount, item.netPayable
                 ]);
             });
@@ -1497,7 +1509,7 @@
 
             // Table Footer (Total Row)
             worksheetData.push([
-                "المجموع", null, null, null, null, null, null, null, totalDiscount, totalNetPayable
+                "المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable
             ]);
             const totalRow = worksheetData.length;
 
@@ -1543,7 +1555,7 @@
             ws[XLSX.utils.encode_cell({r:3, c:0})].s = subHeaderStyle;
 
             // Table Header Styles (Row 5)
-            for (let C = 0; C < 10; C++) {
+            for (let C = 0; C < 11; C++) {
                 ws[XLSX.utils.encode_cell({r:5, c:C})].s = tableHeaderStyle;
             }
 
@@ -1553,7 +1565,7 @@
                 ws[XLSX.utils.encode_cell({r:R, c:1})].s = rightAlign;  // Name
                 ws[XLSX.utils.encode_cell({r:R, c:2})].s = centerAlign; // Meter
                 ws[XLSX.utils.encode_cell({r:R, c:3})].s = centerAlign; // RIP
-                for (let C = 4; C <= 9; C++) { // Currency columns
+                for (let C = 4; C <= 10; C++) { // Currency columns
                     const cell = ws[XLSX.utils.encode_cell({r:R, c:C})];
                     if (cell) {
                         cell.t = 'n';
@@ -1564,8 +1576,9 @@
 
             // Total Row Styles
             ws[XLSX.utils.encode_cell({r:totalRow-1, c:0})].s = { ...totalStyle, ...rightAlign }; // "المجموع" label
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:8})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Discount
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:9})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Net Payable
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:8})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Sum
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:9})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Discount
+            ws[XLSX.utils.encode_cell({r:totalRow-1, c:10})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Net Payable
 
             // Footer Text Styles
             ws[XLSX.utils.encode_cell({r:totalRow+1, c:0})].s = footerTextStyle;
@@ -1575,16 +1588,16 @@
             // 5. MERGES & COLUMN WIDTHS
             ws['!merges'] = [
                 // Headers
-                { s: { r: 0, c: 0 }, e: { r: 0, c: 9 } },
-                { s: { r: 1, c: 0 }, e: { r: 1, c: 9 } },
-                { s: { r: 2, c: 0 }, e: { r: 2, c: 9 } },
-                { s: { r: 3, c: 0 }, e: { r: 3, c: 9 } },
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 10 } },
+                { s: { r: 1, c: 0 }, e: { r: 1, c: 10 } },
+                { s: { r: 2, c: 0 }, e: { r: 2, c: 10 } },
+                { s: { r: 3, c: 0 }, e: { r: 3, c: 10 } },
                 // Total row label
                 { s: { r: totalRow - 1, c: 0 }, e: { r: totalRow - 1, c: 7 } },
                 // Footer text
-                { s: { r: totalRow + 1, c: 0 }, e: { r: totalRow + 1, c: 9 } },
-                { s: { r: totalRow + 2, c: 0 }, e: { r: totalRow + 2, c: 9 } },
-                { s: { r: totalRow + 3, c: 0 }, e: { r: totalRow + 3, c: 9 } }
+                { s: { r: totalRow + 1, c: 0 }, e: { r: totalRow + 1, c: 10 } },
+                { s: { r: totalRow + 2, c: 0 }, e: { r: totalRow + 2, c: 10 } },
+                { s: { r: totalRow + 3, c: 0 }, e: { r: totalRow + 3, c: 10 } }
             ];
 
             ws['!cols'] = [
@@ -1596,6 +1609,7 @@
                 { wch: 15 },  // تعويض ث 2
                 { wch: 15 },  // تعويض ث 3
                 { wch: 15 },  // تعويض ث 4
+                { wch: 15 },  // المجموع
                 { wch: 15 },  // الخصم
                 { wch: 18 }   // الصافي للدفع
             ];
