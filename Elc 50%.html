@@ -456,6 +456,43 @@
                  transform: translateY(-1px);
             }
 
+        /* Mode Selection Modal */
+        #mode-selection-modal {
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+        }
+        #mode-selection-modal .modal-content {
+            max-width: 600px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--background-white), var(--light-color));
+        }
+        .mode-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 1.3em;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-md);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .mode-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.02);
+        }
+        .mode-btn i {
+            font-size: 1.5em;
+        }
+
         /* Focus indicator */
         *:focus-visible {
             outline: 2px solid var(--primary-color);
@@ -715,6 +752,7 @@
     <header>
         <h1><i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
         <nav>
+            <button id="switch-mode-btn" style="background-color: rgba(0,0,0,0.25);"><i class="fas fa-home"></i> الرئيسية</button>
             <button data-section="institution-info-section"><i class="fas fa-building"></i> معلومات المؤسسة</button>
             <button data-section="compensation-management-section"><i class="fas fa-users"></i> إدارة التعويضات والمستفيدين</button>
             <button data-section="reporting-section"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
@@ -780,6 +818,10 @@
                 <div>
                     <label for="open-credit">الاعتماد المفتوح (دج):</label>
                     <input type="number" id="open-credit" value="0" step="0.01" placeholder="أدخل المبلغ الإجمالي للاعتماد">
+                </div>
+                <div id="equipment-grant-field" style="display: none;">
+                    <label for="equipment-grant-value">قيمة منحة التجهيز (دج):</label>
+                    <input type="number" id="equipment-grant-value" value="0" step="0.01" placeholder="قيمة المنحة الثابتة">
                 </div>
                 <div>
                     <button type="submit"><i class="fas fa-save"></i> حفظ المعلومات</button>
@@ -876,9 +918,13 @@
                         <label for="account-number">رقم الحساب (CCP):</label>
                         <input type="text" id="account-number" required oninput="updateCalculatedRIP()">
                     </div>
-                    <div>
+                    <div id="meter-field-group">
                         <label for="meter-number">رقم العداد:</label>
                         <input type="text" id="meter-number">
+                    </div>
+                    <div id="section-field-group" style="display: none;">
+                        <label for="section-name">القسم:</label>
+                        <input type="text" id="section-name" placeholder="القسم التربوي أو الإداري">
                     </div>
                     <div>
                         <label for="calculated-rip">رقم RIP الكامل (20 رقم):</label>
@@ -923,6 +969,22 @@
     </div>
 
 
+    <!-- Mode Selection Modal -->
+    <div id="mode-selection-modal" class="modal-overlay visible" style="display: flex;">
+        <div class="modal-content">
+            <h2><i class="fas fa-cogs"></i> اختر نظام العمل</h2>
+            <p>يرجى اختيار نوع التعويضات التي تريد العمل عليها:</p>
+            <button class="mode-btn" onclick="selectMode('electricity')">
+                <i class="fas fa-bolt"></i>
+                تعويضات استهلاك الكهرباء والغاز
+            </button>
+            <button class="mode-btn" onclick="selectMode('equipment')">
+                <i class="fas fa-chair"></i>
+                تعويضات منحة التجهيز
+            </button>
+        </div>
+    </div>
+
     <div id="ticker-container">
         <div id="ticker-content">
             <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
@@ -935,6 +997,8 @@
 
     <script>
         // --- Data Storage ---
+        let currentMode = 'electricity'; // 'electricity' or 'equipment'
+        
         let institutionInfo = {
             republic: "الجمهورية الجزائرية الديمقراطية الشعبية",
             ministry: "وزارة التربية الوطنية",
@@ -946,11 +1010,13 @@
             treasuryKey: "",
             orderNumber: "",
             transferNumber: "",
-            openCredit: 0
+            openCredit: 0,
+            equipmentGrantValue: 0 // New field
         };
 
         let beneficiaries = [];
-        let compensations = [];
+        let compensations = []; // Electricity compensations
+        let compensationsEquipment = []; // Equipment compensations
 
 
         // --- Helper Functions ---
@@ -959,6 +1025,7 @@
                 const savedInstitutionInfo = localStorage.getItem('institutionInfo');
                 const savedBeneficiaries = localStorage.getItem('beneficiaries');
                 const savedCompensations = localStorage.getItem('compensations');
+                const savedCompensationsEquipment = localStorage.getItem('compensationsEquipment');
 
                 if (savedInstitutionInfo) {
                     const tempInfo = JSON.parse(savedInstitutionInfo);
@@ -967,6 +1034,7 @@
                          ...tempInfo
                      };
                      institutionInfo.openCredit = parseFloat(institutionInfo.openCredit) || 0;
+                     institutionInfo.equipmentGrantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
                 }
 
                 if (savedBeneficiaries) {
@@ -1000,7 +1068,36 @@
                     });
                     compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                 }
+                
+                if (savedCompensationsEquipment) {
+                    compensationsEquipment = JSON.parse(savedCompensationsEquipment);
+                    compensationsEquipment.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsEquipment = compensationsEquipment.filter(comp => comp.beneficiaryId > 0);
+                }
+
+                // --- MIGRATION: Assign types to legacy beneficiaries ---
+                beneficiaries.forEach(b => {
+                    if (!b.type) {
+                        // Check if this beneficiary has explicit equipment data
+                        const hasEquip = compensationsEquipment.some(c => c.beneficiaryId === b.id);
+                        // Check if this beneficiary has explicit electricity data (non-zero)
+                        const hasElec = compensations.some(c => c.beneficiaryId === b.id && c.netPayable > 0);
+                        
+                        if (hasEquip && !hasElec) {
+                            b.type = 'equipment';
+                        } else {
+                            b.type = 'electricity'; // Default to electricity
+                        }
+                    }
+                });
+
+                 // Filter out compensations for deleted beneficiaries
                  compensations = compensations.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsEquipment = compensationsEquipment.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+
             } catch (e) {
                 console.error("An error occurred during data loading:", e);
                 alert("حدث خطأ أثناء تحميل البيانات المحفوظة. قد يتم استخدام البيانات الافتراضية.");
@@ -1009,13 +1106,36 @@
 
         function saveData() {
             try {
-                 localStorage.setItem('institutionInfo', JSON.stringify(institutionInfo));
+                localStorage.setItem('institutionInfo', JSON.stringify(institutionInfo));
                 localStorage.setItem('beneficiaries', JSON.stringify(beneficiaries));
                 localStorage.setItem('compensations', JSON.stringify(compensations));
+                localStorage.setItem('compensationsEquipment', JSON.stringify(compensationsEquipment));
             } catch (e) {
                 console.error("An error occurred during data saving:", e);
                 alert("حدث خطأ أثناء حفظ البيانات.");
             }
+        }
+
+        function selectMode(mode) {
+            currentMode = mode;
+            const modal = document.getElementById('mode-selection-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => modal.style.display = 'none', 300);
+
+            // Update UI based on mode
+            const titleEl = document.querySelector('header h1');
+            const equipmentField = document.getElementById('equipment-grant-field');
+            
+            if (mode === 'electricity') {
+                titleEl.innerHTML = '<i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز';
+                equipmentField.style.display = 'none';
+            } else {
+                titleEl.innerHTML = '<i class="fas fa-chair"></i> برنامج تسديد منحة التجهيز';
+                equipmentField.style.display = 'block';
+            }
+            
+            // Refresh views
+            showSection('institution-info-section');
         }
 
         function getNextBeneficiaryId() {
@@ -1031,9 +1151,7 @@
 
         function parseCurrency(str) {
             if (!str) return 0;
-            // Remove all dots (thousands separators)
             const cleanStr = str.toString().replace(/\./g, '');
-            // Replace comma with dot (decimal separator)
             const normalizedStr = cleanStr.replace(',', '.');
             return parseFloat(normalizedStr) || 0;
         }
@@ -1104,7 +1222,7 @@
             });
 
             document.querySelectorAll('.app-section').forEach(section => {
-                if (section.id !== 'beneficiary-management-section') { // Keep it hidden
+                if (section.id !== 'beneficiary-management-section') { 
                     section.style.display = 'none';
                 }
             });
@@ -1135,7 +1253,13 @@
         }
 
         function updateCreditDisplay() {
-            const totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            let totalSpent = 0;
+            if (currentMode === 'electricity') {
+                totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else {
+                totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            }
+            
             const openCredit = institutionInfo.openCredit || 0;
             const remainingCredit = openCredit - totalSpent;
 
@@ -1156,11 +1280,13 @@
         function saveInstitutionInfo(event) {
             event.preventDefault();
             for (const key in institutionInfo) {
-                 if (key === 'openCredit') continue; // Skip openCredit here
+                 if (key === 'openCredit' || key === 'equipmentGrantValue') continue;
                 const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                 if (element) institutionInfo[key] = element.value.trim();
             }
             institutionInfo.openCredit = parseFloat(document.getElementById('open-credit').value) || 0;
+            institutionInfo.equipmentGrantValue = parseFloat(document.getElementById('equipment-grant-value').value) || 0;
+            
             saveData();
             alert('تم حفظ معلومات المؤسسة.');
             updateCreditDisplay();
@@ -1170,28 +1296,41 @@
         }
 
 
-        // --- Beneficiary Management (New Integrated Workflow) ---
+        // --- Beneficiary Management ---
         function openBeneficiaryModal(id = null) {
             const modal = document.getElementById('beneficiary-modal');
             const form = document.getElementById('beneficiary-form');
             const title = document.getElementById('beneficiary-modal-title');
             
-            form.reset(); // Clear previous data
+            form.reset(); 
             
-            if (id) { // Editing existing beneficiary
+            // Toggle fields based on mode
+            const meterGroup = document.getElementById('meter-field-group');
+            const sectionGroup = document.getElementById('section-field-group');
+            
+            if (currentMode === 'electricity') {
+                meterGroup.style.display = 'block';
+                sectionGroup.style.display = 'none';
+            } else {
+                meterGroup.style.display = 'none';
+                sectionGroup.style.display = 'block';
+            }
+
+            if (id) { 
                 const beneficiary = beneficiaries.find(b => b.id === id);
                 if (!beneficiary) return;
                 title.innerHTML = '<i class="fas fa-user-edit"></i> تعديل بيانات المستفيد';
                 document.getElementById('beneficiary-id').value = beneficiary.id;
                 document.getElementById('beneficiary-name').value = beneficiary.name;
                 document.getElementById('account-number').value = beneficiary.account;
-                document.getElementById('meter-number').value = beneficiary.meter;
-            } else { // Adding new beneficiary
+                document.getElementById('meter-number').value = beneficiary.meter || '';
+                document.getElementById('section-name').value = beneficiary.section || '';
+            } else { 
                 title.innerHTML = '<i class="fas fa-user-plus"></i> إضافة مستفيد جديد';
                 document.getElementById('beneficiary-id').value = '';
             }
             
-            updateCalculatedRIP(); // Update RIP field
+            updateCalculatedRIP(); 
             modal.style.display = 'flex';
             setTimeout(() => modal.classList.add('visible'), 10);
         }
@@ -1208,22 +1347,24 @@
             const name = document.getElementById('beneficiary-name').value.trim();
             const account = document.getElementById('account-number').value.trim();
             const meter = document.getElementById('meter-number').value.trim();
+            const section = document.getElementById('section-name').value.trim();
             
             if (!name || !account) return alert('الرجاء ملء الاسم والحساب.');
             if (!/^[a-zA-Z\s\-]+$/.test(name)) return alert('الرجاء إدخال الاسم بالأحرف اللاتينية.');
             if (beneficiaries.some(b => b.account === account && b.id !== id)) return alert('رقم الحساب مسجل لمستفيد آخر.');
             if (calculateRIP(account).includes('خطأ')) return alert('رقم الحساب غير صالح.');
 
-            if (id) { // Update existing
+            if (id) { 
                 const beneficiary = beneficiaries.find(b => b.id === id);
                 if (beneficiary) {
                     beneficiary.name = name;
                     beneficiary.account = account;
                     beneficiary.meter = meter;
+                    beneficiary.section = section;
                 }
                 alert('تم حفظ التعديلات.');
-            } else { // Add new
-                beneficiaries.push({ id: getNextBeneficiaryId(), name, account, meter });
+            } else { 
+                beneficiaries.push({ id: getNextBeneficiaryId(), name, account, meter, section, type: currentMode });
                 alert('تم إضافة المستفيد بنجاح.');
             }
 
@@ -1237,13 +1378,14 @@
             if (confirm(`هل أنت متأكد من حذف المستفيد "${beneficiary.name}" وكل تعويضاته؟`)) {
                 beneficiaries = beneficiaries.filter(b => b.id !== id);
                 compensations = compensations.filter(c => c.beneficiaryId !== id);
+                compensationsEquipment = compensationsEquipment.filter(c => c.beneficiaryId !== id);
                 
-                // Re-sequence IDs to keep them contiguous
                 beneficiaries.sort((a, b) => a.id - b.id).forEach((b, index) => {
                     const oldId = b.id;
                     const newId = index + 1;
                     if (oldId !== newId) {
                         compensations.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
+                        compensationsEquipment.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
                         b.id = newId;
                     }
                 });
@@ -1262,50 +1404,103 @@
         }
 
         function renderCompensationGrid(searchTerm = '') {
+            const tableHead = document.querySelector('#compensation-grid-table thead tr');
             const tableBody = document.querySelector('#compensation-grid-table tbody');
             tableBody.innerHTML = '';
 
+            // Update Headers based on mode
+            if (currentMode === 'electricity') {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>تعويض ث 1</th>
+                    <th>تعويض ث 2</th>
+                    <th>تعويض ث 3</th>
+                    <th>تعويض ث 4</th>
+                    <th>المجموع</th>
+                    <th>الخصم</th>
+                    <th>الصافي للدفع</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            } else {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>القسم</th>
+                    <th>الصافي للدفع</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            }
+
             const filtered = beneficiaries.filter(b =>
-                searchTerm === '' ||
+                (b.type === currentMode || (!b.type && currentMode === 'electricity')) &&
+                (searchTerm === '' ||
                 b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                b.account.includes(searchTerm)
+                b.account.includes(searchTerm))
             );
 
             filtered.sort((a,b) => a.id - b.id).forEach(b => {
-                const compData = compensations.find(c => c.beneficiaryId === b.id) || {
-                    q1: { calculated: 0 }, q2: { calculated: 0 }, q3: { calculated: 0 }, q4: { calculated: 0 },
-                    discount: 0, netPayable: 0
-                };
-                
-                const totalComp = compData.q1.calculated + compData.q2.calculated + compData.q3.calculated + compData.q4.calculated;
-                const netPayable = totalComp - compData.discount;
-                const hasData = compensations.some(c => c.beneficiaryId === b.id);
-
                 const row = document.createElement('tr');
                 row.dataset.beneficiaryId = b.id;
-                row.innerHTML = `
-                    <td>${b.id}</td>
-                    <td class="beneficiary-name-cell">
-                        <span>${b.name}</span>
-                        <div class="beneficiary-actions">
-                             <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
-                             <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                    </td>
-                    <td class="editable-cell" data-quarter="1">${formatCurrency(compData.q1.calculated)}</td>
-                    <td class="editable-cell" data-quarter="2">${formatCurrency(compData.q2.calculated)}</td>
-                    <td class="editable-cell" data-quarter="3">${formatCurrency(compData.q3.calculated)}</td>
-                    <td class="editable-cell" data-quarter="4">${formatCurrency(compData.q4.calculated)}</td>
-                    <td class="calculated-cell total-comp-cell">${formatCurrency(totalComp)}</td>
-                    <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
-                    <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
-                    <td class="status-column"><span class="status-badge ${hasData ? 'saved' : 'empty'}">${hasData ? 'محفوظ' : 'فارغ'}</span></td>
-                `;
+
+                if (currentMode === 'electricity') {
+                    const compData = compensations.find(c => c.beneficiaryId === b.id) || {
+                        q1: { calculated: 0 }, q2: { calculated: 0 }, q3: { calculated: 0 }, q4: { calculated: 0 },
+                        discount: 0, netPayable: 0
+                    };
+                    const totalComp = compData.q1.calculated + compData.q2.calculated + compData.q3.calculated + compData.q4.calculated;
+                    const netPayable = totalComp - compData.discount;
+                    const hasData = compensations.some(c => c.beneficiaryId === b.id);
+
+                    row.innerHTML = `
+                        <td>${b.id}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td class="editable-cell" data-quarter="1">${formatCurrency(compData.q1.calculated)}</td>
+                        <td class="editable-cell" data-quarter="2">${formatCurrency(compData.q2.calculated)}</td>
+                        <td class="editable-cell" data-quarter="3">${formatCurrency(compData.q3.calculated)}</td>
+                        <td class="editable-cell" data-quarter="4">${formatCurrency(compData.q4.calculated)}</td>
+                        <td class="calculated-cell total-comp-cell">${formatCurrency(totalComp)}</td>
+                        <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
+                        <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
+                        <td class="status-column"><span class="status-badge ${hasData ? 'saved' : 'empty'}">${hasData ? 'محفوظ' : 'فارغ'}</span></td>
+                    `;
+                } else {
+                    // Equipment Mode
+                    const compData = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const hasData = !!compData;
+                    // Default to global value if not saved, otherwise use saved value
+                    const netPayable = hasData ? compData.netPayable : institutionInfo.equipmentGrantValue;
+
+                    row.innerHTML = `
+                        <td>${b.id}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td>${b.section || ''}</td>
+                        <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
+                        <td class="status-column">
+                            <button class="save-equipment-btn" style="background:none; border:none; cursor:pointer;">
+                                <span class="status-badge ${hasData ? 'saved' : 'unsaved'}">${hasData ? 'محفوظ' : 'حفظ'}</span>
+                            </button>
+                        </td>
+                    `;
+                }
                 tableBody.appendChild(row);
             });
         }
         
         function openQuarterlyModal(beneficiaryId, quarterIndex) {
+            if (currentMode !== 'electricity') return;
             const beneficiary = beneficiaries.find(b => b.id === beneficiaryId);
             if (!beneficiary) return;
 
@@ -1346,7 +1541,6 @@
             if (targetRow) {
                 const targetCell = targetRow.querySelector(`td[data-quarter='${quarterIndex}']`);
                 targetCell.textContent = formatCurrency(calculated);
-                // Temporarily store detailed data on the element to be picked up by processAndSaveRow
                 targetCell.dataset.nofees = nofees;
                 targetCell.dataset.value = value;
                 targetCell.dataset.contrib = contrib;
@@ -1356,75 +1550,111 @@
         }
 
         function processAndSaveRow(rowElement) {
-            // Part 1: Update UI totals
-            let totalComp = 0;
-            for (let i = 1; i <= 4; i++) {
-                const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                totalComp += parseCurrency(cell.textContent);
-            }
-
-            const discountInput = rowElement.querySelector('.discount-input');
-            let discount = parseFloat(discountInput.value) || 0;
-            if (discountInput.value !== discount.toFixed(2)) {
-                discountInput.value = discount.toFixed(2);
-            }
-
-            const netPayable = totalComp - discount;
-            rowElement.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
-            rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(netPayable);
-
-            // Part 2: Find or create data object and save
             const beneficiaryId = parseInt(rowElement.dataset.beneficiaryId);
-            let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
-            if (!compData) {
-                compData = { beneficiaryId, q1:{}, q2:{}, q3:{}, q4:{}, discount: 0, netPayable: 0 };
-                compensations.push(compData);
-            }
 
-            for(let i=1; i<=4; i++) {
-                const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                compData[`q${i}`] = {
-                    nofees: parseFloat(cell.dataset.nofees) || compData[`q${i}`]?.nofees || 0,
-                    value: parseFloat(cell.dataset.value) || compData[`q${i}`]?.value || 0,
-                    contrib: parseFloat(cell.dataset.contrib) || compData[`q${i}`]?.contrib || 0,
-                    calculated: parseCurrency(cell.textContent)
-                };
-                // Clean up temporary data attributes
-                delete cell.dataset.nofees;
-                delete cell.dataset.value;
-                delete cell.dataset.contrib;
+            if (currentMode === 'electricity') {
+                let totalComp = 0;
+                for (let i = 1; i <= 4; i++) {
+                    const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
+                    totalComp += parseCurrency(cell.textContent);
+                }
+
+                const discountInput = rowElement.querySelector('.discount-input');
+                let discount = parseFloat(discountInput.value) || 0;
+                if (discountInput.value !== discount.toFixed(2)) {
+                    discountInput.value = discount.toFixed(2);
+                }
+
+                const netPayable = totalComp - discount;
+                rowElement.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
+                rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(netPayable);
+
+                let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
+                if (!compData) {
+                    compData = { beneficiaryId, q1:{}, q2:{}, q3:{}, q4:{}, discount: 0, netPayable: 0 };
+                    compensations.push(compData);
+                }
+
+                for(let i=1; i<=4; i++) {
+                    const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
+                    compData[`q${i}`] = {
+                        nofees: parseFloat(cell.dataset.nofees) || compData[`q${i}`]?.nofees || 0,
+                        value: parseFloat(cell.dataset.value) || compData[`q${i}`]?.value || 0,
+                        contrib: parseFloat(cell.dataset.contrib) || compData[`q${i}`]?.contrib || 0,
+                        calculated: parseCurrency(cell.textContent)
+                    };
+                    delete cell.dataset.nofees;
+                    delete cell.dataset.value;
+                    delete cell.dataset.contrib;
+                }
+                
+                compData.discount = discount;
+                compData.netPayable = totalComp - compData.discount;
+
+                rowElement.classList.remove('is-dirty');
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
+
+            } else {
+                // Equipment Mode
+                // In this mode, we just confirm the grant value
+                const grantValue = institutionInfo.equipmentGrantValue;
+                
+                let compData = compensationsEquipment.find(c => c.beneficiaryId === beneficiaryId);
+                if (!compData) {
+                    compData = { beneficiaryId, netPayable: grantValue };
+                    compensationsEquipment.push(compData);
+                } else {
+                    compData.netPayable = grantValue; // Update in case global value changed
+                }
+                
+                // Update UI
+                rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(grantValue);
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
             }
-            
-            compData.discount = discount;
-            compData.netPayable = totalComp - compData.discount;
 
             saveData();
             updateCreditDisplay();
-
-            // Part 3: Update row status
-            rowElement.classList.remove('is-dirty');
-            const statusBadge = rowElement.querySelector('.status-badge');
-            statusBadge.className = 'status-badge saved';
-            statusBadge.textContent = 'محفوظ';
         }
 
         // --- Reporting & Export ---
         function generateReportHTML(forPrint = false) {
-            const reportData = compensations.map(comp => {
-                const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
-                return b ? { ...comp, name: b.name, meter: b.meter, rip: calculateRIP(b.account), id: b.id } : null;
-            }).filter(Boolean).sort((a,b) => a.id - b.id);
+            let reportData = [];
+            let totalNetPayable = 0;
+            let totalSum = 0;
+            let totalDiscount = 0;
+
+            if (currentMode === 'electricity') {
+                reportData = compensations.map(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    return (b && (b.type === 'electricity' || !b.type)) ? { ...comp, name: b.name, meter: b.meter, rip: calculateRIP(b.account), id: b.id } : null;
+                }).filter(Boolean).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+                totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
+                totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+            } else {
+                reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    return { 
+                        id: b.id, 
+                        name: b.name, 
+                        section: b.section || '', 
+                        rip: calculateRIP(b.account), 
+                        netPayable: netPayable 
+                    };
+                }).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            }
             
-            const totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
-            const totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
-            
-            return `
-                <div class="report-header" style="text-align: center; margin-bottom: 20px;">
-                    <p>${institutionInfo.republic}</p><p>${institutionInfo.ministry}</p>
-                    <p>${institutionInfo.directorate}</p><p>${institutionInfo.institution}</p>
-                    <p>السنة المالية: ${institutionInfo.fiscalYear}</p>
-                    <h3 style="margin-top: 20px;">الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز</h3>
-                </div>
+            let tableContent = '';
+            if (currentMode === 'electricity') {
+                tableContent = `
                 <table><thead><tr>
                     <th>الرقم</th><th>اسم المستفيد</th><th>رقم العداد</th><th>رقم RIP الكامل</th>
                     <th>تعويض ث 1</th><th>تعويض ث 2</th><th>تعويض ث 3</th><th>تعويض ث 4</th>
@@ -1444,10 +1674,37 @@
                     <tr class="total-row">
                         <td colspan="8">المجموع</td>
                         <td>${formatCurrency(totalSum)}</td>
-                        <td>${formatCurrency(reportData.reduce((sum, item) => sum + item.discount, 0))}</td>
+                        <td>${formatCurrency(totalDiscount)}</td>
                         <td>${formatCurrency(totalNetPayable)}</td>
                     </tr>
-                </tbody></table>
+                </tbody></table>`;
+            } else {
+                tableContent = `
+                <table><thead><tr>
+                    <th>الرقم</th><th>اسم المستفيد</th><th>القسم</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
+                </tr></thead><tbody>
+                    ${reportData.map(item => `
+                        <tr>
+                            <td>${item.id}</td><td>${item.name}</td><td>${item.section || ''}</td><td>${item.rip}</td>
+                            <td>${formatCurrency(item.netPayable)}</td>
+                        </tr>`).join('')}
+                    <tr class="total-row">
+                        <td colspan="4">المجموع</td>
+                        <td>${formatCurrency(totalNetPayable)}</td>
+                    </tr>
+                </tbody></table>`;
+            }
+
+            const title = currentMode === 'electricity' ? 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز' : 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+
+            return `
+                <div class="report-header" style="text-align: center; margin-bottom: 20px;">
+                    <p>${institutionInfo.republic}</p><p>${institutionInfo.ministry}</p>
+                    <p>${institutionInfo.directorate}</p><p>${institutionInfo.institution}</p>
+                    <p>السنة المالية: ${institutionInfo.fiscalYear}</p>
+                    <h3 style="margin-top: 20px;">${title}</h3>
+                </div>
+                ${tableContent}
                 <div class="report-footer" style="text-align: right; margin-top: 20px;">
                     <p>أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}</p>
                     <p>أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج</p>
@@ -1467,185 +1724,109 @@
         }
 
         function exportXLSX() {
-            // 1. DATA PREPARATION
-            const reportData = compensations.map(comp => {
-                const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
-                if (!b) return null;
-                return {
-                    id: b.id,
-                    name: b.name,
-                    meter: b.meter,
-                    rip: calculateRIP(b.account),
-                    q1: comp.q1.calculated,
-                    q2: comp.q2.calculated,
-                    q3: comp.q3.calculated,
-                    q4: comp.q4.calculated,
-                    discount: comp.discount,
-                    netPayable: comp.netPayable
-                };
-            }).filter(Boolean).sort((a, b) => a.id - b.id);
+            let reportData = [];
+            if (currentMode === 'electricity') {
+                reportData = compensations.map(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (!b || (b.type && b.type !== 'electricity')) return null;
+                    return {
+                        id: b.id, name: b.name, meter: b.meter, rip: calculateRIP(b.account),
+                        q1: comp.q1.calculated, q2: comp.q2.calculated, q3: comp.q3.calculated, q4: comp.q4.calculated,
+                        discount: comp.discount, netPayable: comp.netPayable
+                    };
+                }).filter(Boolean).sort((a, b) => a.id - b.id);
+            } else {
+                reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    return {
+                        id: b.id, name: b.name, section: b.section || '', rip: calculateRIP(b.account),
+                        netPayable: netPayable
+                    };
+                }).sort((a, b) => a.id - b.id);
+            }
 
             if (reportData.length === 0) return alert("لا توجد بيانات للتصدير.");
 
-            const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
-            const totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
-            const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
-
-            // 2. WORKSHEET STRUCTURE (Array of Arrays)
             let worksheetData = [
-                // Report Headers
-                [`الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز`],
+                [`${currentMode === 'electricity' ? 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز' : 'الجدول التفصيلي للمستفيدين من منحة التجهيز'}`],
                 [`${institutionInfo.republic} - ${institutionInfo.ministry}`],
                 [`${institutionInfo.directorate} - ${institutionInfo.institution}`],
                 [`السنة المالية: ${institutionInfo.fiscalYear}`],
-                [null], // Spacer row
-
-                // Table Headers
-                ["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "المجموع", "الخصم", "الصافي للدفع"]
+                [null]
             ];
 
-            // Table Data
-            reportData.forEach(item => {
-                const totalBeforeDiscount = item.q1 + item.q2 + item.q3 + item.q4;
-                worksheetData.push([
-                    item.id, item.name, item.meter, item.rip,
-                    item.q1, item.q2, item.q3, item.q4,
-                    totalBeforeDiscount,
-                    item.discount, item.netPayable
-                ]);
-            });
-            const dataEndRow = worksheetData.length;
+            let totalNetPayable = 0;
 
-            // Table Footer (Total Row)
-            worksheetData.push([
-                "المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable
-            ]);
-            const totalRow = worksheetData.length;
+            if (currentMode === 'electricity') {
+                worksheetData.push(["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "المجموع", "الخصم", "الصافي للدفع"]);
+                reportData.forEach(item => {
+                    const totalBeforeDiscount = item.q1 + item.q2 + item.q3 + item.q4;
+                    worksheetData.push([
+                        item.id, item.name, item.meter, item.rip,
+                        item.q1, item.q2, item.q3, item.q4,
+                        totalBeforeDiscount, item.discount, item.netPayable
+                    ]);
+                    totalNetPayable += item.netPayable;
+                });
+                const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
+                const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+                worksheetData.push(["المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable]);
+            } else {
+                worksheetData.push(["الرقم", "اسم المستفيد", "القسم", "رقم RIP الكامل", "الصافي للدفع"]);
+                reportData.forEach(item => {
+                    worksheetData.push([item.id, item.name, item.section, item.rip, item.netPayable]);
+                    totalNetPayable += item.netPayable;
+                });
+                worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
+            }
 
-            // Report Footer
-            worksheetData.push([null]); // Spacer row
+            worksheetData.push([null]);
             worksheetData.push([`أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}`]);
             worksheetData.push([`أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج`]);
             worksheetData.push([`أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}`]);
             
-            // 3. CREATE WORKSHEET AND WORKBOOK
             const ws = XLSX.utils.aoa_to_sheet(worksheetData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "تقرير التعويضات");
-
-            // 4. STYLING
-            const currencyFormat = "#,##0.00";
-            const centerAlign = { alignment: { horizontal: "center", vertical: "center" } };
-            const rightAlign = { alignment: { horizontal: "right", vertical: "center" } };
-
-            const headerStyle = { font: { name: "Cairo", bold: true, sz: 16, color: { rgb: "4E342E" } }, ...centerAlign };
-            const subHeaderStyle = { font: { name: "Cairo", bold: true, sz: 12, color: { rgb: "4E342E" } }, ...centerAlign };
-            const tableHeaderStyle = {
-                font: { name: "Cairo", bold: true, color: { rgb: "FFFFFF" } },
-                fill: { fgColor: { rgb: "C77700" } }, // --primary-dark-color
-                ...centerAlign,
-                border: {
-                    top: { style: "thin", color: { auto: 1 } }, bottom: { style: "thin", color: { auto: 1 } },
-                    left: { style: "thin", color: { auto: 1 } }, right: { style: "thin", color: { auto: 1 } }
-                }
-            };
-            const totalStyle = {
-                font: { name: "Cairo", bold: true },
-                fill: { fgColor: { rgb: "D7CCC8" } }, // --border-color
-                border: { top: { style: "thin" }, bottom: { style: "thin" } }
-            };
-            const footerTextStyle = { font: { name: "Cairo", bold: true }, ...rightAlign };
-
-            // Apply styles by iterating through cells, as ws['A1'].s is the correct method
-            // Header Styles
-            ws[XLSX.utils.encode_cell({r:0, c:0})].s = headerStyle;
-            ws[XLSX.utils.encode_cell({r:1, c:0})].s = subHeaderStyle;
-            ws[XLSX.utils.encode_cell({r:2, c:0})].s = subHeaderStyle;
-            ws[XLSX.utils.encode_cell({r:3, c:0})].s = subHeaderStyle;
-
-            // Table Header Styles (Row 5)
-            for (let C = 0; C < 11; C++) {
-                ws[XLSX.utils.encode_cell({r:5, c:C})].s = tableHeaderStyle;
-            }
-
-            // Data Rows Formatting (from row 6 to dataEndRow-1)
-            for (let R = 6; R < dataEndRow; R++) {
-                ws[XLSX.utils.encode_cell({r:R, c:0})].s = centerAlign; // ID
-                ws[XLSX.utils.encode_cell({r:R, c:1})].s = rightAlign;  // Name
-                ws[XLSX.utils.encode_cell({r:R, c:2})].s = centerAlign; // Meter
-                ws[XLSX.utils.encode_cell({r:R, c:3})].s = centerAlign; // RIP
-                for (let C = 4; C <= 10; C++) { // Currency columns
-                    const cell = ws[XLSX.utils.encode_cell({r:R, c:C})];
-                    if (cell) {
-                        cell.t = 'n';
-                        cell.s = { numFmt: currencyFormat, ...centerAlign };
-                    }
-                }
-            }
-
-            // Total Row Styles
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:0})].s = { ...totalStyle, ...rightAlign }; // "المجموع" label
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:8})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Sum
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:9})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Discount
-            ws[XLSX.utils.encode_cell({r:totalRow-1, c:10})].s = { ...totalStyle, numFmt: currencyFormat, ...centerAlign }; // Total Net Payable
-
-            // Footer Text Styles
-            ws[XLSX.utils.encode_cell({r:totalRow+1, c:0})].s = footerTextStyle;
-            ws[XLSX.utils.encode_cell({r:totalRow+2, c:0})].s = footerTextStyle;
-            ws[XLSX.utils.encode_cell({r:totalRow+3, c:0})].s = footerTextStyle;
-            
-            // 5. MERGES & COLUMN WIDTHS
-            ws['!merges'] = [
-                // Headers
-                { s: { r: 0, c: 0 }, e: { r: 0, c: 10 } },
-                { s: { r: 1, c: 0 }, e: { r: 1, c: 10 } },
-                { s: { r: 2, c: 0 }, e: { r: 2, c: 10 } },
-                { s: { r: 3, c: 0 }, e: { r: 3, c: 10 } },
-                // Total row label
-                { s: { r: totalRow - 1, c: 0 }, e: { r: totalRow - 1, c: 7 } },
-                // Footer text
-                { s: { r: totalRow + 1, c: 0 }, e: { r: totalRow + 1, c: 10 } },
-                { s: { r: totalRow + 2, c: 0 }, e: { r: totalRow + 2, c: 10 } },
-                { s: { r: totalRow + 3, c: 0 }, e: { r: totalRow + 3, c: 10 } }
-            ];
-
-            ws['!cols'] = [
-                { wch: 5 },   // الرقم
-                { wch: 35 },  // اسم المستفيد
-                { wch: 15 },  // رقم العداد
-                { wch: 25 },  // رقم RIP الكامل
-                { wch: 15 },  // تعويض ث 1
-                { wch: 15 },  // تعويض ث 2
-                { wch: 15 },  // تعويض ث 3
-                { wch: 15 },  // تعويض ث 4
-                { wch: 15 },  // المجموع
-                { wch: 15 },  // الخصم
-                { wch: 18 }   // الصافي للدفع
-            ];
-
-            // Set RTL property for the sheet
             if(!ws['!props']) ws['!props'] = {};
             ws['!props'].rtl = true;
-
-            // 6. WRITE FILE
-            XLSX.writeFile(wb, `تقرير_التعويضات_${institutionInfo.fiscalYear || 'YYYY'}.xlsx`);
+            XLSX.writeFile(wb, `تقرير_${currentMode}_${institutionInfo.fiscalYear || 'YYYY'}.xlsx`);
         }
 
         function exportTxt() {
             let validRecords = [];
             let totalRoundedNetPayable = 0;
-
-            compensations.forEach(comp => {
-                const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
-                const rip = b ? calculateRIP(b.account) : 'error';
-                if (b && !rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
-                    const netPayableRounded = Math.round(comp.netPayable * 100) / 100;
-                    totalRoundedNetPayable += netPayableRounded;
-                    const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
-                    const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
-                    validRecords.push(`*${rip}${amountCents}${namePadded}1`);
-                }
-            });
+            
+            if (currentMode === 'electricity') {
+                compensations.forEach(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (b && (b.type === 'electricity' || !b.type)) {
+                        const rip = calculateRIP(b.account);
+                        if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            const netPayableRounded = Math.round(comp.netPayable * 100) / 100;
+                            totalRoundedNetPayable += netPayableRounded;
+                            const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                            const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                            validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                        }
+                    }
+                });
+            } else {
+                beneficiaries.filter(b => b.type === 'equipment').forEach(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    const rip = calculateRIP(b.account);
+                    
+                    if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                        const netPayableRounded = Math.round(netPayable * 100) / 100;
+                        totalRoundedNetPayable += netPayableRounded;
+                        const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                        const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                        validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    }
+                });
+            }
 
             const treasuryRIP = calculateRIP(institutionInfo.treasuryAccount);
             if (treasuryRIP.includes('خطأ')) return alert('خطأ في حساب RIP الخاص بالخزينة. يرجى التحقق من معلومات المؤسسة.');
@@ -1665,40 +1846,59 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Payment_File_${institutionInfo.fiscalYear}.txt`;
+            a.download = `Payment_File_${currentMode}_${institutionInfo.fiscalYear}.txt`;
             a.click();
             URL.revokeObjectURL(url);
         }
 
         function printCDRomReport() {
-            // 1. Prepare data
-            const reportData = compensations
-                .map(comp => {
-                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
-                    if (!b) return null;
-                    const rip = calculateRIP(b.account);
-                    // Also check that name is latin as per other export function
-                    if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
-                        console.warn(`Skipping beneficiary ${b.name} due to invalid CCP or name format.`);
-                        return null;
-                    }
-                    return {
-                        id: b.id,
-                        name: b.name,
-                        accountPart: rip.substring(0, 18),
-                        keyPart: rip.substring(18),
-                        netPayable: comp.netPayable
-                    };
-                })
-                .filter(Boolean)
-                .sort((a, b) => a.id - b.id);
+            let reportData = [];
+            
+            if (currentMode === 'electricity') {
+                reportData = compensations
+                    .map(comp => {
+                        const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                        if (!b || (b.type && b.type !== 'electricity')) return null;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: comp.netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            } else {
+                reportData = beneficiaries.filter(b => b.type === 'equipment')
+                    .map(b => {
+                        const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                        const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            }
             
             if (reportData.length === 0) {
-                alert("لا توجد بيانات صالحة لطباعة التقرير (تحقق من أسماء المستفيدين وأرقام CCP).");
+                alert("لا توجد بيانات صالحة لطباعة التقرير.");
                 return;
             }
 
-            // 2. Gather header/footer info
             const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
             const monthName = months[parseInt(institutionInfo.financialMonth, 10) - 1] || 'N/A';
             const year = institutionInfo.fiscalYear || 'YYYY';
@@ -1707,7 +1907,6 @@
             const totalAmount = reportData.reduce((sum, item) => sum + item.netPayable, 0);
             const beneficiaryCount = reportData.length;
 
-            // 3. Generate table rows
             const beneficiaryRows = reportData.map(item => `
                 <tr>
                     <td>${item.id}</td>
@@ -1717,7 +1916,6 @@
                 </tr>
             `).join('');
 
-            // 4. Generate full HTML
             const reportHTML = `
                 <!DOCTYPE html>
                 <html lang="fr">
@@ -1780,7 +1978,6 @@
                 </html>
             `;
             
-            // 5. Open print window
             const printWindow = window.open('', '_blank', 'height=700,width=900,scrollbars=yes');
             if (printWindow) {
                 printWindow.document.write(reportHTML);
@@ -1793,7 +1990,7 @@
 
         // --- Backup and Restore ---
         function createBackup() {
-            const backupData = { institutionInfo, beneficiaries, compensations };
+            const backupData = { institutionInfo, beneficiaries, compensations, compensationsEquipment };
             const jsonString = JSON.stringify(backupData, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
             const now = new Date();
@@ -1817,11 +2014,12 @@
             reader.onload = e => {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (data.institutionInfo && data.beneficiaries && data.compensations) {
+                    if (data.institutionInfo && data.beneficiaries) {
                         if (confirm('هل أنت متأكد من استعادة هذه البيانات؟ سيتم الكتابة فوق البيانات الحالية.')) {
                             localStorage.setItem('institutionInfo', JSON.stringify(data.institutionInfo));
                             localStorage.setItem('beneficiaries', JSON.stringify(data.beneficiaries));
-                            localStorage.setItem('compensations', JSON.stringify(data.compensations));
+                            localStorage.setItem('compensations', JSON.stringify(data.compensations || []));
+                            localStorage.setItem('compensationsEquipment', JSON.stringify(data.compensationsEquipment || []));
                             location.reload();
                         }
                     } else { alert('ملف النسخة الاحتياطية غير صالح.'); }
@@ -1833,17 +2031,23 @@
         // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
             loadData();
-            showSection('institution-info-section');
-            updateCreditDisplay();
+            // Don't show section yet, wait for mode selection
+            // showSection('institution-info-section'); 
+            // updateCreditDisplay();
 
             // Main forms
             document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
             document.getElementById('beneficiary-form').addEventListener('submit', saveBeneficiary);
             document.getElementById('restore-file-input').addEventListener('change', handleFileSelect);
 
-            // Refactored Event Listeners (to replace onclick attributes)
             // Navigation
-            document.querySelectorAll('nav button').forEach(button => {
+            document.getElementById('switch-mode-btn').addEventListener('click', () => {
+                const modal = document.getElementById('mode-selection-modal');
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('visible'), 10);
+            });
+
+            document.querySelectorAll('nav button[data-section]').forEach(button => {
                 button.addEventListener('click', () => showSection(button.dataset.section));
             });
             // Reporting
@@ -1877,6 +2081,8 @@
                 } else if (e.target.closest('.editable-cell')) {
                     const quarterIndex = parseInt(e.target.closest('.editable-cell').dataset.quarter);
                     openQuarterlyModal(beneficiaryId, quarterIndex);
+                } else if (e.target.closest('.save-equipment-btn')) {
+                    processAndSaveRow(row);
                 }
             });
             gridBody.addEventListener('change', (e) => {
