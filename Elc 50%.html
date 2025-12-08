@@ -816,8 +816,8 @@
                             <th>تعويض ث 2</th>
                             <th>تعويض ث 3</th>
                             <th>تعويض ث 4</th>
-                            <th>الخصم</th>
                             <th>المجموع</th>
+                            <th>الخصم</th>
                             <th>الصافي للدفع</th>
                             <th class="status-column">الحالة</th>
                         </tr>
@@ -1027,6 +1027,15 @@
             let parts = (parseFloat(amount) || 0).toFixed(2).split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             return parts.join(',');
+        }
+
+        function parseCurrency(str) {
+            if (!str) return 0;
+            // Remove all dots (thousands separators)
+            const cleanStr = str.toString().replace(/\./g, '');
+            // Replace comma with dot (decimal separator)
+            const normalizedStr = cleanStr.replace(',', '.');
+            return parseFloat(normalizedStr) || 0;
         }
         
         function numberToArabicText(amount) {
@@ -1287,8 +1296,8 @@
                     <td class="editable-cell" data-quarter="2">${formatCurrency(compData.q2.calculated)}</td>
                     <td class="editable-cell" data-quarter="3">${formatCurrency(compData.q3.calculated)}</td>
                     <td class="editable-cell" data-quarter="4">${formatCurrency(compData.q4.calculated)}</td>
-                    <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
                     <td class="calculated-cell total-comp-cell">${formatCurrency(totalComp)}</td>
+                    <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
                     <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
                     <td class="status-column"><span class="status-badge ${hasData ? 'saved' : 'empty'}">${hasData ? 'محفوظ' : 'فارغ'}</span></td>
                 `;
@@ -1351,7 +1360,7 @@
             let totalComp = 0;
             for (let i = 1; i <= 4; i++) {
                 const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                totalComp += parseFloat(cell.textContent.replace(',', '.')) || 0;
+                totalComp += parseCurrency(cell.textContent);
             }
 
             const discountInput = rowElement.querySelector('.discount-input');
@@ -1378,7 +1387,7 @@
                     nofees: parseFloat(cell.dataset.nofees) || compData[`q${i}`]?.nofees || 0,
                     value: parseFloat(cell.dataset.value) || compData[`q${i}`]?.value || 0,
                     contrib: parseFloat(cell.dataset.contrib) || compData[`q${i}`]?.contrib || 0,
-                    calculated: parseFloat(cell.textContent.replace(',', '.')) || 0
+                    calculated: parseCurrency(cell.textContent)
                 };
                 // Clean up temporary data attributes
                 delete cell.dataset.nofees;
