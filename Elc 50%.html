@@ -845,6 +845,9 @@
                     <input type="text" id="compensation-grid-search" placeholder="بحث بالاسم أو CCP...">
                 </div>
                 <div class="actions-container">
+                    <label style="margin-left: 15px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-weight: bold;">
+                        <input type="checkbox" id="auto-save-checkbox"> حفظ تلقائي
+                    </label>
                     <button id="add-beneficiary-btn"><i class="fas fa-user-plus"></i> إضافة مستفيد جديد</button>
                 </div>
             </div>
@@ -929,6 +932,10 @@
                     <div id="rank-field-group" style="display: none;">
                         <label for="rank-name">الرتبة:</label>
                         <input type="text" id="rank-name" placeholder="مثال: أستاذ، مقتصد...">
+                    </div>
+                    <div id="amount-field-group" style="display: none;">
+                        <label for="initial-amount">مبلغ التعويض:</label>
+                        <input type="number" id="initial-amount" step="0.01" placeholder="0.00">
                     </div>
                     <div>
                         <label for="calculated-rip">رقم RIP الكامل (20 رقم):</label>
@@ -1023,7 +1030,13 @@
             orderNumber: "",
             transferNumber: "",
             openCredit: 0,
-            equipmentGrantValue: 0 // New field
+            equipmentGrantValue: 0,
+            modeDetails: {
+                electricity: { credit: 0, order: "", transfer: "", month: "" },
+                equipment: { credit: 0, order: "", transfer: "", month: "" },
+                transport: { credit: 0, order: "", transfer: "", month: "" },
+                training: { credit: 0, order: "", transfer: "", month: "" }
+            }
         };
 
         let beneficiaries = [];
@@ -1051,6 +1064,15 @@
                      };
                      institutionInfo.openCredit = parseFloat(institutionInfo.openCredit) || 0;
                      institutionInfo.equipmentGrantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
+                     
+                     if (!institutionInfo.modeDetails) {
+                         institutionInfo.modeDetails = {
+                            electricity: { credit: institutionInfo.openCredit, order: institutionInfo.orderNumber||"", transfer: institutionInfo.transferNumber||"", month: institutionInfo.financialMonth||"" },
+                            equipment: { credit: 0, order: "", transfer: "", month: "" },
+                            transport: { credit: 0, order: "", transfer: "", month: "" },
+                            training: { credit: 0, order: "", transfer: "", month: "" }
+                         };
+                     }
                 }
 
                 if (savedBeneficiaries) {
@@ -1178,6 +1200,15 @@
                 equipmentField.style.display = 'none';
             }
             
+            // Load mode specific info
+            if (institutionInfo.modeDetails && institutionInfo.modeDetails[mode]) {
+                const details = institutionInfo.modeDetails[mode];
+                document.getElementById('open-credit').value = details.credit;
+                document.getElementById('order-number').value = details.order;
+                document.getElementById('transfer-number').value = details.transfer;
+                document.getElementById('financial-month').value = details.month;
+            }
+
             // Refresh views
             showSection('institution-info-section');
         }
@@ -1308,7 +1339,7 @@
                 totalSpent = compensationsTraining.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
             }
             
-            const openCredit = institutionInfo.openCredit || 0;
+            const openCredit = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? institutionInfo.modeDetails[currentMode].credit : 0;
             const remainingCredit = openCredit - totalSpent;
 
             document.getElementById('display-open-credit').textContent = `${formatCurrency(openCredit)} دج`;
@@ -1328,12 +1359,26 @@
         function saveInstitutionInfo(event) {
             event.preventDefault();
             for (const key in institutionInfo) {
-                 if (key === 'openCredit' || key === 'equipmentGrantValue') continue;
+                 if (key === 'openCredit' || key === 'equipmentGrantValue' || key === 'modeDetails') continue;
                 const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                 if (element) institutionInfo[key] = element.value.trim();
             }
-            institutionInfo.openCredit = parseFloat(document.getElementById('open-credit').value) || 0;
             institutionInfo.equipmentGrantValue = parseFloat(document.getElementById('equipment-grant-value').value) || 0;
+            
+            // Save mode specific info
+            if (!institutionInfo.modeDetails) institutionInfo.modeDetails = {};
+            institutionInfo.modeDetails[currentMode] = {
+                credit: parseFloat(document.getElementById('open-credit').value) || 0,
+                order: document.getElementById('order-number').value,
+                transfer: document.getElementById('transfer-number').value,
+                month: document.getElementById('financial-month').value
+            };
+            
+            // Sync legacy fields for safety
+            institutionInfo.openCredit = institutionInfo.modeDetails[currentMode].credit;
+            institutionInfo.orderNumber = institutionInfo.modeDetails[currentMode].order;
+            institutionInfo.transferNumber = institutionInfo.modeDetails[currentMode].transfer;
+            institutionInfo.financialMonth = institutionInfo.modeDetails[currentMode].month;
             
             saveData();
             alert('تم حفظ معلومات المؤسسة.');
@@ -1356,10 +1401,12 @@
             const meterGroup = document.getElementById('meter-field-group');
             const sectionGroup = document.getElementById('section-field-group');
             const rankGroup = document.getElementById('rank-field-group');
+            const amountGroup = document.getElementById('amount-field-group');
             
             meterGroup.style.display = 'none';
             sectionGroup.style.display = 'none';
             rankGroup.style.display = 'none';
+            amountGroup.style.display = 'none';
 
             if (currentMode === 'electricity') {
                 meterGroup.style.display = 'block';
@@ -1367,6 +1414,7 @@
                 sectionGroup.style.display = 'block';
             } else if (currentMode === 'transport' || currentMode === 'training') {
                 rankGroup.style.display = 'block';
+                amountGroup.style.display = 'block';
             }
 
             if (id) { 
@@ -1379,6 +1427,12 @@
                 document.getElementById('meter-number').value = beneficiary.meter || '';
                 document.getElementById('section-name').value = beneficiary.section || '';
                 document.getElementById('rank-name').value = beneficiary.rank || '';
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                    const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                    const comp = targetArray.find(c => c.beneficiaryId === id);
+                    document.getElementById('initial-amount').value = comp ? comp.netPayable : '';
+                }
             } else { 
                 title.innerHTML = '<i class="fas fa-user-plus"></i> إضافة مستفيد جديد';
                 document.getElementById('beneficiary-id').value = '';
@@ -1403,6 +1457,7 @@
             const meter = document.getElementById('meter-number').value.trim();
             const section = document.getElementById('section-name').value.trim();
             const rank = document.getElementById('rank-name').value.trim();
+            const amount = parseFloat(document.getElementById('initial-amount').value) || 0;
             
             if (!name || !account) return alert('الرجاء ملء الاسم والحساب.');
             if (!/^[a-zA-Z\s\-]+$/.test(name)) return alert('الرجاء إدخال الاسم بالأحرف اللاتينية.');
@@ -1418,9 +1473,24 @@
                     beneficiary.section = section;
                     beneficiary.rank = rank;
                 }
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                     let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                     let comp = targetArray.find(c => c.beneficiaryId === id);
+                     if (comp) comp.netPayable = amount;
+                     else targetArray.push({ beneficiaryId: id, netPayable: amount });
+                }
+                
                 alert('تم حفظ التعديلات.');
             } else { 
-                beneficiaries.push({ id: getNextBeneficiaryId(), name, account, meter, section, rank, type: currentMode });
+                const newId = getNextBeneficiaryId();
+                beneficiaries.push({ id: newId, name, account, meter, section, rank, type: currentMode });
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                     let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                     targetArray.push({ beneficiaryId: newId, netPayable: amount });
+                }
+                
                 alert('تم إضافة المستفيد بنجاح.');
             }
 
@@ -1739,6 +1809,9 @@
             let totalSum = 0;
             let totalDiscount = 0;
 
+            // Reset numbering for each mode (Separation requested)
+            let startCounter = 1;
+
             if (currentMode === 'electricity') {
                 reportData = compensations.map(comp => {
                     const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
@@ -1788,11 +1861,11 @@
                     <th>تعويض ث 1</th><th>تعويض ث 2</th><th>تعويض ث 3</th><th>تعويض ث 4</th>
                     <th>المجموع</th><th>الخصم</th><th>الصافي للدفع</th>
                 </tr></thead><tbody>
-                    ${reportData.map(item => {
+                    ${reportData.map((item, index) => {
                         const totalBeforeDiscount = item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated;
                         return `
                         <tr>
-                            <td>${item.id}</td><td>${item.name}</td><td>${item.meter}</td><td>${item.rip}</td>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.meter}</td><td>${item.rip}</td>
                             <td>${formatCurrency(item.q1.calculated)}</td><td>${formatCurrency(item.q2.calculated)}</td>
                             <td>${formatCurrency(item.q3.calculated)}</td><td>${formatCurrency(item.q4.calculated)}</td>
                             <td>${formatCurrency(totalBeforeDiscount)}</td>
@@ -1811,9 +1884,9 @@
                 <table><thead><tr>
                     <th>الرقم</th><th>اسم المستفيد</th><th>القسم</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
                 </tr></thead><tbody>
-                    ${reportData.map(item => `
+                    ${reportData.map((item, index) => `
                         <tr>
-                            <td>${item.id}</td><td>${item.name}</td><td>${item.section || ''}</td><td>${item.rip}</td>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.section || ''}</td><td>${item.rip}</td>
                             <td>${formatCurrency(item.netPayable)}</td>
                         </tr>`).join('')}
                     <tr class="total-row">
@@ -1826,9 +1899,9 @@
                 <table><thead><tr>
                     <th>الرقم</th><th>اسم المستفيد</th><th>الرتبة</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
                 </tr></thead><tbody>
-                    ${reportData.map(item => `
+                    ${reportData.map((item, index) => `
                         <tr>
-                            <td>${item.id}</td><td>${item.name}</td><td>${item.rank || ''}</td><td>${item.rip}</td>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.rank || ''}</td><td>${item.rip}</td>
                             <td>${formatCurrency(item.netPayable)}</td>
                         </tr>`).join('')}
                     <tr class="total-row">
@@ -1872,6 +1945,10 @@
 
         function exportXLSX() {
             let reportData = [];
+            
+            // Reset numbering for each mode (Separation requested)
+            let startCounter = 1;
+
             if (currentMode === 'electricity') {
                 reportData = compensations.map(comp => {
                     const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
@@ -1923,10 +2000,10 @@
 
             if (currentMode === 'electricity') {
                 worksheetData.push(["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "المجموع", "الخصم", "الصافي للدفع"]);
-                reportData.forEach(item => {
+                reportData.forEach((item, index) => {
                     const totalBeforeDiscount = item.q1 + item.q2 + item.q3 + item.q4;
                     worksheetData.push([
-                        item.id, item.name, item.meter, item.rip,
+                        startCounter + index, item.name, item.meter, item.rip,
                         item.q1, item.q2, item.q3, item.q4,
                         totalBeforeDiscount, item.discount, item.netPayable
                     ]);
@@ -1937,15 +2014,15 @@
                 worksheetData.push(["المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable]);
             } else if (currentMode === 'equipment') {
                 worksheetData.push(["الرقم", "اسم المستفيد", "القسم", "رقم RIP الكامل", "الصافي للدفع"]);
-                reportData.forEach(item => {
-                    worksheetData.push([item.id, item.name, item.section, item.rip, item.netPayable]);
+                reportData.forEach((item, index) => {
+                    worksheetData.push([startCounter + index, item.name, item.section, item.rip, item.netPayable]);
                     totalNetPayable += item.netPayable;
                 });
                 worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
             } else {
                 worksheetData.push(["الرقم", "اسم المستفيد", "الرتبة", "رقم RIP الكامل", "الصافي للدفع"]);
-                reportData.forEach(item => {
-                    worksheetData.push([item.id, item.name, item.rank, item.rip, item.netPayable]);
+                reportData.forEach((item, index) => {
+                    worksheetData.push([startCounter + index, item.name, item.rank, item.rip, item.netPayable]);
                     totalNetPayable += item.netPayable;
                 });
                 worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
@@ -2016,12 +2093,14 @@
             const treasuryRIP = calculateRIP(institutionInfo.treasuryAccount);
             if (treasuryRIP.includes('خطأ')) return alert('خطأ في حساب RIP الخاص بالخزينة. يرجى التحقق من معلومات المؤسسة.');
 
+            const details = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? institutionInfo.modeDetails[currentMode] : { month: institutionInfo.financialMonth, order: institutionInfo.orderNumber, transfer: institutionInfo.transferNumber };
+
             const totalAmountCents = String(Math.round(totalRoundedNetPayable * 100)).padStart(13, '0');
             const recordCount = String(validRecords.length).padStart(7, '0');
-            const month = String(institutionInfo.financialMonth).padStart(2, '0');
+            const month = String(details.month).padStart(2, '0');
             const year = String(institutionInfo.fiscalYear).padStart(4, '0');
-            const order = String(institutionInfo.orderNumber).padStart(8, '0');
-            const transfer = String(institutionInfo.transferNumber).padStart(6, '0');
+            const order = String(details.order).padStart(8, '0');
+            const transfer = String(details.transfer).padStart(6, '0');
             const header = `*${treasuryRIP}${totalAmountCents}${recordCount}${month}${year}${order}${transfer}0`;
             
             if (header.length !== 62) return alert('خطأ في توليد السطر الأول للملف. تحقق من معلومات المؤسسة.');
@@ -2295,15 +2374,31 @@
                 } else if (e.target.closest('.editable-cell')) {
                     const quarterIndex = parseInt(e.target.closest('.editable-cell').dataset.quarter);
                     openQuarterlyModal(beneficiaryId, quarterIndex);
-                } else if (e.target.closest('.save-equipment-btn')) {
+                } else if (e.target.closest('.save-equipment-btn') || e.target.closest('.save-manual-btn')) {
                     processAndSaveRow(row);
                 }
             });
             gridBody.addEventListener('change', (e) => {
-                if (e.target.classList.contains('discount-input')) {
-                     const row = e.target.closest('tr');
+                const row = e.target.closest('tr');
+                if (!row) return;
+                
+                const autoSaveCb = document.getElementById('auto-save-checkbox');
+                if (autoSaveCb && autoSaveCb.checked) {
+                    processAndSaveRow(row);
+                } else if (e.target.classList.contains('discount-input')) {
                      processAndSaveRow(row);
                 }
+            });
+            
+            // Load auto-save preference
+            const savedAutoSave = localStorage.getItem('autoSaveEnabled');
+            if (savedAutoSave === 'true') {
+                const cb = document.getElementById('auto-save-checkbox');
+                if (cb) cb.checked = true;
+            }
+            
+            document.getElementById('auto-save-checkbox').addEventListener('change', (e) => {
+                localStorage.setItem('autoSaveEnabled', e.target.checked);
             });
         });
     </script>
