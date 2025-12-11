@@ -1097,28 +1097,10 @@
 
                         comp.discount = parseFloat(comp.discount) || 0;
 
-                        // Only recalculate if calculated value is not saved (for backward compatibility)
-                        // Otherwise use the saved calculated value to preserve user's last edit
-                        if (comp.q1.calculated === undefined || comp.q1.calculated === null) {
-                            comp.q1.calculated = calculateQuarterlyComp(comp.q1.nofees, comp.q1.value, comp.q1.contrib);
-                        } else {
-                            comp.q1.calculated = parseFloat(comp.q1.calculated) || 0;
-                        }
-                        if (comp.q2.calculated === undefined || comp.q2.calculated === null) {
-                            comp.q2.calculated = calculateQuarterlyComp(comp.q2.nofees, comp.q2.value, comp.q2.contrib);
-                        } else {
-                            comp.q2.calculated = parseFloat(comp.q2.calculated) || 0;
-                        }
-                        if (comp.q3.calculated === undefined || comp.q3.calculated === null) {
-                            comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
-                        } else {
-                            comp.q3.calculated = parseFloat(comp.q3.calculated) || 0;
-                        }
-                        if (comp.q4.calculated === undefined || comp.q4.calculated === null) {
-                            comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
-                        } else {
-                            comp.q4.calculated = parseFloat(comp.q4.calculated) || 0;
-                        }
+                        comp.q1.calculated = calculateQuarterlyComp(comp.q1.nofees, comp.q1.value, comp.q1.contrib);
+                        comp.q2.calculated = calculateQuarterlyComp(comp.q2.nofees, comp.q2.value, comp.q2.contrib);
+                        comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
+                        comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
 
                         comp.netPayable = Math.round(((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) - comp.discount) * 100) / 100;
                     });
@@ -1723,9 +1705,9 @@
             if (targetRow) {
                 const targetCell = targetRow.querySelector(`td[data-quarter='${quarterIndex}']`);
                 targetCell.textContent = formatCurrency(calculated);
-                targetCell.dataset.nofees = nofees;
-                targetCell.dataset.value = value;
-                targetCell.dataset.contrib = contrib;
+                targetCell.setAttribute('data-nofees', nofees);
+                targetCell.setAttribute('data-value', value);
+                targetCell.setAttribute('data-contrib', contrib);
                 processAndSaveRow(targetRow);
             }
             closeQuarterlyModal();
@@ -1761,13 +1743,13 @@
                     const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
                     
                     let nofees = compData[`q${i}`]?.nofees || 0;
-                    if (cell.dataset.nofees !== undefined) nofees = parseFloat(cell.dataset.nofees);
+                    if (cell.hasAttribute('data-nofees')) nofees = parseFloat(cell.getAttribute('data-nofees'));
                     
                     let value = compData[`q${i}`]?.value || 0;
-                    if (cell.dataset.value !== undefined) value = parseFloat(cell.dataset.value);
+                    if (cell.hasAttribute('data-value')) value = parseFloat(cell.getAttribute('data-value'));
                     
                     let contrib = compData[`q${i}`]?.contrib || 0;
-                    if (cell.dataset.contrib !== undefined) contrib = parseFloat(cell.dataset.contrib);
+                    if (cell.hasAttribute('data-contrib')) contrib = parseFloat(cell.getAttribute('data-contrib'));
 
                     compData[`q${i}`] = {
                         nofees: nofees,
@@ -1775,9 +1757,9 @@
                         contrib: contrib,
                         calculated: parseCurrency(cell.textContent)
                     };
-                    delete cell.dataset.nofees;
-                    delete cell.dataset.value;
-                    delete cell.dataset.contrib;
+                    cell.removeAttribute('data-nofees');
+                    cell.removeAttribute('data-value');
+                    cell.removeAttribute('data-contrib');
                 }
                 
                 compData.discount = discount;
