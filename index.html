@@ -94,11 +94,24 @@
             margin: 0;
             font-size: var(--font-size-h1);
             font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+                         0 0 20px rgba(255, 255, 255, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
             gap: var(--space-sm);
+            letter-spacing: 0.5px;
+        }
+        
+        header h1 i {
+            display: inline-block;
+            animation: rotate 4s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(30deg); }
+            to { transform: rotate(390deg); }
         }
 
         nav {
@@ -107,26 +120,56 @@
 
         nav button {
             margin: 0 8px;
-            padding: 12px 25px;
+            padding: 13px 28px;
             cursor: pointer;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
             color: white;
-            border-radius: var(--border-radius-lg);
+            border-radius: 50px;
             font-size: 1.05em;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             font-family: var(--font-family);
             font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: var(--space-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        nav button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
-        nav button:hover, nav button.active {
-            background-color: rgba(255, 255, 255, 0.3);
+        nav button:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        nav button.active {
+            background: linear-gradient(145deg, white, rgba(255, 255, 255, 0.9));
+            color: var(--primary-dark-color);
+            border-color: white;
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4),
+                        inset 0 1px 3px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
 
         nav button:active {
@@ -135,24 +178,59 @@
         }
 
         .app-section {
-            background-color: var(--background-section);
-            padding: var(--space-lg);
-            margin-bottom: var(--space-lg);
-            border-radius: var(--border-radius-md);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border-light-color);
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%);
+            padding: calc(var(--space-lg) * 1.3);
+            margin-bottom: calc(var(--space-lg) * 1.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1),
+                        0 2px 8px rgba(251, 140, 0, 0.1);
+            border: 2px solid rgba(252, 169, 3, 0.1);
             display: none;
-            border-top: 4px solid var(--primary-color);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffa726, #fb8c00, #ef6c00);
+        }
+        
+        .app-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .app-section h2, .app-section h3 {
             color: var(--primary-dark-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: var(--space-sm);
+            padding-bottom: var(--space-md);
             margin-bottom: var(--space-lg);
             font-weight: 700;
+            position: relative;
+            display: inline-block;
         }
+        
+        .app-section h2::after, .app-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ffa726, #fb8c00);
+            border-radius: 2px;
+        }
+        
         .app-section h2 { font-size: var(--font-size-h2); }
         .app-section h3 { font-size: var(--font-size-h3); }
 
@@ -193,22 +271,25 @@
         form input[type="number"],
         form select {
             width: 100%;
-            padding: 13px;
-            border: 1px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
+            padding: 13px 15px;
+            border: 2px solid rgba(252, 169, 3, 0.2);
+            border-radius: 10px;
             box-sizing: border-box;
             text-align: right;
             font-size: var(--font-size-base);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            background-color: var(--background-white);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
             color: var(--text-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
          form input[type="text"]:focus,
          form input[type="number"]:focus,
          form select:focus {
-             border-color: var(--primary-color);
-             box-shadow: 0 0 0 3px rgba(252, 169, 3, 0.25);
+             border-color: #ffa726;
+             box-shadow: 0 0 0 4px rgba(255, 167, 38, 0.1),
+                         0 4px 12px rgba(251, 140, 0, 0.2);
              outline: none;
+             transform: translateY(-1px);
          }
         input[readonly] {
             background-color: var(--border-light-color) !important;
@@ -288,32 +369,40 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: var(--space-md);
-            box-shadow: var(--shadow-sm);
-            border-radius: var(--border-radius-md);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
             overflow: hidden;
-            background-color: var(--background-white);
+            background-color: white;
         }
 
         table th, table td {
-            border-bottom: 1px solid var(--border-color);
-            padding: var(--space-sm) var(--space-md);
+            border-bottom: 1px solid rgba(252, 169, 3, 0.08);
+            padding: 15px 18px;
             text-align: right;
             font-size: 0.95em;
         }
 
         th {
-            background-color: var(--primary-dark-color);
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 50%, #ef6c00 100%);
             font-weight: 700;
             color: white;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         tbody tr:nth-child(even) {
-            background-color: #FFFDF5; /* Lighter than light-color for subtle striping */
+            background-color: rgba(252, 169, 3, 0.02);
         }
          tbody tr:hover {
-             background-color: #FFE0B2; /* Light orange on hover */
+             background: linear-gradient(90deg, rgba(255, 247, 230, 0.5), rgba(255, 243, 224, 0.8));
+             transform: scale(1.01);
+             box-shadow: 0 2px 8px rgba(251, 140, 0, 0.1);
+             transition: all 0.3s ease;
          }
 
         .report-output {
@@ -591,12 +680,16 @@
             overflow-x: auto;
             max-height: 70vh;
         }
-        #compensation-grid-table { table-layout: fixed; }
+        #compensation-grid-table { 
+            table-layout: fixed;
+            border: 3px solid var(--primary-dark-color);
+        }
         #compensation-grid-table th, #compensation-grid-table td {
             text-align: center;
             vertical-align: middle;
             padding: 10px;
             white-space: nowrap;
+            border: 2px solid var(--primary-dark-color);
         }
         
         /* Beneficiary Name Column with Actions */
@@ -605,12 +698,15 @@
             text-align: right;
             width: 280px;
             white-space: normal;
+            border-bottom: none !important;
         }
         .beneficiary-name-cell {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: var(--space-sm);
+            border-bottom: 2px solid var(--primary-dark-color);
+            padding-bottom: 10px;
         }
         .beneficiary-name-cell .beneficiary-actions {
             display: flex;
@@ -898,8 +994,14 @@
                  <button id="create-backup-btn"><i class="fas fa-download"></i> إنشاء نسخة احتياطية</button>
                  <input type="file" id="restore-file-input" accept=".json" style="display: none;">
                  <button id="restore-backup-btn"><i class="fas fa-upload"></i> استعادة من نسخة</button>
+                 <button id="delete-all-beneficiaries-btn" style="background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);">
+                     <i class="fas fa-trash-alt"></i> حذف جميع المستفيدين
+                 </button>
              </div>
              <p class="explanation">ملاحظة: عند إنشاء نسخة احتياطية، سيتم حفظ ملف بامتداد .json على جهازك.</p>
+             <p class="explanation" style="color: #d32f2f; font-weight: bold;">
+                 <i class="fas fa-exclamation-triangle"></i> حذف جميع المستفيدين: سيتم حفظ نسخة احتياطية تلقائية قبل الحذف.
+             </p>
          </section>
 
     </main>
@@ -1004,6 +1106,52 @@
         </div>
     </div>
 
+    <!-- Restore Type Selection Modal -->
+    <div id="restore-type-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3><i class="fas fa-upload"></i> اختر نوع الاستعادة</h3>
+            <p>اختر ما تريد استعادته من النسخة الاحتياطية:</p>
+            <button class="mode-btn" onclick="selectRestoreType('full')">
+                <i class="fas fa-database"></i>
+                استعادة جميع البيانات (معلومات المؤسسة + المستفيدين + التعويضات)
+            </button>
+            <button class="mode-btn" onclick="selectRestoreType('beneficiaries')">
+                <i class="fas fa-users"></i>
+                استيراد معلومات المستفيدين فقط
+            </button>
+            <div class="modal-buttons">
+                <button type="button" class="cancel-button" onclick="cancelRestoreType()">
+                    <i class="fas fa-times-circle"></i> إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beneficiary Selection Modal -->
+    <div id="beneficiary-selection-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px; max-height: 80vh; overflow-y: auto;">
+            <h3><i class="fas fa-user-check"></i> اختر المستفيدين للاستيراد</h3>
+            <p>حدد المستفيدين الذين تريد استيراد بياناتهم:</p>
+            <div style="margin-bottom: 15px;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold; color: var(--primary-dark-color);">
+                    <input type="checkbox" id="select-all-beneficiaries" style="width: 18px; height: 18px; cursor: pointer;">
+                    تحديد/إلغاء تحديد الكل
+                </label>
+            </div>
+            <div id="beneficiary-selection-list" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); padding: 15px; background: var(--background-white); border-radius: var(--border-radius-sm);">
+                <!-- سيتم ملء القائمة ديناميكياً -->
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="save-button" onclick="confirmBeneficiarySelection()">
+                    <i class="fas fa-check"></i> تأكيد الاستيراد
+                </button>
+                <button type="button" class="cancel-button" onclick="cancelBeneficiarySelection()">
+                    <i class="fas fa-times-circle"></i> إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="ticker-container">
         <div id="ticker-content">
             <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
@@ -1017,6 +1165,7 @@
     <script>
         // --- Data Storage ---
         let currentMode = 'electricity'; // 'electricity' or 'equipment'
+        let tempBackupData = null; // مؤقت لحفظ بيانات النسخة الاحتياطية
         
         let institutionInfo = {
             republic: "الجمهورية الجزائرية الديمقراطية الشعبية",
@@ -1177,10 +1326,13 @@
         }
 
         function selectMode(mode) {
+            console.log('selectMode called with:', mode);
             currentMode = mode;
             const modal = document.getElementById('mode-selection-modal');
+            
+            // إخفاء النافذة فورًا
+            modal.style.display = 'none';
             modal.classList.remove('visible');
-            setTimeout(() => modal.style.display = 'none', 300);
 
             // Update UI based on mode
             const titleEl = document.querySelector('header h1');
@@ -1200,6 +1352,7 @@
                 equipmentField.style.display = 'none';
             }
             
+            console.log('Loading mode specific info...');
             // Load mode specific info
             if (institutionInfo.modeDetails && institutionInfo.modeDetails[mode]) {
                 const details = institutionInfo.modeDetails[mode];
@@ -1209,8 +1362,10 @@
                 document.getElementById('financial-month').value = details.month;
             }
 
-            // Refresh views
-            showSection('institution-info-section');
+            console.log('Calling showSection...');
+            // Refresh views - go to compensation management section
+            showSection('compensation-management-section');
+            console.log('selectMode completed');
         }
 
         function getNextBeneficiaryId() {
@@ -1577,9 +1732,10 @@
                 b.account.includes(searchTerm))
             );
 
-            filtered.sort((a,b) => a.id - b.id).forEach(b => {
+            filtered.sort((a,b) => a.id - b.id).forEach((b, index) => {
                 const row = document.createElement('tr');
                 row.dataset.beneficiaryId = b.id;
+                const rowNumber = index + 1; // ترقيم متسلسل لكل نوع تعويض
 
                 if (currentMode === 'electricity') {
                     const compData = compensations.find(c => c.beneficiaryId === b.id) || {
@@ -1591,7 +1747,7 @@
                     const hasData = compensations.some(c => c.beneficiaryId === b.id);
 
                     row.innerHTML = `
-                        <td>${b.id}</td>
+                        <td>${rowNumber}</td>
                         <td class="beneficiary-name-cell">
                             <span>${b.name}</span>
                             <div class="beneficiary-actions">
@@ -1616,7 +1772,7 @@
                     const netPayable = hasData ? compData.netPayable : institutionInfo.equipmentGrantValue;
 
                     row.innerHTML = `
-                        <td>${b.id}</td>
+                        <td>${rowNumber}</td>
                         <td class="beneficiary-name-cell">
                             <span>${b.name}</span>
                             <div class="beneficiary-actions">
@@ -1642,7 +1798,7 @@
                     const netPayable = hasData ? compData.netPayable : 0;
 
                     row.innerHTML = `
-                        <td>${b.id}</td>
+                        <td>${rowNumber}</td>
                         <td class="beneficiary-name-cell">
                             <span>${b.name}</span>
                             <div class="beneficiary-actions">
@@ -2304,6 +2460,75 @@
             URL.revokeObjectURL(url);
         }
 
+        function createAutoBackup(reason = 'قبل_الحذف') {
+            const backupData = { 
+                institutionInfo, 
+                beneficiaries, 
+                compensations, 
+                compensationsEquipment,
+                compensationsTransport,
+                compensationsTraining
+            };
+            const jsonString = JSON.stringify(backupData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const now = new Date();
+            const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+            const filename = `نسخة_تلقائية_${reason}_${timestamp}.json`;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            return filename;
+        }
+
+        function deleteAllBeneficiaries() {
+            if (beneficiaries.length === 0) {
+                alert('لا يوجد مستفيدون للحذف.');
+                return;
+            }
+
+            const message = `⚠️ تحذير: سيتم حذف جميع المستفيدين (${beneficiaries.length} مستفيد) وجميع التعويضات المرتبطة بهم.\n\n` +
+                          `سيتم حفظ نسخة احتياطية تلقائية قبل الحذف.\n\n` +
+                          `هل أنت متأكد من المتابعة؟`;
+            
+            if (!confirm(message)) {
+                return;
+            }
+
+            // حفظ نسخة احتياطية تلقائية
+            try {
+                const filename = createAutoBackup('قبل_حذف_جميع_المستفيدين');
+                showToast(`تم حفظ نسخة احتياطية: ${filename}`, 'success');
+            } catch (error) {
+                alert('فشل إنشاء النسخة الاحتياطية. لن يتم الحذف.');
+                return;
+            }
+
+            // التأكيد النهائي
+            if (!confirm('تم حفظ النسخة الاحتياطية. هل تريد المتابعة في حذف جميع المستفيدين؟')) {
+                return;
+            }
+
+            // حذف جميع البيانات
+            const deletedCount = beneficiaries.length;
+            beneficiaries.length = 0;
+            compensations.length = 0;
+            compensationsEquipment.length = 0;
+            compensationsTransport.length = 0;
+            compensationsTraining.length = 0;
+
+            // حفظ التغييرات
+            saveData();
+
+            // تحديث الواجهة
+            renderCompensationGrid();
+            updateCreditDisplay();
+
+            showToast(`تم حذف ${deletedCount} مستفيد بنجاح. النسخة الاحتياطية محفوظة.`, 'success');
+        }
+
         function restoreBackup() {
             document.getElementById('restore-file-input').click();
         }
@@ -2316,19 +2541,248 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (data.institutionInfo && data.beneficiaries) {
-                        if (confirm('هل أنت متأكد من استعادة هذه البيانات؟ سيتم الكتابة فوق البيانات الحالية.')) {
-                            localStorage.setItem('institutionInfo', JSON.stringify(data.institutionInfo));
-                            localStorage.setItem('beneficiaries', JSON.stringify(data.beneficiaries));
-                            localStorage.setItem('compensations', JSON.stringify(data.compensations || []));
-                            localStorage.setItem('compensationsEquipment', JSON.stringify(data.compensationsEquipment || []));
-                            localStorage.setItem('compensationsTransport', JSON.stringify(data.compensationsTransport || []));
-                            localStorage.setItem('compensationsTraining', JSON.stringify(data.compensationsTraining || []));
-                            location.reload();
-                        }
+                        tempBackupData = data;
+                        showRestoreTypeModal();
                     } else { alert('ملف النسخة الاحتياطية غير صالح.'); }
                 } catch (err) { alert('خطأ في قراءة الملف.'); }
             };
             reader.readAsText(file);
+            // إعادة تعيين input لتمكين اختيار نفس الملف مرة أخرى
+            event.target.value = '';
+        }
+
+        function showRestoreTypeModal() {
+            const modal = document.getElementById('restore-type-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function cancelRestoreType() {
+            const modal = document.getElementById('restore-type-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                tempBackupData = null;
+            }, 300);
+        }
+
+        function selectRestoreType(type) {
+            if (!tempBackupData) return;
+            
+            if (type === 'full') {
+                // استعادة كاملة
+                if (confirm('هل أنت متأكد من استعادة جميع البيانات؟ سيتم الكتابة فوق البيانات الحالية بالكامل.')) {
+                    restoreFullBackup(tempBackupData);
+                }
+                cancelRestoreType(); // إفراغ البيانات بعد الاستعادة الكاملة
+            } else if (type === 'beneficiaries') {
+                // استيراد المستفيدين فقط - لا نفرغ tempBackupData هنا
+                // إغلاق نافذة اختيار النوع فقط
+                const modal = document.getElementById('restore-type-modal');
+                modal.classList.remove('visible');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                
+                // عرض نافذة اختيار المستفيدين
+                showBeneficiarySelectionModal(tempBackupData, currentMode);
+            }
+        }
+
+        function restoreFullBackup(data) {
+            localStorage.setItem('institutionInfo', JSON.stringify(data.institutionInfo));
+            localStorage.setItem('beneficiaries', JSON.stringify(data.beneficiaries));
+            localStorage.setItem('compensations', JSON.stringify(data.compensations || []));
+            localStorage.setItem('compensationsEquipment', JSON.stringify(data.compensationsEquipment || []));
+            localStorage.setItem('compensationsTransport', JSON.stringify(data.compensationsTransport || []));
+            localStorage.setItem('compensationsTraining', JSON.stringify(data.compensationsTraining || []));
+            location.reload();
+        }
+
+        function showBeneficiarySelectionModal(backupData, compensationType) {
+            tempBackupData = backupData; // حفظ البيانات للاستخدام عند التأكيد
+            const modal = document.getElementById('beneficiary-selection-modal');
+            const list = document.getElementById('beneficiary-selection-list');
+            
+            if (!backupData.beneficiaries || backupData.beneficiaries.length === 0) {
+                alert('لا يوجد مستفيدون في النسخة الاحتياطية.');
+                tempBackupData = null;
+                return;
+            }
+            
+            // تصفية المستفيدين حسب نوع التعويض الحالي
+            const filteredBeneficiaries = backupData.beneficiaries.filter(b => b.type === compensationType);
+            
+            if (filteredBeneficiaries.length === 0) {
+                const typeLabel = compensationType === 'electricity' ? 'كهرباء وغاز' :
+                                 compensationType === 'equipment' ? 'منحة تجهيز' :
+                                 compensationType === 'transport' ? 'تنقل' : 'تكوين';
+                alert(`لا يوجد مستفيدون من نوع ${typeLabel} في النسخة الاحتياطية.`);
+                tempBackupData = null;
+                return;
+            }
+            
+            // إنشاء قائمة المستفيدين المصفاة
+            list.innerHTML = filteredBeneficiaries.map(b => {
+                const typeLabel = b.type === 'electricity' ? 'كهرباء وغاز' :
+                                 b.type === 'equipment' ? 'منحة تجهيز' :
+                                 b.type === 'transport' ? 'تنقل' :
+                                 b.type === 'training' ? 'تكوين' : 'غير محدد';
+                
+                const originalIndex = backupData.beneficiaries.indexOf(b);
+                return `
+                    <div style="margin-bottom: 12px; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); background: white;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" class="beneficiary-checkbox" value="${b.id}" data-beneficiary-index="${originalIndex}" style="width: 18px; height: 18px; cursor: pointer;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--dark-color);">${b.name}</div>
+                                <div style="font-size: 0.9em; color: var(--text-secondary-color);">
+                                    <span><i class="fas fa-credit-card"></i> ${b.account}</span>
+                                    ${b.meter ? `<span style="margin-right: 15px;"><i class="fas fa-tachometer-alt"></i> ${b.meter}</span>` : ''}
+                                    <span style="margin-right: 15px;"><i class="fas fa-tag"></i> ${typeLabel}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            // إعداد زر تحديد الكل
+            const selectAllCheckbox = document.getElementById('select-all-beneficiaries');
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.onchange = function() {
+                const checkboxes = list.querySelectorAll('.beneficiary-checkbox');
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            };
+            
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function cancelBeneficiarySelection() {
+            const modal = document.getElementById('beneficiary-selection-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                tempBackupData = null;
+            }, 300);
+        }
+
+        function confirmBeneficiarySelection() {
+            console.log('confirmBeneficiarySelection called');
+            console.log('tempBackupData:', tempBackupData);
+            
+            if (!tempBackupData) {
+                console.log('No tempBackupData - returning');
+                alert('خطأ: لا توجد بيانات احتياطية. الرجاء إعادة المحاولة.');
+                return;
+            }
+            
+            const selectedCheckboxes = document.querySelectorAll('.beneficiary-checkbox:checked');
+            console.log('Selected checkboxes:', selectedCheckboxes.length);
+            
+            if (selectedCheckboxes.length === 0) {
+                alert('الرجاء تحديد مستفيد واحد على الأقل.');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من استيراد بيانات ${selectedCheckboxes.length} مستفيد؟`)) {
+                return;
+            }
+            
+            // جمع المستفيدين المحددين
+            const selectedBeneficiaries = [];
+            const selectedBeneficiaryIds = [];
+            
+            selectedCheckboxes.forEach(checkbox => {
+                const index = parseInt(checkbox.dataset.beneficiaryIndex);
+                const originalBeneficiary = tempBackupData.beneficiaries[index];
+                selectedBeneficiaries.push(originalBeneficiary);
+                selectedBeneficiaryIds.push(originalBeneficiary.id);
+            });
+            
+            // دمج المستفيدين الجدد مع الموجودين
+            let importedCount = 0;
+            let skippedCount = 0;
+            let nextId = getNextBeneficiaryId();
+            
+            selectedBeneficiaries.forEach(backupBen => {
+                // التحقق من عدم وجود نفس الحساب
+                if (beneficiaries.some(b => b.account === backupBen.account)) {
+                    skippedCount++;
+                    return; // تخطي هذا المستفيد
+                }
+                
+                // إنشاء معرف جديد
+                const oldId = backupBen.id;
+                const newBen = {
+                    ...backupBen,
+                    id: nextId++
+                };
+                
+                beneficiaries.push(newBen);
+                importedCount++;
+                
+                // استيراد التعويضات إن وجدت (اختياري)
+                // يمكن التعليق على هذا الجزء إذا أردت استيراد معلومات المستفيدين فقط بدون تعويضات
+                /*
+                if (tempBackupData.compensations) {
+                    const comp = tempBackupData.compensations.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensations.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsEquipment) {
+                    const comp = tempBackupData.compensationsEquipment.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsEquipment.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsTransport) {
+                    const comp = tempBackupData.compensationsTransport.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsTransport.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsTraining) {
+                    const comp = tempBackupData.compensationsTraining.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsTraining.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                */
+            });
+            
+            // حفظ البيانات
+            saveData();
+            
+            // إغلاق المودال
+            cancelBeneficiarySelection();
+            
+            // إعادة رسم الجدول
+            renderCompensationGrid();
+            updateCreditDisplay();
+            
+            // إظهار رسالة النتيجة
+            console.log('Imported beneficiaries:', importedCount);
+            console.log('Total beneficiaries now:', beneficiaries.length);
+            console.log('Current mode:', currentMode);
+            
+            let message = `تم استيراد ${importedCount} مستفيد بنجاح إلى قائمة المستفيدين.`;
+            if (skippedCount > 0) {
+                message += ` تم تخطي ${skippedCount} مستفيد (حساب مكرر).`;
+            }
+            message += '\n\nالمستفيدون متاحون الآن في جدول إدارة التعويضات.';
+            
+            showToast(message, 'success');
+            
+            // تحديث القائمة لإظهار المستفيدين الجدد
+            setTimeout(() => {
+                renderCompensationGrid();
+            }, 500);
         }
  
         // --- Initialization ---
@@ -2342,6 +2796,8 @@
             document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
             document.getElementById('beneficiary-form').addEventListener('submit', saveBeneficiary);
             document.getElementById('restore-file-input').addEventListener('change', handleFileSelect);
+            document.getElementById('delete-all-beneficiaries-btn').addEventListener('click', deleteAllBeneficiaries);
+            document.getElementById('delete-all-beneficiaries-btn').addEventListener('click', deleteAllBeneficiaries);
 
             // Navigation
             document.getElementById('switch-mode-btn').addEventListener('click', () => {
