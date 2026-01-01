@@ -7,7 +7,10 @@
     <!-- Include SheetJS library for XLSX export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -40,7 +43,7 @@
             --space-xl: 40px;
 
             /* Typography */
-            --font-family: 'Cairo', sans-serif;
+            --font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
             --font-size-base: 1em;
             --font-size-h1: 2.2em;
             --font-size-h2: 1.8em;
@@ -94,6 +97,7 @@
             margin: 0;
             font-size: var(--font-size-h1);
             font-weight: 700;
+            font-family: 'Aref Ruqaa', 'Amiri', 'Cairo', serif;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
                          0 0 20px rgba(255, 255, 255, 0.2);
             display: flex;
@@ -216,6 +220,7 @@
             padding-bottom: var(--space-md);
             margin-bottom: var(--space-lg);
             font-weight: 700;
+            font-family: 'Aref Ruqaa', 'Amiri', 'Cairo', serif;
             position: relative;
             display: inline-block;
         }
@@ -408,22 +413,27 @@
         .report-output {
             margin-top: var(--space-md);
             padding: var(--space-md);
+            padding-bottom: 50px;
             border: 1px dashed var(--border-color);
             background-color: var(--background-white);
             border-radius: var(--border-radius-sm);
             box-shadow: var(--shadow-sm);
             font-size: 12px;
             overflow-x: auto;
+            font-family: 'Amiri', serif !important;
+            position: relative;
         }
 
         .report-output table {
             border: 2px solid var(--dark-color);
+            font-family: 'Amiri', serif !important;
         }
         .report-output th, .report-output td {
              border: 1px solid var(--text-color);
              padding: var(--space-sm);
              text-align: center;
              font-size: 11px;
+             font-family: 'Amiri', serif !important;
         }
         .report-output th {
             background-color: #FFE0B2;
@@ -786,7 +796,7 @@
         /* Print Specific Styles */
         @media print {
             body {
-                padding: 0; margin: 0; background: none !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: 'Arial', sans-serif !important; color: #000 !important;
+                padding: 0; margin: 0; background: none !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: 'Amiri', serif !important; color: #000 !important;
             }
             
             body > * {
@@ -798,12 +808,32 @@
 
             @page {
                 size: landscape; 
-                margin: 1cm;
+                margin: 1cm 1cm 2cm 1cm;
+                @bottom-left {
+                    content: "الصفحة " counter(page) " من " counter(pages);
+                    font-family: 'Amiri', serif;
+                    font-size: 10pt;
+                    color: #000;
+                }
             }
 
             #print-report-content.report-output {
-                padding: 0; margin: 0; border: none; box-shadow: none; overflow-x: visible; 
+                padding: 0; margin: 0; border: none; box-shadow: none; overflow: hidden; 
                 font-size: 10pt; color: #000 !important; background-color: #ffffff !important;
+                font-family: 'Amiri', serif !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                height: auto;
+                max-height: 100%;
+            }
+            
+            #print-report-content * {
+                page-break-after: avoid !important;
+            }
+            
+            #print-report-content .report-footer {
+                orphans: 3;
+                widows: 3;
             }
             #print-report-content table {
                 width: 100%; border-collapse: collapse; table-layout: fixed; 
@@ -831,6 +861,15 @@
             #print-report-content th { 
                 background-color: #E0E0E0 !important; 
             }
+            
+            /* تكرار رأس الجدول في كل صفحة */
+            #print-report-content thead {
+                display: table-header-group;
+            }
+            #print-report-content tbody {
+                display: table-row-group;
+            }
+            
             #print-report-content .total-row th,
             #print-report-content .total-row td { 
                 background-color: #E0E0E0 !important; 
@@ -839,6 +878,24 @@
             #print-report-content .report-header, 
             #print-report-content .report-footer {
                 color: #000 !important;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+            
+            #print-report-content .report-header p,
+            #print-report-content .report-footer p {
+                margin: 2px 0 !important;
+                line-height: 1.2 !important;
+            }
+            
+            #print-report-content .report-footer {
+                margin-top: 8px !important;
+                margin-bottom: 0 !important;
+            }
+            
+            #print-report-content table {
+                page-break-after: avoid;
+                margin-bottom: 5px !important;
             }
         }
     </style>
@@ -1684,7 +1741,10 @@
         
         // --- Compensation Grid ---
         function calculateQuarterlyComp(nofees, value, contrib) {
-            const comp = (parseFloat(nofees||0) + parseFloat(value||0) - parseFloat(contrib||0)) / 2;
+            const nofeesVal = parseFloat(nofees||0);
+            const valueVal = parseFloat(value||0);
+            const contribVal = parseFloat(contrib||0);
+            const comp = ((nofeesVal + valueVal) - contribVal) * 0.5;
             return comp > 0 ? comp : 0;
         }
 
@@ -1755,10 +1815,10 @@
                                  <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </td>
-                        <td class="editable-cell" data-quarter="1">${formatCurrency(compData.q1.calculated)}</td>
-                        <td class="editable-cell" data-quarter="2">${formatCurrency(compData.q2.calculated)}</td>
-                        <td class="editable-cell" data-quarter="3">${formatCurrency(compData.q3.calculated)}</td>
-                        <td class="editable-cell" data-quarter="4">${formatCurrency(compData.q4.calculated)}</td>
+                        <td class="editable-cell" data-quarter="1" data-nofees="${compData.q1.nofees || 0}" data-value="${compData.q1.value || 0}" data-contrib="${compData.q1.contrib || 0}">${formatCurrency(compData.q1.calculated)}</td>
+                        <td class="editable-cell" data-quarter="2" data-nofees="${compData.q2.nofees || 0}" data-value="${compData.q2.value || 0}" data-contrib="${compData.q2.contrib || 0}">${formatCurrency(compData.q2.calculated)}</td>
+                        <td class="editable-cell" data-quarter="3" data-nofees="${compData.q3.nofees || 0}" data-value="${compData.q3.value || 0}" data-contrib="${compData.q3.contrib || 0}">${formatCurrency(compData.q3.calculated)}</td>
+                        <td class="editable-cell" data-quarter="4" data-nofees="${compData.q4.nofees || 0}" data-value="${compData.q4.value || 0}" data-contrib="${compData.q4.contrib || 0}">${formatCurrency(compData.q4.calculated)}</td>
                         <td class="calculated-cell total-comp-cell">${formatCurrency(totalComp)}</td>
                         <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
                         <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
@@ -1849,7 +1909,7 @@
         function handleQuarterlyFormSubmit(event) {
             event.preventDefault();
             const beneficiaryId = parseInt(document.getElementById('quarterly-beneficiary-id').value);
-            const quarterIndex = document.getElementById('quarterly-quarter-index').value;
+            const quarterIndex = parseInt(document.getElementById('quarterly-quarter-index').value);
             
             const nofees = parseFloat(document.getElementById('quarterly-nofees').value) || 0;
             const value = parseFloat(document.getElementById('quarterly-value').value) || 0;
@@ -1857,15 +1917,75 @@
 
             const calculated = calculateQuarterlyComp(nofees, value, contrib);
 
+            // تحديث أو إنشاء بيانات التعويض
+            let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
+            if (!compData) {
+                compData = { 
+                    beneficiaryId, 
+                    q1: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q2: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q3: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q4: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    discount: 0, 
+                    netPayable: 0 
+                };
+                compensations.push(compData);
+            }
+
+            // حفظ البيانات في الكائن مباشرة
+            compData[`q${quarterIndex}`] = {
+                nofees: nofees,
+                value: value,
+                contrib: contrib,
+                calculated: calculated
+            };
+
+            // إعادة حساب المجموع من جميع الثلاثيات
+            let totalComp = 0;
+            for (let i = 1; i <= 4; i++) {
+                totalComp += (compData[`q${i}`]?.calculated || 0);
+            }
+            
+            // تحديث الخصم والصافي
             const targetRow = document.querySelector(`#compensation-grid-table tbody tr[data-beneficiary-id='${beneficiaryId}']`);
             if (targetRow) {
-                const targetCell = targetRow.querySelector(`td[data-quarter='${quarterIndex}']`);
-                targetCell.textContent = formatCurrency(calculated);
-                targetCell.setAttribute('data-nofees', nofees);
-                targetCell.setAttribute('data-value', value);
-                targetCell.setAttribute('data-contrib', contrib);
-                processAndSaveRow(targetRow);
+                const discountInput = targetRow.querySelector('.discount-input');
+                const discount = parseFloat(discountInput.value) || 0;
+                compData.discount = discount;
+                compData.netPayable = totalComp - discount;
+                
+                // تحديث جميع خلايا الثلاثيات في الجدول مع حفظ البيانات الكاملة
+                for (let i = 1; i <= 4; i++) {
+                    const cell = targetRow.querySelector(`td[data-quarter='${i}']`);
+                    if (cell) {
+                        const qData = compData[`q${i}`] || {nofees: 0, value: 0, contrib: 0, calculated: 0};
+                        cell.textContent = formatCurrency(qData.calculated);
+                        cell.setAttribute('data-nofees', qData.nofees);
+                        cell.setAttribute('data-value', qData.value);
+                        cell.setAttribute('data-contrib', qData.contrib);
+                    }
+                }
+                
+                // تحديث المجموع والصافي
+                targetRow.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
+                targetRow.querySelector('.net-payable-cell').textContent = formatCurrency(compData.netPayable);
+                
+                // تحديث حالة الحفظ
+                targetRow.classList.remove('is-dirty');
+                const statusBadge = targetRow.querySelector('.status-badge');
+                if (statusBadge) {
+                    statusBadge.className = 'status-badge saved';
+                    statusBadge.textContent = 'محفوظ';
+                }
             }
+            
+            // حفظ جميع البيانات باستخدام saveData
+            saveData();
+            
+            // تحديث عرض الرصيد
+            updateCreditDisplay();
+            
+            // إغلاق النافذة
             closeQuarterlyModal();
         }
 
@@ -1898,24 +2018,27 @@
                 for(let i=1; i<=4; i++) {
                     const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
                     
+                    // إذا كانت البيانات موجودة في compData، استخدمها مباشرة
+                    // وإلا حاول القراءة من الخصائص
                     let nofees = compData[`q${i}`]?.nofees || 0;
-                    if (cell.hasAttribute('data-nofees')) nofees = parseFloat(cell.getAttribute('data-nofees'));
-                    
                     let value = compData[`q${i}`]?.value || 0;
-                    if (cell.hasAttribute('data-value')) value = parseFloat(cell.getAttribute('data-value'));
-                    
                     let contrib = compData[`q${i}`]?.contrib || 0;
-                    if (cell.hasAttribute('data-contrib')) contrib = parseFloat(cell.getAttribute('data-contrib'));
+                    let calculated = compData[`q${i}`]?.calculated || parseCurrency(cell.textContent);
+                    
+                    // إذا لم تكن البيانات موجودة، حاول قراءتها من الخصائص
+                    if (cell.hasAttribute('data-nofees')) {
+                        nofees = parseFloat(cell.getAttribute('data-nofees'));
+                        value = parseFloat(cell.getAttribute('data-value')) || 0;
+                        contrib = parseFloat(cell.getAttribute('data-contrib')) || 0;
+                    }
 
+                    // تحديث compData
                     compData[`q${i}`] = {
                         nofees: nofees,
                         value: value,
                         contrib: contrib,
-                        calculated: parseCurrency(cell.textContent)
+                        calculated: calculated
                     };
-                    cell.removeAttribute('data-nofees');
-                    cell.removeAttribute('data-value');
-                    cell.removeAttribute('data-contrib');
                 }
                 
                 compData.discount = discount;
@@ -2084,18 +2207,20 @@
             else if (currentMode === 'training') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف العمليات التكوينية';
 
             return `
-                <div class="report-header" style="text-align: center; margin-bottom: 20px;">
-                    <p>${institutionInfo.republic}</p><p>${institutionInfo.ministry}</p>
-                    <p>${institutionInfo.directorate}</p><p>${institutionInfo.institution}</p>
-                    <p>السنة المالية: ${institutionInfo.fiscalYear}</p>
-                    <h3 style="margin-top: 20px;">${title}</h3>
+                <div class="report-header" style="text-align: center; margin-bottom: 10px;">
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.republic}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.ministry}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.directorate}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.institution}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">السنة المالية: ${institutionInfo.fiscalYear}</p>
+                    <h3 style="margin-top: 10px; margin-bottom: 10px; font-weight: bold; font-family: 'Aref Ruqaa', serif; font-size: 20pt; text-decoration: underline;">${title}</h3>
                 </div>
                 ${tableContent}
-                <div class="report-footer" style="text-align: right; margin-top: 20px;">
-                    <p>أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}</p>
-                    <p>أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج</p>
-                    <p>أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}</p>
-                    ${forPrint ? `<div style="display: flex; justify-content: space-around; margin-top: 40px;"><p>المدير</p><p>المسير المالي</p></div>` : ''}
+                <div class="report-footer" style="text-align: right; margin-top: 10px;">
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}</p>
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج</p>
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}</p>
+                    ${forPrint ? `<div style="display: flex; justify-content: space-around; margin-top: 15px;"><p style="font-family: 'Aref Ruqaa', serif; font-weight: bold; font-size: 16pt;">المدير</p><p style="font-family: 'Aref Ruqaa', serif; font-weight: bold; font-size: 16pt;">المسير المالي</p></div>` : ''}
                 </div>`;
         }
 
