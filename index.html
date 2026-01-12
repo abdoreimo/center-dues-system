@@ -1570,30 +1570,51 @@
         // --- Institution Info Management ---
         function saveInstitutionInfo(event) {
             event.preventDefault();
+            
+            // Validate fiscal year
+            const fiscalYear = document.getElementById('fiscal-year').value.trim();
+            if (!/^\d{4}$/.test(fiscalYear)) {
+                showToast('السنة المالية يجب أن تكون 4 أرقام (مثال: 2025)', 'error');
+                return;
+            }
+            
+            const financialMonth = document.getElementById('financial-month').value.trim();
+            if (financialMonth && !/^\d{1,2}$/.test(financialMonth)) {
+                showToast('الشهر المالي يجب أن يكون رقماً بين 1 و 12', 'error');
+                return;
+            }
+
             for (const key in institutionInfo) {
                  if (key === 'openCredit' || key === 'equipmentGrantValue' || key === 'modeDetails') continue;
                 const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                 if (element) institutionInfo[key] = element.value.trim();
             }
+            
+            const openCredit = parseFloat(document.getElementById('open-credit').value) || 0;
+            if (openCredit < 0) {
+                showToast('الاعتماد المفتوح لا يمكن أن يكون سالباً', 'error');
+                return;
+            }
+            
             institutionInfo.equipmentGrantValue = parseFloat(document.getElementById('equipment-grant-value').value) || 0;
             
             // Save mode specific info
             if (!institutionInfo.modeDetails) institutionInfo.modeDetails = {};
             institutionInfo.modeDetails[currentMode] = {
-                credit: parseFloat(document.getElementById('open-credit').value) || 0,
+                credit: openCredit,
                 order: document.getElementById('order-number').value,
                 transfer: document.getElementById('transfer-number').value,
-                month: document.getElementById('financial-month').value
+                month: financialMonth
             };
             
-            // Sync legacy fields for safety
+            // Sync legacy fields
             institutionInfo.openCredit = institutionInfo.modeDetails[currentMode].credit;
             institutionInfo.orderNumber = institutionInfo.modeDetails[currentMode].order;
             institutionInfo.transferNumber = institutionInfo.modeDetails[currentMode].transfer;
             institutionInfo.financialMonth = institutionInfo.modeDetails[currentMode].month;
             
             saveData();
-            alert('تم حفظ معلومات المؤسسة.');
+            showToast('تم حفظ معلومات المؤسسة بنجاح', 'success');
             updateCreditDisplay();
             if (document.getElementById('reporting-section').style.display === 'block') {
                  generateReportPreview();
@@ -1669,12 +1690,35 @@
             const meter = document.getElementById('meter-number').value.trim();
             const section = document.getElementById('section-name').value.trim();
             const rank = document.getElementById('rank-name').value.trim();
-            const amount = parseFloat(document.getElementById('initial-amount').value) || 0;
+            let amount = parseFloat(document.getElementById('initial-amount').value) || 0;
             
-            if (!name || !account) return alert('الرجاء ملء الاسم والحساب.');
-            if (!/^[a-zA-Z\s\-]+$/.test(name)) return alert('الرجاء إدخال الاسم بالأحرف اللاتينية.');
-            if (beneficiaries.some(b => b.account === account && b.id !== id)) return alert('رقم الحساب مسجل لمستفيد آخر.');
-            if (calculateRIP(account).includes('خطأ')) return alert('رقم الحساب غير صالح.');
+            // Validation
+            if (!name || !account) {
+                showToast('الرجاء ملء الاسم والحساب', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z\s\-]+$/.test(name)) {
+                showToast('الرجاء إدخال الاسم بالأحرف اللاتينية فقط', 'error');
+                return;
+            }
+            
+            if (beneficiaries.some(b => b.account === account && b.id !== id)) {
+                showToast('رقم الحساب مسجل بالفعل لمستفيد آخر', 'error');
+                return;
+            }
+            
+            const rip = calculateRIP(account);
+            if (rip.includes('خطأ')) {
+                showToast('رقم الحساب غير صالح. تأكد من صحة الرقم', 'error');
+                return;
+            }
+
+            // Validate amount for transport/training modes
+            if ((currentMode === 'transport' || currentMode === 'training') && amount < 0) {
+                showToast('المبلغ لا يمكن أن يكون سالباً', 'error');
+                return;
+            }
 
             if (id) { 
                 const beneficiary = beneficiaries.find(b => b.id === id);
@@ -1693,7 +1737,7 @@
                      else targetArray.push({ beneficiaryId: id, netPayable: amount });
                 }
                 
-                alert('تم حفظ التعديلات.');
+                showToast('تم حفظ التعديلات بنجاح', 'success');
             } else { 
                 const newId = getNextBeneficiaryId();
                 beneficiaries.push({ id: newId, name, account, meter, section, rank, type: currentMode });
@@ -1703,31 +1747,49 @@
                      targetArray.push({ beneficiaryId: newId, netPayable: amount });
                 }
                 
-                alert('تم إضافة المستفيد بنجاح.');
+                showToast('تم إضافة المستفيد بنجاح', 'success');
             }
 
             saveData();
             renderCompensationGrid();
+            updateCreditDisplay();
             cancelBeneficiaryEdit();
         }
 
         function deleteBeneficiary(id) {
             const beneficiary = beneficiaries.find(b => b.id === id);
             if (confirm(`هل أنت متأكد من حذف المستفيد "${beneficiary.name}" وكل تعويضاته؟`)) {
-                beneficiaries = beneficiaries.filter(b => b.id !== id);
+                // حذف المستفيد
+                const deletedIndex = beneficiaries.findIndex(b => b.id === id);
+                beneficiaries.splice(deletedIndex, 1);
+                
+                // حذف التعويضات المرتبطة
                 compensations = compensations.filter(c => c.beneficiaryId !== id);
                 compensationsEquipment = compensationsEquipment.filter(c => c.beneficiaryId !== id);
                 compensationsTransport = compensationsTransport.filter(c => c.beneficiaryId !== id);
                 compensationsTraining = compensationsTraining.filter(c => c.beneficiaryId !== id);
                 
-                beneficiaries.sort((a, b) => a.id - b.id).forEach((b, index) => {
+                // إعادة ترقيم المستفيدين بشكل صحيح
+                beneficiaries.sort((a, b) => a.id - b.id);
+                beneficiaries.forEach((b, index) => {
                     const oldId = b.id;
                     const newId = index + 1;
+                    
                     if (oldId !== newId) {
-                        compensations.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
-                        compensationsEquipment.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
-                        compensationsTransport.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
-                        compensationsTraining.forEach(c => { if(c.beneficiaryId === oldId) c.beneficiaryId = newId; });
+                        // تحديث معرفات جميع التعويضات
+                        compensations.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsEquipment.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsTransport.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsTraining.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        
                         b.id = newId;
                     }
                 });
@@ -1735,7 +1797,7 @@
                 saveData();
                 renderCompensationGrid();
                 updateCreditDisplay();
-                alert('تم حذف المستفيد وتحديث الترقيم.');
+                alert('تم حذف المستفيد بنجاح وتحديث الترقيم.');
             }
         }
         
@@ -1906,6 +1968,51 @@
             setTimeout(() => modal.style.display = 'none', 300);
         }
 
+        function showToast(message, type = 'info') {
+            // Create a simple toast notification
+            const existingToast = document.getElementById('toast-notification');
+            if (existingToast) existingToast.remove();
+            
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add toast animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
         function handleQuarterlyFormSubmit(event) {
             event.preventDefault();
             const beneficiaryId = parseInt(document.getElementById('quarterly-beneficiary-id').value);
@@ -2001,48 +2108,44 @@
 
                 const discountInput = rowElement.querySelector('.discount-input');
                 let discount = parseFloat(discountInput.value) || 0;
-                if (discountInput.value !== discount.toFixed(2)) {
-                    discountInput.value = discount.toFixed(2);
-                }
+                if (isNaN(discount) || discount < 0) discount = 0;
+                discountInput.value = discount.toFixed(2);
 
-                const netPayable = totalComp - discount;
+                const netPayable = Math.round((totalComp - discount) * 100) / 100;
                 rowElement.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
                 rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(netPayable);
 
                 let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
                 if (!compData) {
-                    compData = { beneficiaryId, q1:{}, q2:{}, q3:{}, q4:{}, discount: 0, netPayable: 0 };
+                    compData = { 
+                        beneficiaryId, 
+                        q1: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q2: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q3: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q4: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        discount: 0, 
+                        netPayable: 0 
+                    };
                     compensations.push(compData);
                 }
 
                 for(let i=1; i<=4; i++) {
                     const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                    
-                    // إذا كانت البيانات موجودة في compData، استخدمها مباشرة
-                    // وإلا حاول القراءة من الخصائص
-                    let nofees = compData[`q${i}`]?.nofees || 0;
-                    let value = compData[`q${i}`]?.value || 0;
-                    let contrib = compData[`q${i}`]?.contrib || 0;
-                    let calculated = compData[`q${i}`]?.calculated || parseCurrency(cell.textContent);
-                    
-                    // إذا لم تكن البيانات موجودة، حاول قراءتها من الخصائص
-                    if (cell.hasAttribute('data-nofees')) {
-                        nofees = parseFloat(cell.getAttribute('data-nofees'));
-                        value = parseFloat(cell.getAttribute('data-value')) || 0;
-                        contrib = parseFloat(cell.getAttribute('data-contrib')) || 0;
-                    }
+                    let nofees = parseFloat(cell.getAttribute('data-nofees')) || 0;
+                    let value = parseFloat(cell.getAttribute('data-value')) || 0;
+                    let contrib = parseFloat(cell.getAttribute('data-contrib')) || 0;
+                    let calculated = calculateQuarterlyComp(nofees, value, contrib);
 
-                    // تحديث compData
                     compData[`q${i}`] = {
-                        nofees: nofees,
-                        value: value,
-                        contrib: contrib,
-                        calculated: calculated
+                        nofees: parseFloat(nofees.toFixed(2)),
+                        value: parseFloat(value.toFixed(2)),
+                        contrib: parseFloat(contrib.toFixed(2)),
+                        calculated: parseFloat(calculated.toFixed(2))
                     };
                 }
                 
-                compData.discount = discount;
-                compData.netPayable = totalComp - compData.discount;
+                compData.discount = parseFloat(discount.toFixed(2));
+                compData.netPayable = parseFloat(netPayable.toFixed(2));
 
                 rowElement.classList.remove('is-dirty');
                 const statusBadge = rowElement.querySelector('.status-badge');
@@ -2050,27 +2153,26 @@
                 statusBadge.textContent = 'محفوظ';
 
             } else if (currentMode === 'equipment') {
-                // Equipment Mode
-                // In this mode, we just confirm the grant value
-                const grantValue = institutionInfo.equipmentGrantValue;
+                const grantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
                 
                 let compData = compensationsEquipment.find(c => c.beneficiaryId === beneficiaryId);
                 if (!compData) {
                     compData = { beneficiaryId, netPayable: grantValue };
                     compensationsEquipment.push(compData);
                 } else {
-                    compData.netPayable = grantValue; // Update in case global value changed
+                    compData.netPayable = grantValue;
                 }
                 
-                // Update UI
                 rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(grantValue);
                 const statusBadge = rowElement.querySelector('.status-badge');
                 statusBadge.className = 'status-badge saved';
                 statusBadge.textContent = 'محفوظ';
             } else {
-                // Transport & Training Mode
                 const amountInput = rowElement.querySelector('.manual-amount-input');
-                const amount = parseFloat(amountInput.value) || 0;
+                let amount = parseFloat(amountInput.value) || 0;
+                if (isNaN(amount) || amount < 0) amount = 0;
+                amount = parseFloat(amount.toFixed(2));
+                amountInput.value = amount.toFixed(2);
                 
                 let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
                 let compData = targetArray.find(c => c.beneficiaryId === beneficiaryId);
@@ -2230,14 +2332,28 @@
 
         function printReport() {
             const printContent = document.getElementById('print-report-content');
-            printContent.innerHTML = generateReportHTML(true);
-            window.print();
+            if (!printContent) {
+                showToast('خطأ: عنصر الطباعة غير موجود', 'error');
+                return;
+            }
+            
+            const reportHTML = generateReportHTML(true);
+            if (!reportHTML) {
+                showToast('خطأ في توليد التقرير', 'error');
+                return;
+            }
+            
+            printContent.innerHTML = reportHTML;
+            
+            // Trigger print with a small delay to ensure content is rendered
+            setTimeout(() => {
+                window.print();
+                showToast('تم فتح نافذة الطباعة', 'success');
+            }, 100);
         }
 
         function exportXLSX() {
             let reportData = [];
-            
-            // Reset numbering for each mode (Separation requested)
             let startCounter = 1;
 
             if (currentMode === 'electricity') {
@@ -2246,8 +2362,12 @@
                     if (!b || (b.type && b.type !== 'electricity')) return null;
                     return {
                         id: b.id, name: b.name, meter: b.meter, rip: calculateRIP(b.account),
-                        q1: comp.q1.calculated, q2: comp.q2.calculated, q3: comp.q3.calculated, q4: comp.q4.calculated,
-                        discount: comp.discount, netPayable: comp.netPayable
+                        q1: Math.round(comp.q1.calculated * 100) / 100, 
+                        q2: Math.round(comp.q2.calculated * 100) / 100, 
+                        q3: Math.round(comp.q3.calculated * 100) / 100, 
+                        q4: Math.round(comp.q4.calculated * 100) / 100,
+                        discount: Math.round(comp.discount * 100) / 100, 
+                        netPayable: Math.round(comp.netPayable * 100) / 100
                     };
                 }).filter(Boolean).sort((a, b) => a.id - b.id);
             } else if (currentMode === 'equipment') {
@@ -2256,7 +2376,7 @@
                     const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
                     return {
                         id: b.id, name: b.name, section: b.section || '', rip: calculateRIP(b.account),
-                        netPayable: netPayable
+                        netPayable: Math.round(netPayable * 100) / 100
                     };
                 }).sort((a, b) => a.id - b.id);
             } else {
@@ -2266,12 +2386,15 @@
                     const netPayable = comp ? comp.netPayable : 0;
                     return {
                         id: b.id, name: b.name, rank: b.rank || '', rip: calculateRIP(b.account),
-                        netPayable: netPayable
+                        netPayable: Math.round(netPayable * 100) / 100
                     };
                 }).sort((a, b) => a.id - b.id);
             }
 
-            if (reportData.length === 0) return alert("لا توجد بيانات للتصدير.");
+            if (reportData.length === 0) {
+                showToast('لا توجد بيانات للتصدير', 'error');
+                return;
+            }
 
             let title = '';
             if (currentMode === 'electricity') title = 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز';
@@ -2302,21 +2425,21 @@
                 });
                 const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
                 const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
-                worksheetData.push(["المجموع", null, null, null, null, null, null, null, totalSum, totalDiscount, totalNetPayable]);
+                worksheetData.push(["المجموع", null, null, null, null, null, null, null, Math.round(totalSum * 100) / 100, Math.round(totalDiscount * 100) / 100, Math.round(totalNetPayable * 100) / 100]);
             } else if (currentMode === 'equipment') {
                 worksheetData.push(["الرقم", "اسم المستفيد", "القسم", "رقم RIP الكامل", "الصافي للدفع"]);
                 reportData.forEach((item, index) => {
                     worksheetData.push([startCounter + index, item.name, item.section, item.rip, item.netPayable]);
                     totalNetPayable += item.netPayable;
                 });
-                worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
+                worksheetData.push(["المجموع", null, null, null, Math.round(totalNetPayable * 100) / 100]);
             } else {
                 worksheetData.push(["الرقم", "اسم المستفيد", "الرتبة", "رقم RIP الكامل", "الصافي للدفع"]);
                 reportData.forEach((item, index) => {
                     worksheetData.push([startCounter + index, item.name, item.rank, item.rip, item.netPayable]);
                     totalNetPayable += item.netPayable;
                 });
-                worksheetData.push(["المجموع", null, null, null, totalNetPayable]);
+                worksheetData.push(["المجموع", null, null, null, Math.round(totalNetPayable * 100) / 100]);
             }
 
             worksheetData.push([null]);
@@ -2329,12 +2452,16 @@
             XLSX.utils.book_append_sheet(wb, ws, "تقرير التعويضات");
             if(!ws['!props']) ws['!props'] = {};
             ws['!props'].rtl = true;
-            XLSX.writeFile(wb, `تقرير_${currentMode}_${institutionInfo.fiscalYear || 'YYYY'}.xlsx`);
+            
+            const filename = `تقرير_${currentMode}_${institutionInfo.fiscalYear || 'YYYY'}_${new Date().toLocaleDateString('ar-SA')}.xlsx`;
+            XLSX.writeFile(wb, filename);
+            showToast(`تم تصدير الملف: ${filename}`, 'success');
         }
 
         function exportTxt() {
             let validRecords = [];
             let totalRoundedNetPayable = 0;
+            let invalidRecords = 0;
             
             if (currentMode === 'electricity') {
                 compensations.forEach(comp => {
@@ -2347,6 +2474,8 @@
                             const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
                             const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
                             validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                        } else {
+                            invalidRecords++;
                         }
                     }
                 });
@@ -2362,6 +2491,8 @@
                         const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
                         const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
                         validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    } else {
+                        invalidRecords++;
                     }
                 });
             } else {
@@ -2377,33 +2508,55 @@
                         const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
                         const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
                         validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    } else {
+                        invalidRecords++;
                     }
                 });
             }
 
-            const treasuryRIP = calculateRIP(institutionInfo.treasuryAccount);
-            if (treasuryRIP.includes('خطأ')) return alert('خطأ في حساب RIP الخاص بالخزينة. يرجى التحقق من معلومات المؤسسة.');
+            if (validRecords.length === 0) {
+                showToast('لا توجد سجلات صحيحة للتصدير. تحقق من بيانات المستفيدين والحسابات', 'error');
+                return;
+            }
 
-            const details = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? institutionInfo.modeDetails[currentMode] : { month: institutionInfo.financialMonth, order: institutionInfo.orderNumber, transfer: institutionInfo.transferNumber };
+            const treasuryRIP = calculateRIP(institutionInfo.treasuryAccount);
+            if (treasuryRIP.includes('خطأ')) {
+                showToast('خطأ: رقم الحساب البريدي للخزينة غير صحيح. يرجى تحديث معلومات المؤسسة', 'error');
+                return;
+            }
+
+            const details = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? 
+                            institutionInfo.modeDetails[currentMode] : 
+                            { month: institutionInfo.financialMonth, order: institutionInfo.orderNumber, transfer: institutionInfo.transferNumber };
 
             const totalAmountCents = String(Math.round(totalRoundedNetPayable * 100)).padStart(13, '0');
             const recordCount = String(validRecords.length).padStart(7, '0');
-            const month = String(details.month).padStart(2, '0');
+            const month = String(details.month || '01').padStart(2, '0');
             const year = String(institutionInfo.fiscalYear).padStart(4, '0');
-            const order = String(details.order).padStart(8, '0');
-            const transfer = String(details.transfer).padStart(6, '0');
+            const order = String(details.order || '0').padStart(8, '0');
+            const transfer = String(details.transfer || '0').padStart(6, '0');
             const header = `*${treasuryRIP}${totalAmountCents}${recordCount}${month}${year}${order}${transfer}0`;
             
-            if (header.length !== 62) return alert('خطأ في توليد السطر الأول للملف. تحقق من معلومات المؤسسة.');
+            if (header.length !== 62) {
+                showToast('خطأ في توليد السطر الأول للملف. تحقق من معلومات المؤسسة كاملة', 'error');
+                return;
+            }
 
             const txtContent = [header, ...validRecords].join('\n');
             const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Payment_File_${currentMode}_${institutionInfo.fiscalYear}.txt`;
+            const filename = `Payment_File_${currentMode}_${institutionInfo.fiscalYear}_${new Date().toLocaleDateString('ar-SA')}.txt`;
+            a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
+            
+            let message = `تم تصدير الملف: ${filename}\n${validRecords.length} سجل صحيح`;
+            if (invalidRecords > 0) {
+                message += `\n⚠️ ${invalidRecords} سجل مرفوض (بيانات غير صحيحة)`;
+            }
+            showToast(message, 'success');
         }
 
         function printCDRomReport() {
@@ -2565,52 +2718,68 @@
 
         // --- Backup and Restore ---
         function createBackup() {
-            const backupData = { 
-                institutionInfo, 
-                beneficiaries, 
-                compensations, 
-                compensationsEquipment,
-                compensationsTransport,
-                compensationsTraining
-            };
-            const jsonString = JSON.stringify(backupData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const now = new Date();
-            const filename = `CompData_Backup_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.json`;
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
+            try {
+                const backupData = { 
+                    institutionInfo, 
+                    beneficiaries, 
+                    compensations, 
+                    compensationsEquipment,
+                    compensationsTransport,
+                    compensationsTraining,
+                    backupVersion: '2.0',
+                    backupDate: new Date().toISOString()
+                };
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const now = new Date();
+                const filename = `CompData_Backup_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}.json`;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast(`تم إنشاء النسخة الاحتياطية: ${filename}`, 'success');
+            } catch (e) {
+                console.error('Backup error:', e);
+                showToast('خطأ في إنشاء النسخة الاحتياطية', 'error');
+            }
         }
 
         function createAutoBackup(reason = 'قبل_الحذف') {
-            const backupData = { 
-                institutionInfo, 
-                beneficiaries, 
-                compensations, 
-                compensationsEquipment,
-                compensationsTransport,
-                compensationsTraining
-            };
-            const jsonString = JSON.stringify(backupData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const now = new Date();
-            const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
-            const filename = `نسخة_تلقائية_${reason}_${timestamp}.json`;
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-            return filename;
+            try {
+                const backupData = { 
+                    institutionInfo, 
+                    beneficiaries, 
+                    compensations, 
+                    compensationsEquipment,
+                    compensationsTransport,
+                    compensationsTraining,
+                    backupVersion: '2.0',
+                    backupDate: new Date().toISOString(),
+                    reason: reason
+                };
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const now = new Date();
+                const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+                const filename = `نسخة_تلقائية_${reason}_${timestamp}.json`;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                return filename;
+            } catch (e) {
+                console.error('Auto backup error:', e);
+                throw e;
+            }
         }
 
         function deleteAllBeneficiaries() {
             if (beneficiaries.length === 0) {
-                alert('لا يوجد مستفيدون للحذف.');
+                showToast('لا يوجد مستفيدون للحذف', 'info');
                 return;
             }
 
@@ -2627,7 +2796,8 @@
                 const filename = createAutoBackup('قبل_حذف_جميع_المستفيدين');
                 showToast(`تم حفظ نسخة احتياطية: ${filename}`, 'success');
             } catch (error) {
-                alert('فشل إنشاء النسخة الاحتياطية. لن يتم الحذف.');
+                console.error('Auto backup failed:', error);
+                showToast('فشل إنشاء النسخة الاحتياطية. لن يتم الحذف', 'error');
                 return;
             }
 
@@ -2651,7 +2821,7 @@
             renderCompensationGrid();
             updateCreditDisplay();
 
-            showToast(`تم حذف ${deletedCount} مستفيد بنجاح. النسخة الاحتياطية محفوظة.`, 'success');
+            showToast(`✓ تم حذف ${deletedCount} مستفيد بنجاح. النسخة الاحتياطية محفوظة`, 'success');
         }
 
         function restoreBackup() {
