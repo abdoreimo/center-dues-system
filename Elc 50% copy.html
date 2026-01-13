@@ -1,121 +1,3 @@
-Skip to content
-Navigation Menu
-abdoreimo
-center-dues-system
-
-Type / to search
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-1
-Insights
-Settings
-Files
-Go to file
-t
-css
-js
-.gitignore
-CompData_Backup_2025-06-07_08-46-53.json
-Elc 50% - Copy.html
-Elc 50% copy.html
-Elc 50%.html
-README.md
-index.html
-package-lock.json
-package.json
-robots.txt
-sample-compensations.json
-sample-database.json
-sample-employees.json
-sitemap.xml
-center-dues-system
-/
-Elc 50% copy.html
-in
-main
-
-Edit
-
-Preview
-Indent mode
-
-Spaces
-Indent size
-
-4
-Line wrap mode
-
-No wrap
-Editing Elc 50% copy.html file contents
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-
-﻿
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -124,31 +6,34 @@ Editing Elc 50% copy.html file contents
     <title>برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</title>
     <!-- Include SheetJS library for XLSX export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Optional: Include a Google Font for better typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Include Font Awesome for icons -->
+    <!-- Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- CSS Variables (Optional but Recommended for easier maintenance) --- */
+        /* --- CSS Variables --- Honey Theme --- */
         :root {
-            /* Colors - Balanced Medium Theme */
-            --primary-color: #5b87b4;       /* Medium Blue */
-            --primary-dark-color: #3a6ea5;  /* Deeper Medium Blue */
-            --secondary-color: #8c97a0;     /* Medium Gray */
-            --success-color: #5caa7f;       /* Medium Sea Green */
-            --danger-color: #d95d49;        /* Medium Red */
-            --warning-color: #f7b854;       /* Medium Amber */
-            --info-color: #4caed9;         /* Medium Blue */
-            --light-color: #e7eff2;         /* Light Gray-Blue */
-            --dark-color: #3b4446;          /* Medium-Dark Gray */
-            --background-light: #a0c2d8;   /* Medium Blue-Gray */
-            --background-white: #e0e7eb;    /* Light Gray */
-            --background-section: #d0d9e1;  /* Light-Medium Gray */
-            --border-color: #9dacb3;       /* Medium Gray */
-            --border-light-color: #c1ccd1; /* Light-Medium Gray */
-            --text-color: #2b3942;         /* Dark Gray Text */
-            --text-secondary-color: #5a6d7b; /* Medium Gray Text */
+            /* Honey Theme Colors */
+            --primary-color: #fca903;       /* Bright Amber/Orange */
+            --primary-dark-color: #c77700;  /* Darker Honey/Brown */
+            --secondary-color: #8D6E63;     /* Soft Brown */
+            --success-color: #4CAF50;       /* A brighter, more positive green */
+            --danger-color: #E53935;        /* A slightly softer red */
+            --warning-color: #FFA000;       /* Amber */
+            --info-color: #03A9F4;          /* A vibrant light blue */
+            --light-color: #FFF8E1;         /* Light Cream */
+            --dark-color: #4E342E;          /* Dark Brown for Text */
+            --background-light: #FFECB3;   /* Light Honey */
+            --background-white: #FFFAF0;    /* Floral White */
+            --background-section: #FFF3E0;  /* Lighter Orange/Cream */
+            --border-color: #D7CCC8;       /* Light Brown/Gray */
+            --border-light-color: #EFEBE9; /* Very Light Brown/Gray */
+            --text-color: #4E342E;         /* Dark Brown Text */
+            --text-secondary-color: #795548; /* Medium Brown Text */
 
             /* Spacing */
             --space-xs: 5px;
@@ -158,7 +43,7 @@ Editing Elc 50% copy.html file contents
             --space-xl: 40px;
 
             /* Typography */
-            --font-family: 'Cairo', sans-serif;
+            --font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
             --font-size-base: 1em;
             --font-size-h1: 2.2em;
             --font-size-h2: 1.8em;
@@ -169,11 +54,3114 @@ Editing Elc 50% copy.html file contents
             --border-radius-sm: 5px;
             --border-radius-md: 10px;
             --border-radius-lg: 25px;
-            --border-radius-xl: 30px;
 
             /* Shadows */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 6px 12px rgba(0, 0, 0, 0.2);
-            --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.3);
-Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 6px 12px rgba(100, 50, 0, 0.15);
+            --shadow-xl: 0 8px 16px rgba(100, 50, 0, 0.2);
+            --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        /* --- General Styles --- */
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: var(--space-md) var(--space-md) 60px var(--space-md);
+            background-color: var(--background-light);
+            direction: rtl;
+            text-align: right;
+            line-height: 1.6;
+            color: var(--text-color);
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-image:
+                linear-gradient(to bottom right, rgba(255, 236, 179, 0.8), rgba(255, 224, 130, 0.8), rgba(255, 213, 79, 0.8)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23c77700' fill-opacity='0.12' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.99 7.5V30L0 22.5zM15 15l12.99 7.5V30L15 22.5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        header {
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark-color));
+            color: white;
+            padding: var(--space-md) 0;
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: var(--font-size-h1);
+            font-weight: 700;
+            font-family: 'Aref Ruqaa', 'Amiri', 'Cairo', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+                         0 0 20px rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-sm);
+            letter-spacing: 0.5px;
+        }
+        
+        header h1 i {
+            display: inline-block;
+            animation: rotate 4s linear infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(30deg); }
+            to { transform: rotate(390deg); }
+        }
+
+        nav {
+            margin-top: var(--space-md);
+        }
+
+        nav button {
+            margin: 0 8px;
+            padding: 13px 28px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            color: white;
+            border-radius: 50px;
+            font-size: 1.05em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-family: var(--font-family);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        nav button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        nav button:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        nav button.active {
+            background: linear-gradient(145deg, white, rgba(255, 255, 255, 0.9));
+            color: var(--primary-dark-color);
+            border-color: white;
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4),
+                        inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        nav button:active {
+             transform: translateY(0);
+             box-shadow: var(--shadow-sm);
+        }
+
+        .app-section {
+            background: linear-gradient(135deg, #ffffff 0%, #fff8f0 100%);
+            padding: calc(var(--space-lg) * 1.3);
+            margin-bottom: calc(var(--space-lg) * 1.2);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1),
+                        0 2px 8px rgba(251, 140, 0, 0.1);
+            border: 2px solid rgba(252, 169, 3, 0.1);
+            display: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffa726, #fb8c00, #ef6c00);
+        }
+        
+        .app-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .app-section h2, .app-section h3 {
+            color: var(--primary-dark-color);
+            padding-bottom: var(--space-md);
+            margin-bottom: var(--space-lg);
+            font-weight: 700;
+            font-family: 'Aref Ruqaa', 'Amiri', 'Cairo', serif;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .app-section h2::after, .app-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #ffa726, #fb8c00);
+            border-radius: 2px;
+        }
+        
+        .app-section h2 { font-size: var(--font-size-h2); }
+        .app-section h3 { font-size: var(--font-size-h3); }
+
+
+        form > div {
+            margin-bottom: var(--space-md);
+        }
+         .form-row > div {
+             margin-bottom: 0;
+         }
+
+         .form-row {
+             display: flex;
+             gap: var(--space-lg);
+             margin-bottom: var(--space-md);
+             flex-wrap: wrap;
+         }
+         .form-row > div {
+             flex: 1 1 250px;
+         }
+          #beneficiary-form .form-row > div {
+              flex: 1 1 180px;
+          }
+         form button[type="submit"]:not(.modal-buttons button) {
+            margin-top: var(--space-lg);
+         }
+
+
+        form label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+            color: var(--text-secondary-color);
+            font-size: 1.05em;
+        }
+
+        form input[type="text"],
+        form input[type="number"],
+        form select {
+            width: 100%;
+            padding: 13px 15px;
+            border: 2px solid rgba(252, 169, 3, 0.2);
+            border-radius: 10px;
+            box-sizing: border-box;
+            text-align: right;
+            font-size: var(--font-size-base);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            color: var(--text-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+         form input[type="text"]:focus,
+         form input[type="number"]:focus,
+         form select:focus {
+             border-color: #ffa726;
+             box-shadow: 0 0 0 4px rgba(255, 167, 38, 0.1),
+                         0 4px 12px rgba(251, 140, 0, 0.2);
+             outline: none;
+             transform: translateY(-1px);
+         }
+        input[readonly] {
+            background-color: var(--border-light-color) !important;
+            cursor: not-allowed;
+        }
+
+        /* Primary form submit buttons */
+        form button[type="submit"]:not(.modal-buttons button) {
+            padding: 14px 30px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            font-weight: 700;
+            font-family: var(--font-family);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        form button[type="submit"]:not(.modal-buttons button):hover {
+            background-color: #388E3C; /* Darker Green */
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+         form button[type="submit"]:not(.modal-buttons button):active {
+             transform: translateY(0);
+             box-shadow: var(--shadow-sm);
+         }
+
+        /* Generic Button Grouping */
+        .button-group {
+             display: flex;
+             align-items: center;
+             gap: var(--space-sm);
+             margin-top: var(--space-md);
+             flex-wrap: wrap;
+        }
+        .button-group button {
+            margin-left: 0;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            font-family: var(--font-family);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: white;
+        }
+        .button-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        #backup-restore-section .button-group button { background-color: var(--info-color); }
+        #backup-restore-section .button-group button:hover { background-color: #0288D1; }
+        #reporting-section .button-group button { background-color: var(--primary-dark-color); }
+        #reporting-section .button-group button:hover { background-color: #A16200; }
+        #reporting-section .button-group button:disabled {
+              background-color: #BDBDBD;
+              cursor: not-allowed;
+              transform: none;
+              box-shadow: none;
+        }
+        .explanation {
+             margin-top: var(--space-sm);
+             font-size: 0.9em;
+             color: var(--text-secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: var(--space-md);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        table th, table td {
+            border-bottom: 1px solid rgba(252, 169, 3, 0.08);
+            padding: 15px 18px;
+            text-align: right;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 50%, #ef6c00 100%);
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(252, 169, 3, 0.02);
+        }
+         tbody tr:hover {
+             background: linear-gradient(90deg, rgba(255, 247, 230, 0.5), rgba(255, 243, 224, 0.8));
+             transform: scale(1.01);
+             box-shadow: 0 2px 8px rgba(251, 140, 0, 0.1);
+             transition: all 0.3s ease;
+         }
+
+        .report-output {
+            margin-top: var(--space-md);
+            padding: var(--space-md);
+            padding-bottom: 50px;
+            border: 1px dashed var(--border-color);
+            background-color: var(--background-white);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-sm);
+            font-size: 12px;
+            overflow-x: auto;
+            font-family: 'Amiri', serif !important;
+            position: relative;
+        }
+
+        .report-output table {
+            border: 2px solid var(--dark-color);
+            font-family: 'Amiri', serif !important;
+        }
+        .report-output th, .report-output td {
+             border: 1px solid var(--text-color);
+             padding: var(--space-sm);
+             text-align: center;
+             font-size: 11px;
+             font-family: 'Amiri', serif !important;
+        }
+        .report-output th {
+            background-color: #FFE0B2;
+            color: var(--dark-color);
+        }
+        .report-output .total-row th,
+        .report-output .total-row td {
+            font-weight: bold;
+            background-color: var(--border-color);
+        }
+        #compensation-summary-table .total-row td {
+            font-weight: bold;
+            background-color: var(--border-color);
+        }
+
+        /* Ticker Tape Styles */
+        #ticker-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45px;
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            overflow: hidden;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+            line-height: 45px;
+            white-space: nowrap;
+            z-index: 1000;
+            font-size: 1em;
+         }
+
+         #ticker-content {
+             display: inline-block;
+             position: absolute;
+             left: -100%;
+             right: auto;
+             animation: scrollTickerLeftToRight 35s linear infinite;
+         }
+
+         @keyframes scrollTickerLeftToRight {
+             0% { transform: translateX(100vw); }
+             100% { transform: translateX(-100%); }
+         }
+
+         #ticker-content span {
+             margin-right: 50px;
+         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.visible {
+             display: flex;
+             opacity: 1;
+        }
+        .modal-overlay.visible .modal-content {
+             transform: translateY(0);
+             opacity: 1;
+        }
+        .modal-content {
+            background-color: var(--background-section);
+            padding: 35px;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-xl);
+            max-width: 550px;
+            width: 90%;
+            text-align: right;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+         .modal-buttons {
+             text-align: left;
+             margin-top: var(--space-lg);
+         }
+          .modal-buttons button {
+             margin-left: var(--space-sm);
+             padding: 10px 20px;
+             border: none;
+             border-radius: var(--border-radius-sm);
+             cursor: pointer;
+             font-size: 1em;
+             transition: all 0.3s ease;
+             box-shadow: var(--shadow-sm);
+             font-family: var(--font-family);
+             display: inline-flex;
+             align-items: center;
+             gap: var(--space-xs);
+          }
+           .modal-buttons .save-button {
+               background-color: var(--success-color);
+               color: white;
+           }
+            .modal-buttons .save-button:hover {
+                background-color: #388E3C;
+                transform: translateY(-1px);
+            }
+           .modal-buttons .cancel-button {
+               background-color: var(--secondary-color);
+               color: white;
+           }
+            .modal-buttons .cancel-button:hover {
+                 background-color: #6D4C41;
+                 transform: translateY(-1px);
+            }
+
+        /* Mode Selection Modal */
+        #mode-selection-modal {
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+        }
+        #mode-selection-modal .modal-content {
+            max-width: 600px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--background-white), var(--light-color));
+        }
+        .mode-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 15px 0;
+            font-size: 1.3em;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius-md);
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark-color);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .mode-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.02);
+        }
+        .mode-btn i {
+            font-size: 1.5em;
+        }
+
+        /* Focus indicator */
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+        input:focus, select:focus, button:focus {
+           outline: none;
+        }
+        
+        /* --- Compensation Grid Section Styles --- */
+        #compensation-management-section {
+            display: none; /* Managed by JS */
+            flex-direction: column;
+        }
+        .credit-summary-container {
+            display: flex;
+            justify-content: space-around;
+            gap: var(--space-md);
+            background-color: var(--light-color);
+            padding: var(--space-md);
+            border-radius: var(--border-radius-md);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--primary-color);
+            box-shadow: var(--shadow-inset);
+            text-align: center;
+            flex-wrap: wrap;
+        }
+        .credit-summary-container div {
+            flex: 1;
+            font-size: 1.1em;
+            color: var(--text-secondary-color);
+            min-width: 200px;
+        }
+        .credit-summary-container strong {
+            color: var(--dark-color);
+        }
+        .credit-summary-container .remaining-credit-value {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: var(--success-color);
+            transition: color 0.3s ease;
+        }
+        .credit-summary-container .remaining-credit-value.negative {
+            color: var(--danger-color);
+        }
+        .compensation-grid-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--border-color);
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        .compensation-grid-toolbar .search-container {
+            position: relative;
+            flex-grow: 1;
+            min-width: 250px;
+        }
+        .compensation-grid-toolbar .search-container i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary-color);
+        }
+        #compensation-grid-search {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--border-color);
+        }
+        #compensation-grid-search:focus {
+             border-color: var(--primary-color);
+             box-shadow: 0 0 0 3px rgba(252, 169, 3, 0.25);
+        }
+        #add-beneficiary-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius-lg);
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+        #add-beneficiary-btn:hover { 
+            background-color: var(--primary-dark-color);
+            transform: translateY(-2px);
+        }
+
+        .compensation-grid-container {
+            overflow-x: auto;
+            max-height: 70vh;
+        }
+        #compensation-grid-table { 
+            table-layout: fixed;
+            border: 3px solid var(--primary-dark-color);
+        }
+        #compensation-grid-table th, #compensation-grid-table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+            white-space: nowrap;
+            border: 2px solid var(--primary-dark-color);
+        }
+        
+        /* Beneficiary Name Column with Actions */
+        #compensation-grid-table th:nth-child(2),
+        #compensation-grid-table td:nth-child(2) {
+            text-align: right;
+            width: 280px;
+            white-space: normal;
+            border-bottom: none !important;
+        }
+        .beneficiary-name-cell {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-sm);
+            border-bottom: 2px solid var(--primary-dark-color);
+            padding-bottom: 10px;
+        }
+        .beneficiary-name-cell .beneficiary-actions {
+            display: flex;
+            gap: var(--space-xs);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        tr:hover .beneficiary-name-cell .beneficiary-actions {
+            opacity: 1;
+        }
+        .beneficiary-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: var(--text-secondary-color);
+            transition: all 0.2s ease;
+        }
+        .beneficiary-actions button:hover {
+            background-color: rgba(0,0,0,0.1);
+            color: var(--dark-color);
+        }
+        .beneficiary-actions .edit-btn-inline:hover { color: var(--warning-color); }
+        .beneficiary-actions .delete-btn-inline:hover { color: var(--danger-color); }
+
+
+        #compensation-grid-table th:nth-child(1),
+        #compensation-grid-table td:nth-child(1) { width: 50px; }
+        #compensation-grid-table th.status-column { width: 120px; }
+
+        .editable-cell {
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 600;
+            border-radius: var(--border-radius-sm);
+        }
+        .editable-cell:hover {
+            background-color: var(--light-color);
+            box-shadow: 0 0 0 2px var(--primary-color) inset;
+        }
+        .grid-input {
+            width: 100px;
+            padding: 8px;
+            text-align: center;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 0.95em;
+            background-color: var(--background-white);
+            color: var(--text-color);
+        }
+        .grid-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(252, 169, 3, 0.25);
+            outline: none;
+        }
+        .calculated-cell { font-weight: bold; color: var(--text-secondary-color); }
+        .net-payable-cell { color: var(--success-color); font-size: 1.1em; }
+
+        tr.is-dirty { background-color: var(--light-color) !important; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: var(--border-radius-lg);
+            font-size: 0.85em;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+        }
+        .status-badge.empty { background-color: #BDBDBD; color: var(--dark-color); }
+        .status-badge.saved { background-color: var(--success-color); }
+        .status-badge.unsaved { background-color: var(--warning-color); color: var(--dark-color); }
+
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                padding: 0; margin: 0; background: none !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: 'Amiri', serif !important; color: #000 !important;
+            }
+            
+            body > * {
+                display: none !important;
+            }
+            #print-report-content {
+                display: block !important;
+            }
+
+            @page {
+                size: landscape; 
+                margin: 1cm 1cm 2cm 1cm;
+                @bottom-left {
+                    content: "الصفحة " counter(page) " من " counter(pages);
+                    font-family: 'Amiri', serif;
+                    font-size: 10pt;
+                    color: #000;
+                }
+            }
+
+            #print-report-content.report-output {
+                padding: 0; margin: 0; border: none; box-shadow: none; overflow: hidden; 
+                font-size: 10pt; color: #000 !important; background-color: #ffffff !important;
+                font-family: 'Amiri', serif !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                height: auto;
+                max-height: 100%;
+            }
+            
+            #print-report-content * {
+                page-break-after: avoid !important;
+            }
+            
+            #print-report-content .report-footer {
+                orphans: 3;
+                widows: 3;
+            }
+            #print-report-content table {
+                width: 100%; border-collapse: collapse; table-layout: fixed; 
+                border: 2px solid #000 !important;
+            }
+            #print-report-content th, #print-report-content td {
+                font-size: 9pt; padding: 3px 5px; text-align: center; 
+                border: 1px solid #000 !important; color: #000 !important;
+                word-wrap: break-word; /* Prevents text overflow */
+                vertical-align: middle; /* Better vertical alignment */
+            }
+            /* Defining column widths for better layout control */
+            #print-report-content th:nth-child(1), #print-report-content td:nth-child(1) { width: 4%; }
+            #print-report-content th:nth-child(2), #print-report-content td:nth-child(2) { width: 20%; text-align: right; padding-right: 8px; }
+            #print-report-content th:nth-child(3), #print-report-content td:nth-child(3) { width: 8%; }
+            #print-report-content th:nth-child(4), #print-report-content td:nth-child(4) { width: 16%; }
+            #print-report-content th:nth-child(5), #print-report-content td:nth-child(5) { width: 6%; }
+            #print-report-content th:nth-child(6), #print-report-content td:nth-child(6) { width: 6%; }
+            #print-report-content th:nth-child(7), #print-report-content td:nth-child(7) { width: 6%; }
+            #print-report-content th:nth-child(8), #print-report-content td:nth-child(8) { width: 6%; }
+            #print-report-content th:nth-child(9), #print-report-content td:nth-child(9) { width: 8%; font-weight: bold; }
+            #print-report-content th:nth-child(10), #print-report-content td:nth-child(10) { width: 8%; }
+            #print-report-content th:nth-child(11), #print-report-content td:nth-child(11) { width: 12%; font-weight: bold; }
+            
+            #print-report-content th { 
+                background-color: #E0E0E0 !important; 
+            }
+            
+            /* تكرار رأس الجدول في كل صفحة */
+            #print-report-content thead {
+                display: table-header-group;
+            }
+            #print-report-content tbody {
+                display: table-row-group;
+            }
+            
+            #print-report-content .total-row th,
+            #print-report-content .total-row td { 
+                background-color: #E0E0E0 !important; 
+                font-weight: bold;
+            }
+            #print-report-content .report-header, 
+            #print-report-content .report-footer {
+                color: #000 !important;
+                page-break-after: avoid;
+                page-break-inside: avoid;
+            }
+            
+            #print-report-content .report-header p,
+            #print-report-content .report-footer p {
+                margin: 2px 0 !important;
+                line-height: 1.2 !important;
+            }
+            
+            #print-report-content .report-footer {
+                margin-top: 8px !important;
+                margin-bottom: 0 !important;
+            }
+            
+            #print-report-content table {
+                page-break-after: avoid;
+                margin-bottom: 5px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز</h1>
+        <nav>
+            <button id="switch-mode-btn" style="background-color: rgba(0,0,0,0.25);"><i class="fas fa-home"></i> الرئيسية</button>
+            <button data-section="institution-info-section"><i class="fas fa-building"></i> معلومات المؤسسة</button>
+            <button data-section="compensation-management-section"><i class="fas fa-users"></i> إدارة التعويضات والمستفيدين</button>
+            <button data-section="reporting-section"><i class="fas fa-file-alt"></i> التقارير والتصدير</button>
+            <button data-section="backup-restore-section"><i class="fas fa-database"></i> النسخ الاحتياطي</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- معلومات المؤسسة -->
+        <section id="institution-info-section" class="app-section">
+            <h2>معلومات المؤسسة</h2>
+            <form id="institution-info-form">
+                <div class="form-row">
+                    <div>
+                        <label for="republic">الجمهورية:</label>
+                        <input type="text" id="republic" value="الجمهورية الجزائرية الديمقراطية الشعبية">
+                    </div>
+                    <div>
+                        <label for="ministry">الوزارة:</label>
+                        <input type="text" id="ministry" value="وزارة التربية الوطنية">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="directorate">المديرية:</label>
+                        <input type="text" id="directorate" value="مديرية التربية لولاية أدرار">
+                    </div>
+                    <div>
+                        <label for="institution">المؤسسة:</label>
+                        <input type="text" id="institution" value="متوسطة حكومي قدور بن علال">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="fiscal-year">السنة المالية (YYYY):</label>
+                        <input type="text" id="fiscal-year" value="2025" placeholder="مثال: 2025" maxlength="4">
+                    </div>
+                    <div>
+                        <label for="financial-month">الشهر المالي (MM):</label>
+                        <input type="text" id="financial-month" value="" placeholder="مثال: 04" maxlength="2">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="treasury-account">رقم الحساب البريدي لدى الخزينة (CCP):</label>
+                        <input type="text" id="treasury-account" value="" placeholder="حساب الخزينة CCP">
+                    </div>
+                    <div>
+                        <label for="treasury-key">مفتاح الحساب البريدي لدى الخزينة (CLE):</label>
+                        <input type="text" id="treasury-key" value="" placeholder="مفتاح حساب الخزينة 02 رقم" maxlength="2">
+                    </div>
+                </div>
+                <div class="form-row">
+                     <div>
+                         <label for="order-number">رقم الأمر بالصرف:</label>
+                         <input type="text" id="order-number" value="">
+                     </div>
+                     <div>
+                         <label for="transfer-number">رقم الحوالة:</label>
+                         <input type="text" id="transfer-number" value="">
+                     </div>
+                </div>
+                <div>
+                    <label for="open-credit">الاعتماد المفتوح (دج):</label>
+                    <input type="number" id="open-credit" value="0" step="0.01" placeholder="أدخل المبلغ الإجمالي للاعتماد">
+                </div>
+                <div id="equipment-grant-field" style="display: none;">
+                    <label for="equipment-grant-value">قيمة منحة التجهيز (دج):</label>
+                    <input type="number" id="equipment-grant-value" value="0" step="0.01" placeholder="قيمة المنحة الثابتة">
+                </div>
+                <div>
+                    <button type="submit"><i class="fas fa-save"></i> حفظ المعلومات</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- إدارة المستفيدين (Deprecated - kept for structure but hidden) -->
+        <section id="beneficiary-management-section" class="app-section" style="display: none !important;"></section>
+
+        <!-- إدارة التعويضات (NEW GRID UI) -->
+        <section id="compensation-management-section" class="app-section">
+            <div class="credit-summary-container">
+                <div><strong>الاعتماد المفتوح:</strong> <span id="display-open-credit">0,00 دج</span></div>
+                <div><strong>المبلغ المصروف:</strong> <span id="display-amount-spent">0,00 دج</span></div>
+                <div><strong>الاعتماد المتبقي:</strong> <span id="display-remaining-credit" class="remaining-credit-value">0,00 دج</span></div>
+            </div>
+            <div class="compensation-grid-toolbar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="compensation-grid-search" placeholder="بحث بالاسم أو CCP...">
+                </div>
+                <div class="actions-container">
+                    <label style="margin-left: 15px; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-weight: bold;">
+                        <input type="checkbox" id="auto-save-checkbox"> حفظ تلقائي
+                    </label>
+                    <button id="add-beneficiary-btn"><i class="fas fa-user-plus"></i> إضافة مستفيد جديد</button>
+                </div>
+            </div>
+            <div class="compensation-grid-container">
+                <table id="compensation-grid-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>اللقب و الاسم</th>
+                            <th>تعويض ث 1</th>
+                            <th>تعويض ث 2</th>
+                            <th>تعويض ث 3</th>
+                            <th>تعويض ث 4</th>
+                            <th>المجموع</th>
+                            <th>الخصم</th>
+                            <th>الصافي للدفع</th>
+                            <th class="status-column">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- التقارير والتصدير -->
+        <section id="reporting-section" class="app-section">
+             <h2>التقارير والتصدير</h2>
+             <p>التقرير سيتم إنشاؤه بناءً على معلومات المؤسسة وقائمة المستفيدين وتعويضاتهم.</p>
+             <div class="button-group">
+                 <button id="print-report-btn"><i class="fas fa-print"></i> طباعة التقرير</button>
+                 <button id="export-xlsx-btn"><i class="fas fa-file-excel"></i> تصدير XLSX</button>
+                 <button id="export-txt-btn"><i class="fas fa-file-code"></i> تصدير ملف TXT</button>
+                 <button id="print-cdrom-btn"><i class="fas fa-compact-disc"></i> طباعة جدول الدفع CD-ROM</button>
+             </div>
+             <p class="explanation">ملاحظة: يعرض المتصفح غالباً نافذة لاختيار مكان حفظ ملف التصدير.</p>
+             
+             <h3><i class="fas fa-eye"></i> معاينة التقرير</h3>
+             <div id="report-preview" class="report-output"></div>
+        </section>
+
+         <!-- Backup/Restore -->
+         <section id="backup-restore-section" class="app-section">
+             <h2>النسخ الاحتياطي والاستعادة</h2>
+             <p>يمكنك إنشاء نسخة احتياطية لبياناتك الحالية أو استعادة بيانات من ملف نسخة احتياطية سابق.</p>
+             <div class="button-group">
+                 <button id="create-backup-btn"><i class="fas fa-download"></i> إنشاء نسخة احتياطية</button>
+                 <input type="file" id="restore-file-input" accept=".json" style="display: none;">
+                 <button id="restore-backup-btn"><i class="fas fa-upload"></i> استعادة من نسخة</button>
+                 <button id="delete-all-beneficiaries-btn" style="background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);">
+                     <i class="fas fa-trash-alt"></i> حذف جميع المستفيدين
+                 </button>
+             </div>
+             <p class="explanation">ملاحظة: عند إنشاء نسخة احتياطية، سيتم حفظ ملف بامتداد .json على جهازك.</p>
+             <p class="explanation" style="color: #d32f2f; font-weight: bold;">
+                 <i class="fas fa-exclamation-triangle"></i> حذف جميع المستفيدين: سيتم حفظ نسخة احتياطية تلقائية قبل الحذف.
+             </p>
+         </section>
+
+    </main>
+
+    <div id="print-report-content" class="report-output" style="display: none;"></div>
+
+    <!-- Add/Edit Beneficiary Modal -->
+    <div id="beneficiary-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="beneficiary-modal-title"></h3>
+            <form id="beneficiary-form">
+                 <input type="hidden" id="beneficiary-id">
+                 <div>
+                    <label for="beneficiary-name">اللقب و الاسم:</label>
+                    <input type="text" id="beneficiary-name" required placeholder="الرجاء حجز الاسم و اللقب كاملا باللغة اللاتينية" pattern="^[a-zA-Z\s\-]+$" inputmode="latin">
+                </div>
+                <div class="form-row">
+                    <div>
+                        <label for="account-number">رقم الحساب (CCP):</label>
+                        <input type="text" id="account-number" required oninput="updateCalculatedRIP()">
+                    </div>
+                    <div id="meter-field-group">
+                        <label for="meter-number">رقم العداد:</label>
+                        <input type="text" id="meter-number">
+                    </div>
+                    <div id="section-field-group" style="display: none;">
+                        <label for="section-name">القسم:</label>
+                        <input type="text" id="section-name" placeholder="القسم التربوي أو الإداري">
+                    </div>
+                    <div id="rank-field-group" style="display: none;">
+                        <label for="rank-name">الرتبة:</label>
+                        <input type="text" id="rank-name" placeholder="مثال: أستاذ، مقتصد...">
+                    </div>
+                    <div id="amount-field-group" style="display: none;">
+                        <label for="initial-amount">مبلغ التعويض:</label>
+                        <input type="number" id="initial-amount" step="0.01" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label for="calculated-rip">رقم RIP الكامل (20 رقم):</label>
+                        <input type="text" id="calculated-rip" value="" readonly placeholder="يتم حسابه تلقائياً">
+                    </div>
+                </div>
+                 <div class="modal-buttons">
+                    <button type="submit" class="save-button"><i class="fas fa-save"></i> حفظ</button>
+                    <button type="button" class="cancel-button" id="cancel-beneficiary-btn"><i class="fas fa-times-circle"></i> إلغاء</button>
+                 </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Quarterly Details Modal -->
+    <div id="quarterly-details-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <h3 id="quarterly-modal-title"></h3>
+            <form id="quarterly-details-form">
+                <input type="hidden" id="quarterly-beneficiary-id">
+                <input type="hidden" id="quarterly-quarter-index">
+                <div class="form-row">
+                    <div>
+                        <label for="quarterly-nofees">المبلغ دون رسوم:</label>
+                        <input type="number" id="quarterly-nofees" step="0.01" value="0.00">
+                    </div>
+                    <div>
+                        <label for="quarterly-value">القيمة المضافة:</label>
+                        <input type="number" id="quarterly-value" step="0.01" value="0.00">
+                    </div>
+                </div>
+                 <div>
+                    <label for="quarterly-contrib">مساهمة الدولة:</label>
+                    <input type="number" id="quarterly-contrib" step="0.01" value="0.00">
+                 </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="save-button"><i class="fas fa-check"></i> تأكيد</button>
+                    <button type="button" class="cancel-button" id="cancel-quarterly-btn"><i class="fas fa-times"></i> إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Mode Selection Modal -->
+    <div id="mode-selection-modal" class="modal-overlay visible" style="display: flex;">
+        <div class="modal-content">
+            <h2><i class="fas fa-cogs"></i> اختر نظام العمل</h2>
+            <p>يرجى اختيار نوع التعويضات التي تريد العمل عليها:</p>
+            <button class="mode-btn" onclick="selectMode('electricity')">
+                <i class="fas fa-bolt"></i>
+                تعويضات استهلاك الكهرباء والغاز
+            </button>
+            <button class="mode-btn" onclick="selectMode('equipment')">
+                <i class="fas fa-chair"></i>
+                تعويضات منحة التجهيز
+            </button>
+            <button class="mode-btn" onclick="selectMode('transport')">
+                <i class="fas fa-bus"></i>
+                تعويض مصاريف التنقل
+            </button>
+            <button class="mode-btn" onclick="selectMode('training')">
+                <i class="fas fa-chalkboard-teacher"></i>
+                تعويض مصاريف العمليات التكوينية
+            </button>
+        </div>
+    </div>
+
+    <!-- Restore Type Selection Modal -->
+    <div id="restore-type-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3><i class="fas fa-upload"></i> اختر نوع الاستعادة</h3>
+            <p>اختر ما تريد استعادته من النسخة الاحتياطية:</p>
+            <button class="mode-btn" onclick="selectRestoreType('full')">
+                <i class="fas fa-database"></i>
+                استعادة جميع البيانات (معلومات المؤسسة + المستفيدين + التعويضات)
+            </button>
+            <button class="mode-btn" onclick="selectRestoreType('beneficiaries')">
+                <i class="fas fa-users"></i>
+                استيراد معلومات المستفيدين فقط
+            </button>
+            <div class="modal-buttons">
+                <button type="button" class="cancel-button" onclick="cancelRestoreType()">
+                    <i class="fas fa-times-circle"></i> إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beneficiary Selection Modal -->
+    <div id="beneficiary-selection-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px; max-height: 80vh; overflow-y: auto;">
+            <h3><i class="fas fa-user-check"></i> اختر المستفيدين للاستيراد</h3>
+            <p>حدد المستفيدين الذين تريد استيراد بياناتهم:</p>
+            <div style="margin-bottom: 15px;">
+                <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: bold; color: var(--primary-dark-color);">
+                    <input type="checkbox" id="select-all-beneficiaries" style="width: 18px; height: 18px; cursor: pointer;">
+                    تحديد/إلغاء تحديد الكل
+                </label>
+            </div>
+            <div id="beneficiary-selection-list" style="max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); padding: 15px; background: var(--background-white); border-radius: var(--border-radius-sm);">
+                <!-- سيتم ملء القائمة ديناميكياً -->
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="save-button" onclick="confirmBeneficiarySelection()">
+                    <i class="fas fa-check"></i> تأكيد الاستيراد
+                </button>
+                <button type="button" class="cancel-button" onclick="cancelBeneficiarySelection()">
+                    <i class="fas fa-times-circle"></i> إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ticker-container">
+        <div id="ticker-content">
+            <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+            <span>&nbsp;&nbsp;***&nbsp;&nbsp;</span>
+            <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+            <span>&nbsp;&nbsp;***&nbsp;&nbsp;</span>
+            <span>هذا البرنامج من انجاز الزميلين اولفي عبد الرحمن و لروي حبيب صدقة جارية على ابويهما المتوفين فادعوا لهما بالرحمة و المغفرة ولجميع موتى المسلمين اللهم انصر اخواننا بغزة</span>
+        </div>
+    </div>
+
+    <script>
+        // --- Data Storage ---
+        let currentMode = 'electricity'; // 'electricity' or 'equipment'
+        let tempBackupData = null; // مؤقت لحفظ بيانات النسخة الاحتياطية
+        
+        let institutionInfo = {
+            republic: "الجمهورية الجزائرية الديمقراطية الشعبية",
+            ministry: "وزارة التربية الوطنية",
+            directorate: "مديرية التربية لولاية أدرار",
+            institution: "متوسطة حكومي قدور بن علال",
+            fiscalYear: "2025",
+            financialMonth: "",
+            treasuryAccount: "",
+            treasuryKey: "",
+            orderNumber: "",
+            transferNumber: "",
+            openCredit: 0,
+            equipmentGrantValue: 0,
+            modeDetails: {
+                electricity: { credit: 0, order: "", transfer: "", month: "" },
+                equipment: { credit: 0, order: "", transfer: "", month: "" },
+                transport: { credit: 0, order: "", transfer: "", month: "" },
+                training: { credit: 0, order: "", transfer: "", month: "" }
+            }
+        };
+
+        let beneficiaries = [];
+        let compensations = []; // Electricity compensations
+        let compensationsEquipment = []; // Equipment compensations
+        let compensationsTransport = []; // Transport compensations
+        let compensationsTraining = []; // Training compensations
+
+
+        // --- Helper Functions ---
+        function loadData() {
+            try {
+                const savedInstitutionInfo = localStorage.getItem('institutionInfo');
+                const savedBeneficiaries = localStorage.getItem('beneficiaries');
+                const savedCompensations = localStorage.getItem('compensations');
+                const savedCompensationsEquipment = localStorage.getItem('compensationsEquipment');
+                const savedCompensationsTransport = localStorage.getItem('compensationsTransport');
+                const savedCompensationsTraining = localStorage.getItem('compensationsTraining');
+
+                if (savedInstitutionInfo) {
+                    const tempInfo = JSON.parse(savedInstitutionInfo);
+                     institutionInfo = {
+                         ...institutionInfo,
+                         ...tempInfo
+                     };
+                     institutionInfo.openCredit = parseFloat(institutionInfo.openCredit) || 0;
+                     institutionInfo.equipmentGrantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
+                     
+                     if (!institutionInfo.modeDetails) {
+                         institutionInfo.modeDetails = {
+                            electricity: { credit: institutionInfo.openCredit, order: institutionInfo.orderNumber||"", transfer: institutionInfo.transferNumber||"", month: institutionInfo.financialMonth||"" },
+                            equipment: { credit: 0, order: "", transfer: "", month: "" },
+                            transport: { credit: 0, order: "", transfer: "", month: "" },
+                            training: { credit: 0, order: "", transfer: "", month: "" }
+                         };
+                     }
+                }
+
+                if (savedBeneficiaries) {
+                    beneficiaries = JSON.parse(savedBeneficiaries);
+                    beneficiaries.forEach(b => {
+                        b.id = parseInt(b.id) || 0;
+                         if (b.meter === undefined) b.meter = "";
+                         if (b.key !== undefined) delete b.key;
+                    });
+                    beneficiaries = beneficiaries.filter(b => b.id > 0);
+                }
+
+                if (savedCompensations) {
+                    compensations = JSON.parse(savedCompensations);
+                    compensations.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        const defaultQuarter = { nofees: 0, value: 0, contrib: 0, calculated: 0 };
+                        comp.q1 = {...defaultQuarter, ...(comp.q1 || {})};
+                        comp.q2 = {...defaultQuarter, ...(comp.q2 || {})};
+                        comp.q3 = {...defaultQuarter, ...(comp.q3 || {})};
+                        comp.q4 = {...defaultQuarter, ...(comp.q4 || {})};
+
+                        comp.discount = parseFloat(comp.discount) || 0;
+
+                        comp.q1.calculated = calculateQuarterlyComp(comp.q1.nofees, comp.q1.value, comp.q1.contrib);
+                        comp.q2.calculated = calculateQuarterlyComp(comp.q2.nofees, comp.q2.value, comp.q2.contrib);
+                        comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
+                        comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
+
+                        comp.netPayable = Math.round(((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) - comp.discount) * 100) / 100;
+                    });
+                    compensations = compensations.filter(comp => comp.beneficiaryId > 0);
+                }
+                
+                if (savedCompensationsEquipment) {
+                    compensationsEquipment = JSON.parse(savedCompensationsEquipment);
+                    compensationsEquipment.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsEquipment = compensationsEquipment.filter(comp => comp.beneficiaryId > 0);
+                }
+
+                if (savedCompensationsTransport) {
+                    compensationsTransport = JSON.parse(savedCompensationsTransport);
+                    compensationsTransport.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsTransport = compensationsTransport.filter(comp => comp.beneficiaryId > 0);
+                }
+
+                if (savedCompensationsTraining) {
+                    compensationsTraining = JSON.parse(savedCompensationsTraining);
+                    compensationsTraining.forEach(comp => {
+                        comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
+                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                    });
+                    compensationsTraining = compensationsTraining.filter(comp => comp.beneficiaryId > 0);
+                }
+
+                // --- MIGRATION: Assign types to legacy beneficiaries ---
+                beneficiaries.forEach(b => {
+                    if (!b.type) {
+                        // Check if this beneficiary has explicit equipment data
+                        const hasEquip = compensationsEquipment.some(c => c.beneficiaryId === b.id);
+                        // Check if this beneficiary has explicit electricity data (non-zero)
+                        const hasElec = compensations.some(c => c.beneficiaryId === b.id && c.netPayable > 0);
+                        
+                        if (hasEquip && !hasElec) {
+                            b.type = 'equipment';
+                        } else {
+                            b.type = 'electricity'; // Default to electricity
+                        }
+                    }
+                });
+
+                 // Filter out compensations for deleted beneficiaries
+                 compensations = compensations.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsEquipment = compensationsEquipment.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsTransport = compensationsTransport.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+                 compensationsTraining = compensationsTraining.filter(comp => beneficiaries.some(b => b.id === comp.beneficiaryId));
+
+            } catch (e) {
+                console.error("An error occurred during data loading:", e);
+                alert("حدث خطأ أثناء تحميل البيانات المحفوظة. قد يتم استخدام البيانات الافتراضية.");
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('institutionInfo', JSON.stringify(institutionInfo));
+                localStorage.setItem('beneficiaries', JSON.stringify(beneficiaries));
+                localStorage.setItem('compensations', JSON.stringify(compensations));
+                localStorage.setItem('compensationsEquipment', JSON.stringify(compensationsEquipment));
+                localStorage.setItem('compensationsTransport', JSON.stringify(compensationsTransport));
+                localStorage.setItem('compensationsTraining', JSON.stringify(compensationsTraining));
+            } catch (e) {
+                console.error("An error occurred during data saving:", e);
+                alert("حدث خطأ أثناء حفظ البيانات.");
+            }
+        }
+
+        function selectMode(mode) {
+            console.log('selectMode called with:', mode);
+            currentMode = mode;
+            const modal = document.getElementById('mode-selection-modal');
+            
+            // إخفاء النافذة فورًا
+            modal.style.display = 'none';
+            modal.classList.remove('visible');
+
+            // Update UI based on mode
+            const titleEl = document.querySelector('header h1');
+            const equipmentField = document.getElementById('equipment-grant-field');
+            
+            if (mode === 'electricity') {
+                titleEl.innerHTML = '<i class="fas fa-certificate" style="transform: rotate(30deg);"></i> برنامج حساب تعويض 50% من استهلاك الكهرباء والغاز';
+                equipmentField.style.display = 'none';
+            } else if (mode === 'equipment') {
+                titleEl.innerHTML = '<i class="fas fa-chair"></i> برنامج تسديد منحة التجهيز';
+                equipmentField.style.display = 'block';
+            } else if (mode === 'transport') {
+                titleEl.innerHTML = '<i class="fas fa-bus"></i> برنامج تعويض مصاريف التنقل';
+                equipmentField.style.display = 'none';
+            } else if (mode === 'training') {
+                titleEl.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> برنامج تعويض مصاريف العمليات التكوينية';
+                equipmentField.style.display = 'none';
+            }
+            
+            console.log('Loading mode specific info...');
+            // Load mode specific info
+            if (institutionInfo.modeDetails && institutionInfo.modeDetails[mode]) {
+                const details = institutionInfo.modeDetails[mode];
+                document.getElementById('open-credit').value = details.credit;
+                document.getElementById('order-number').value = details.order;
+                document.getElementById('transfer-number').value = details.transfer;
+                document.getElementById('financial-month').value = details.month;
+            }
+
+            console.log('Calling showSection...');
+            // Refresh views - go to compensation management section
+            showSection('compensation-management-section');
+            console.log('selectMode completed');
+        }
+
+        function getNextBeneficiaryId() {
+            if (beneficiaries.length === 0) return 1;
+            return Math.max(...beneficiaries.map(b => b.id)) + 1;
+        }
+
+        function formatCurrency(amount) {
+            let parts = (parseFloat(amount) || 0).toFixed(2).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return parts.join(',');
+        }
+
+        function parseCurrency(str) {
+            if (!str) return 0;
+            const cleanStr = str.toString().replace(/\./g, '');
+            const normalizedStr = cleanStr.replace(',', '.');
+            return parseFloat(normalizedStr) || 0;
+        }
+        
+        function numberToArabicText(amount) {
+            const roundedAmount = Math.round(amount * 100) / 100;
+            const [integerPart, decimalPart] = roundedAmount.toFixed(2).split('.');
+            const onesArabic = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة', 'عشرة', 'أحد عشر', 'اثنا عشر', 'ثلاثة عشر', 'أربعة عشر', 'خمسة عشر', 'ستة عشر', 'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'];
+            const tensArabic = ['', '', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+            const hundreds = ['', 'مائة', 'مائتان', 'ثلاثمائة', 'أربعمائة', 'خمسمائة', 'ستمائة', 'سبعمائة', 'ثمانمائة', 'تسعمائة'];
+            
+            function processThreeDigits(num) {
+                if (num === 0) return '';
+                const hundred = Math.floor(num / 100);
+                const remainder = num % 100;
+                let result = '';
+                if (hundred > 0) result += hundreds[hundred] + (remainder > 0 ? ' و ' : '');
+                if (remainder > 0 && remainder < 20) result += onesArabic[remainder];
+                else if (remainder >= 20) {
+                    const tens = Math.floor(remainder / 10), ones = remainder % 10;
+                    result += (ones > 0 ? onesArabic[ones] + ' و ' : '') + tensArabic[tens];
+                }
+                return result;
+            }
+            
+            const intValue = parseInt(integerPart);
+            if (intValue === 0 && parseInt(decimalPart) === 0) return 'صفر دينار';
+            
+            const million = Math.floor(intValue / 1e6);
+            const thousand = Math.floor((intValue % 1e6) / 1000);
+            const remain = intValue % 1000;
+            let result = '';
+
+            if (million > 0) result += (million === 1 ? 'مليون' : million === 2 ? 'مليونان' : processThreeDigits(million) + (million > 10 ? ' مليون' : ' ملايين')) + (thousand > 0 || remain > 0 ? ' و ' : '');
+            if (thousand > 0) result += (thousand === 1 ? 'ألف' : thousand === 2 ? 'ألفان' : processThreeDigits(thousand) + (thousand > 10 ? ' ألف' : ' آلاف')) + (remain > 0 ? ' و ' : '');
+            if (remain > 0) result += processThreeDigits(remain);
+            
+            if (intValue > 0) result += (intValue === 1 ? ' دينار' : intValue === 2 ? ' ديناران' : intValue > 10 ? ' دينار' : ' دنانير');
+
+            if (parseInt(decimalPart) > 0) {
+                const decimalValue = parseInt(decimalPart);
+                result += (intValue > 0 ? ' و ' : '') + processThreeDigits(decimalValue) + (decimalValue === 1 ? ' سنتيم' : decimalValue === 2 ? ' سنتيمان' : decimalValue > 10 ? ' سنتيم' : ' سنتيمات');
+            }
+            return result.replace(/^ و /, '').replace(/ و $/, '');
+        }
+
+         function calculateRIP(ccpNumberString) {
+             if (!ccpNumberString || !/^\d+$/.test(ccpNumberString.trim())) return 'CCP غير صالح';
+             const ccpPadded = ccpNumberString.trim().padStart(10, '0');
+             let ripKey = (parseInt(ccpNumberString, 10) * 100) % 97;
+             ripKey = 97 - (ripKey + 85) % 97;
+             const rip = '00799999' + ccpPadded + ripKey.toString().padStart(2, '0');
+             return rip.length === 20 ? rip : 'خطأ في الطول';
+         }
+
+        function updateCalculatedRIP() {
+            const ccpInput = document.getElementById('account-number');
+            const ripDisplay = document.getElementById('calculated-rip');
+            ripDisplay.value = ccpInput.value.trim() ? calculateRIP(ccpInput.value) : '';
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('nav button').forEach(button => {
+                button.classList.remove('active');
+                if (button.dataset.section === sectionId) {
+                    button.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.app-section').forEach(section => {
+                if (section.id !== 'beneficiary-management-section') { 
+                    section.style.display = 'none';
+                }
+            });
+
+            const sectionToShow = document.getElementById(sectionId);
+            
+            if (sectionToShow) {
+                 const displayStyle = sectionId === 'compensation-management-section' ? 'flex' : 'block';
+                 if (sectionId.includes('-modal')) {
+                     sectionToShow.style.display = 'flex';
+                     setTimeout(() => sectionToShow.classList.add('visible'), 10);
+                 } else {
+                     sectionToShow.style.display = displayStyle;
+                 }
+            } else { return; }
+
+            if (sectionId === 'institution-info-section') {
+                for (const key in institutionInfo) {
+                    const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
+                    if (element) element.value = institutionInfo[key];
+                }
+            } else if (sectionId === 'compensation-management-section') {
+                renderCompensationGrid();
+                updateCreditDisplay();
+            } else if (sectionId === 'reporting-section') {
+                generateReportPreview();
+            }
+        }
+
+        function updateCreditDisplay() {
+            let totalSpent = 0;
+            if (currentMode === 'electricity') {
+                totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else if (currentMode === 'equipment') {
+                totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else if (currentMode === 'transport') {
+                totalSpent = compensationsTransport.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            } else if (currentMode === 'training') {
+                totalSpent = compensationsTraining.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+            }
+            
+            const openCredit = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? institutionInfo.modeDetails[currentMode].credit : 0;
+            const remainingCredit = openCredit - totalSpent;
+
+            document.getElementById('display-open-credit').textContent = `${formatCurrency(openCredit)} دج`;
+            document.getElementById('display-amount-spent').textContent = `${formatCurrency(totalSpent)} دج`;
+            
+            const remainingEl = document.getElementById('display-remaining-credit');
+            remainingEl.textContent = `${formatCurrency(remainingCredit)} دج`;
+            
+            if (remainingCredit < 0) {
+                remainingEl.classList.add('negative');
+            } else {
+                remainingEl.classList.remove('negative');
+            }
+        }
+
+        // --- Institution Info Management ---
+        function saveInstitutionInfo(event) {
+            event.preventDefault();
+            
+            // Validate fiscal year
+            const fiscalYear = document.getElementById('fiscal-year').value.trim();
+            if (!/^\d{4}$/.test(fiscalYear)) {
+                showToast('السنة المالية يجب أن تكون 4 أرقام (مثال: 2025)', 'error');
+                return;
+            }
+            
+            const financialMonth = document.getElementById('financial-month').value.trim();
+            if (financialMonth && !/^\d{1,2}$/.test(financialMonth)) {
+                showToast('الشهر المالي يجب أن يكون رقماً بين 1 و 12', 'error');
+                return;
+            }
+
+            for (const key in institutionInfo) {
+                 if (key === 'openCredit' || key === 'equipmentGrantValue' || key === 'modeDetails') continue;
+                const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
+                if (element) institutionInfo[key] = element.value.trim();
+            }
+            
+            const openCredit = parseFloat(document.getElementById('open-credit').value) || 0;
+            if (openCredit < 0) {
+                showToast('الاعتماد المفتوح لا يمكن أن يكون سالباً', 'error');
+                return;
+            }
+            
+            institutionInfo.equipmentGrantValue = parseFloat(document.getElementById('equipment-grant-value').value) || 0;
+            
+            // Save mode specific info
+            if (!institutionInfo.modeDetails) institutionInfo.modeDetails = {};
+            institutionInfo.modeDetails[currentMode] = {
+                credit: openCredit,
+                order: document.getElementById('order-number').value,
+                transfer: document.getElementById('transfer-number').value,
+                month: financialMonth
+            };
+            
+            // Sync legacy fields
+            institutionInfo.openCredit = institutionInfo.modeDetails[currentMode].credit;
+            institutionInfo.orderNumber = institutionInfo.modeDetails[currentMode].order;
+            institutionInfo.transferNumber = institutionInfo.modeDetails[currentMode].transfer;
+            institutionInfo.financialMonth = institutionInfo.modeDetails[currentMode].month;
+            
+            saveData();
+            showToast('تم حفظ معلومات المؤسسة بنجاح', 'success');
+            updateCreditDisplay();
+            if (document.getElementById('reporting-section').style.display === 'block') {
+                 generateReportPreview();
+            }
+        }
+
+
+        // --- Beneficiary Management ---
+        function openBeneficiaryModal(id = null) {
+            const modal = document.getElementById('beneficiary-modal');
+            const form = document.getElementById('beneficiary-form');
+            const title = document.getElementById('beneficiary-modal-title');
+            
+            form.reset(); 
+            
+            // Toggle fields based on mode
+            const meterGroup = document.getElementById('meter-field-group');
+            const sectionGroup = document.getElementById('section-field-group');
+            const rankGroup = document.getElementById('rank-field-group');
+            const amountGroup = document.getElementById('amount-field-group');
+            
+            meterGroup.style.display = 'none';
+            sectionGroup.style.display = 'none';
+            rankGroup.style.display = 'none';
+            amountGroup.style.display = 'none';
+
+            if (currentMode === 'electricity') {
+                meterGroup.style.display = 'block';
+            } else if (currentMode === 'equipment') {
+                sectionGroup.style.display = 'block';
+            } else if (currentMode === 'transport' || currentMode === 'training') {
+                rankGroup.style.display = 'block';
+                amountGroup.style.display = 'block';
+            }
+
+            if (id) { 
+                const beneficiary = beneficiaries.find(b => b.id === id);
+                if (!beneficiary) return;
+                title.innerHTML = '<i class="fas fa-user-edit"></i> تعديل بيانات المستفيد';
+                document.getElementById('beneficiary-id').value = beneficiary.id;
+                document.getElementById('beneficiary-name').value = beneficiary.name;
+                document.getElementById('account-number').value = beneficiary.account;
+                document.getElementById('meter-number').value = beneficiary.meter || '';
+                document.getElementById('section-name').value = beneficiary.section || '';
+                document.getElementById('rank-name').value = beneficiary.rank || '';
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                    const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                    const comp = targetArray.find(c => c.beneficiaryId === id);
+                    document.getElementById('initial-amount').value = comp ? comp.netPayable : '';
+                }
+            } else { 
+                title.innerHTML = '<i class="fas fa-user-plus"></i> إضافة مستفيد جديد';
+                document.getElementById('beneficiary-id').value = '';
+            }
+            
+            updateCalculatedRIP(); 
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function cancelBeneficiaryEdit() {
+            const modal = document.getElementById('beneficiary-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function saveBeneficiary(event) {
+            event.preventDefault();
+            const id = parseInt(document.getElementById('beneficiary-id').value) || null;
+            const name = document.getElementById('beneficiary-name').value.trim();
+            const account = document.getElementById('account-number').value.trim();
+            const meter = document.getElementById('meter-number').value.trim();
+            const section = document.getElementById('section-name').value.trim();
+            const rank = document.getElementById('rank-name').value.trim();
+            let amount = parseFloat(document.getElementById('initial-amount').value) || 0;
+            
+            // Validation
+            if (!name || !account) {
+                showToast('الرجاء ملء الاسم والحساب', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z\s\-]+$/.test(name)) {
+                showToast('الرجاء إدخال الاسم بالأحرف اللاتينية فقط', 'error');
+                return;
+            }
+            
+            if (beneficiaries.some(b => b.account === account && b.id !== id)) {
+                showToast('رقم الحساب مسجل بالفعل لمستفيد آخر', 'error');
+                return;
+            }
+            
+            const rip = calculateRIP(account);
+            if (rip.includes('خطأ')) {
+                showToast('رقم الحساب غير صالح. تأكد من صحة الرقم', 'error');
+                return;
+            }
+
+            // Validate amount for transport/training modes
+            if ((currentMode === 'transport' || currentMode === 'training') && amount < 0) {
+                showToast('المبلغ لا يمكن أن يكون سالباً', 'error');
+                return;
+            }
+
+            if (id) { 
+                const beneficiary = beneficiaries.find(b => b.id === id);
+                if (beneficiary) {
+                    beneficiary.name = name;
+                    beneficiary.account = account;
+                    beneficiary.meter = meter;
+                    beneficiary.section = section;
+                    beneficiary.rank = rank;
+                }
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                     let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                     let comp = targetArray.find(c => c.beneficiaryId === id);
+                     if (comp) comp.netPayable = amount;
+                     else targetArray.push({ beneficiaryId: id, netPayable: amount });
+                }
+                
+                showToast('تم حفظ التعديلات بنجاح', 'success');
+            } else { 
+                const newId = getNextBeneficiaryId();
+                beneficiaries.push({ id: newId, name, account, meter, section, rank, type: currentMode });
+                
+                if (currentMode === 'transport' || currentMode === 'training') {
+                     let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                     targetArray.push({ beneficiaryId: newId, netPayable: amount });
+                }
+                
+                showToast('تم إضافة المستفيد بنجاح', 'success');
+            }
+
+            saveData();
+            renderCompensationGrid();
+            updateCreditDisplay();
+            cancelBeneficiaryEdit();
+        }
+
+        function deleteBeneficiary(id) {
+            const beneficiary = beneficiaries.find(b => b.id === id);
+            if (confirm(`هل أنت متأكد من حذف المستفيد "${beneficiary.name}" وكل تعويضاته؟`)) {
+                // حذف المستفيد
+                const deletedIndex = beneficiaries.findIndex(b => b.id === id);
+                beneficiaries.splice(deletedIndex, 1);
+                
+                // حذف التعويضات المرتبطة
+                compensations = compensations.filter(c => c.beneficiaryId !== id);
+                compensationsEquipment = compensationsEquipment.filter(c => c.beneficiaryId !== id);
+                compensationsTransport = compensationsTransport.filter(c => c.beneficiaryId !== id);
+                compensationsTraining = compensationsTraining.filter(c => c.beneficiaryId !== id);
+                
+                // إعادة ترقيم المستفيدين بشكل صحيح
+                beneficiaries.sort((a, b) => a.id - b.id);
+                beneficiaries.forEach((b, index) => {
+                    const oldId = b.id;
+                    const newId = index + 1;
+                    
+                    if (oldId !== newId) {
+                        // تحديث معرفات جميع التعويضات
+                        compensations.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsEquipment.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsTransport.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        compensationsTraining.forEach(c => {
+                            if (c.beneficiaryId === oldId) c.beneficiaryId = newId;
+                        });
+                        
+                        b.id = newId;
+                    }
+                });
+
+                saveData();
+                renderCompensationGrid();
+                updateCreditDisplay();
+                alert('تم حذف المستفيد بنجاح وتحديث الترقيم.');
+            }
+        }
+        
+        // --- Compensation Grid ---
+        function calculateQuarterlyComp(nofees, value, contrib) {
+            const nofeesVal = parseFloat(nofees||0);
+            const valueVal = parseFloat(value||0);
+            const contribVal = parseFloat(contrib||0);
+            const comp = ((nofeesVal + valueVal) - contribVal) * 0.5;
+            return comp > 0 ? comp : 0;
+        }
+
+        function renderCompensationGrid(searchTerm = '') {
+            const tableHead = document.querySelector('#compensation-grid-table thead tr');
+            const tableBody = document.querySelector('#compensation-grid-table tbody');
+            tableBody.innerHTML = '';
+
+            // Update Headers based on mode
+            if (currentMode === 'electricity') {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>تعويض ث 1</th>
+                    <th>تعويض ث 2</th>
+                    <th>تعويض ث 3</th>
+                    <th>تعويض ث 4</th>
+                    <th>المجموع</th>
+                    <th>الخصم</th>
+                    <th>الصافي للدفع</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            } else if (currentMode === 'equipment') {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>القسم</th>
+                    <th>الصافي للدفع</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            } else if (currentMode === 'transport' || currentMode === 'training') {
+                tableHead.innerHTML = `
+                    <th>#</th>
+                    <th>اللقب و الاسم</th>
+                    <th>الرتبة</th>
+                    <th>مبلغ التعويض</th>
+                    <th class="status-column">الحالة</th>
+                `;
+            }
+
+            const filtered = beneficiaries.filter(b =>
+                (b.type === currentMode || (!b.type && currentMode === 'electricity')) &&
+                (searchTerm === '' ||
+                b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                b.account.includes(searchTerm))
+            );
+
+            filtered.sort((a,b) => a.id - b.id).forEach((b, index) => {
+                const row = document.createElement('tr');
+                row.dataset.beneficiaryId = b.id;
+                const rowNumber = index + 1; // ترقيم متسلسل لكل نوع تعويض
+
+                if (currentMode === 'electricity') {
+                    const compData = compensations.find(c => c.beneficiaryId === b.id) || {
+                        q1: { calculated: 0 }, q2: { calculated: 0 }, q3: { calculated: 0 }, q4: { calculated: 0 },
+                        discount: 0, netPayable: 0
+                    };
+                    const totalComp = compData.q1.calculated + compData.q2.calculated + compData.q3.calculated + compData.q4.calculated;
+                    const netPayable = totalComp - compData.discount;
+                    const hasData = compensations.some(c => c.beneficiaryId === b.id);
+
+                    row.innerHTML = `
+                        <td>${rowNumber}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td class="editable-cell" data-quarter="1" data-nofees="${compData.q1.nofees || 0}" data-value="${compData.q1.value || 0}" data-contrib="${compData.q1.contrib || 0}">${formatCurrency(compData.q1.calculated)}</td>
+                        <td class="editable-cell" data-quarter="2" data-nofees="${compData.q2.nofees || 0}" data-value="${compData.q2.value || 0}" data-contrib="${compData.q2.contrib || 0}">${formatCurrency(compData.q2.calculated)}</td>
+                        <td class="editable-cell" data-quarter="3" data-nofees="${compData.q3.nofees || 0}" data-value="${compData.q3.value || 0}" data-contrib="${compData.q3.contrib || 0}">${formatCurrency(compData.q3.calculated)}</td>
+                        <td class="editable-cell" data-quarter="4" data-nofees="${compData.q4.nofees || 0}" data-value="${compData.q4.value || 0}" data-contrib="${compData.q4.contrib || 0}">${formatCurrency(compData.q4.calculated)}</td>
+                        <td class="calculated-cell total-comp-cell">${formatCurrency(totalComp)}</td>
+                        <td><input type="number" class="grid-input discount-input" value="${compData.discount.toFixed(2)}" step="0.01"></td>
+                        <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
+                        <td class="status-column"><span class="status-badge ${hasData ? 'saved' : 'empty'}">${hasData ? 'محفوظ' : 'فارغ'}</span></td>
+                    `;
+                } else if (currentMode === 'equipment') {
+                    // Equipment Mode
+                    const compData = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const hasData = !!compData;
+                    // Default to global value if not saved, otherwise use saved value
+                    const netPayable = hasData ? compData.netPayable : institutionInfo.equipmentGrantValue;
+
+                    row.innerHTML = `
+                        <td>${rowNumber}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td>${b.section || ''}</td>
+                        <td class="calculated-cell net-payable-cell">${formatCurrency(netPayable)}</td>
+                        <td class="status-column">
+                            <button class="save-equipment-btn" style="background:none; border:none; cursor:pointer;">
+                                <span class="status-badge ${hasData ? 'saved' : 'unsaved'}">${hasData ? 'محفوظ' : 'حفظ'}</span>
+                            </button>
+                        </td>
+                    `;
+                } else {
+                    // Transport & Training Mode
+                    let compData;
+                    if (currentMode === 'transport') compData = compensationsTransport.find(c => c.beneficiaryId === b.id);
+                    else compData = compensationsTraining.find(c => c.beneficiaryId === b.id);
+                    
+                    const hasData = !!compData;
+                    const netPayable = hasData ? compData.netPayable : 0;
+
+                    row.innerHTML = `
+                        <td>${rowNumber}</td>
+                        <td class="beneficiary-name-cell">
+                            <span>${b.name}</span>
+                            <div class="beneficiary-actions">
+                                 <button class="edit-btn-inline" title="تعديل"><i class="fas fa-edit"></i></button>
+                                 <button class="delete-btn-inline" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </td>
+                        <td>${b.rank || ''}</td>
+                        <td><input type="number" class="grid-input manual-amount-input" value="${netPayable.toFixed(2)}" step="0.01"></td>
+                        <td class="status-column">
+                            <button class="save-manual-btn" style="background:none; border:none; cursor:pointer;">
+                                <span class="status-badge ${hasData ? 'saved' : 'unsaved'}">${hasData ? 'محفوظ' : 'حفظ'}</span>
+                            </button>
+                        </td>
+                    `;
+                }
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function openQuarterlyModal(beneficiaryId, quarterIndex) {
+            if (currentMode !== 'electricity') return;
+            const beneficiary = beneficiaries.find(b => b.id === beneficiaryId);
+            if (!beneficiary) return;
+
+            const modal = document.getElementById('quarterly-details-modal');
+            const compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
+
+            document.getElementById('quarterly-modal-title').textContent = `تفاصيل الثلاثي ${quarterIndex} لـ: ${beneficiary.name}`;
+            document.getElementById('quarterly-beneficiary-id').value = beneficiaryId;
+            document.getElementById('quarterly-quarter-index').value = quarterIndex;
+            
+            const qData = compData ? compData[`q${quarterIndex}`] : { nofees: 0, value: 0, contrib: 0 };
+            document.getElementById('quarterly-nofees').value = (qData.nofees || 0).toFixed(2);
+            document.getElementById('quarterly-value').value = (qData.value || 0).toFixed(2);
+            document.getElementById('quarterly-contrib').value = (qData.contrib || 0).toFixed(2);
+
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function closeQuarterlyModal() {
+            const modal = document.getElementById('quarterly-details-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function showToast(message, type = 'info') {
+            // Create a simple toast notification
+            const existingToast = document.getElementById('toast-notification');
+            if (existingToast) existingToast.remove();
+            
+            const toast = document.createElement('div');
+            toast.id = 'toast-notification';
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                color: white;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add toast animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(400px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(400px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function handleQuarterlyFormSubmit(event) {
+            event.preventDefault();
+            const beneficiaryId = parseInt(document.getElementById('quarterly-beneficiary-id').value);
+            const quarterIndex = parseInt(document.getElementById('quarterly-quarter-index').value);
+            
+            const nofees = parseFloat(document.getElementById('quarterly-nofees').value) || 0;
+            const value = parseFloat(document.getElementById('quarterly-value').value) || 0;
+            const contrib = parseFloat(document.getElementById('quarterly-contrib').value) || 0;
+
+            const calculated = calculateQuarterlyComp(nofees, value, contrib);
+
+            // تحديث أو إنشاء بيانات التعويض
+            let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
+            if (!compData) {
+                compData = { 
+                    beneficiaryId, 
+                    q1: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q2: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q3: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    q4: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                    discount: 0, 
+                    netPayable: 0 
+                };
+                compensations.push(compData);
+            }
+
+            // حفظ البيانات في الكائن مباشرة
+            compData[`q${quarterIndex}`] = {
+                nofees: nofees,
+                value: value,
+                contrib: contrib,
+                calculated: calculated
+            };
+
+            // إعادة حساب المجموع من جميع الثلاثيات
+            let totalComp = 0;
+            for (let i = 1; i <= 4; i++) {
+                totalComp += (compData[`q${i}`]?.calculated || 0);
+            }
+            
+            // تحديث الخصم والصافي
+            const targetRow = document.querySelector(`#compensation-grid-table tbody tr[data-beneficiary-id='${beneficiaryId}']`);
+            if (targetRow) {
+                const discountInput = targetRow.querySelector('.discount-input');
+                const discount = parseFloat(discountInput.value) || 0;
+                compData.discount = discount;
+                compData.netPayable = totalComp - discount;
+                
+                // تحديث جميع خلايا الثلاثيات في الجدول مع حفظ البيانات الكاملة
+                for (let i = 1; i <= 4; i++) {
+                    const cell = targetRow.querySelector(`td[data-quarter='${i}']`);
+                    if (cell) {
+                        const qData = compData[`q${i}`] || {nofees: 0, value: 0, contrib: 0, calculated: 0};
+                        cell.textContent = formatCurrency(qData.calculated);
+                        cell.setAttribute('data-nofees', qData.nofees);
+                        cell.setAttribute('data-value', qData.value);
+                        cell.setAttribute('data-contrib', qData.contrib);
+                    }
+                }
+                
+                // تحديث المجموع والصافي
+                targetRow.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
+                targetRow.querySelector('.net-payable-cell').textContent = formatCurrency(compData.netPayable);
+                
+                // تحديث حالة الحفظ
+                targetRow.classList.remove('is-dirty');
+                const statusBadge = targetRow.querySelector('.status-badge');
+                if (statusBadge) {
+                    statusBadge.className = 'status-badge saved';
+                    statusBadge.textContent = 'محفوظ';
+                }
+            }
+            
+            // حفظ جميع البيانات باستخدام saveData
+            saveData();
+            
+            // تحديث عرض الرصيد
+            updateCreditDisplay();
+            
+            // إغلاق النافذة
+            closeQuarterlyModal();
+        }
+
+        function processAndSaveRow(rowElement) {
+            const beneficiaryId = parseInt(rowElement.dataset.beneficiaryId);
+
+            if (currentMode === 'electricity') {
+                let totalComp = 0;
+                for (let i = 1; i <= 4; i++) {
+                    const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
+                    totalComp += parseCurrency(cell.textContent);
+                }
+
+                const discountInput = rowElement.querySelector('.discount-input');
+                let discount = parseFloat(discountInput.value) || 0;
+                if (isNaN(discount) || discount < 0) discount = 0;
+                discountInput.value = discount.toFixed(2);
+
+                const netPayable = Math.round((totalComp - discount) * 100) / 100;
+                rowElement.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
+                rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(netPayable);
+
+                let compData = compensations.find(c => c.beneficiaryId === beneficiaryId);
+                if (!compData) {
+                    compData = { 
+                        beneficiaryId, 
+                        q1: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q2: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q3: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        q4: {nofees: 0, value: 0, contrib: 0, calculated: 0}, 
+                        discount: 0, 
+                        netPayable: 0 
+                    };
+                    compensations.push(compData);
+                }
+
+                for(let i=1; i<=4; i++) {
+                    const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
+                    let nofees = parseFloat(cell.getAttribute('data-nofees')) || 0;
+                    let value = parseFloat(cell.getAttribute('data-value')) || 0;
+                    let contrib = parseFloat(cell.getAttribute('data-contrib')) || 0;
+                    let calculated = calculateQuarterlyComp(nofees, value, contrib);
+
+                    compData[`q${i}`] = {
+                        nofees: parseFloat(nofees.toFixed(2)),
+                        value: parseFloat(value.toFixed(2)),
+                        contrib: parseFloat(contrib.toFixed(2)),
+                        calculated: parseFloat(calculated.toFixed(2))
+                    };
+                }
+                
+                compData.discount = parseFloat(discount.toFixed(2));
+                compData.netPayable = parseFloat(netPayable.toFixed(2));
+
+                rowElement.classList.remove('is-dirty');
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
+
+            } else if (currentMode === 'equipment') {
+                const grantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
+                
+                let compData = compensationsEquipment.find(c => c.beneficiaryId === beneficiaryId);
+                if (!compData) {
+                    compData = { beneficiaryId, netPayable: grantValue };
+                    compensationsEquipment.push(compData);
+                } else {
+                    compData.netPayable = grantValue;
+                }
+                
+                rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(grantValue);
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
+            } else {
+                const amountInput = rowElement.querySelector('.manual-amount-input');
+                let amount = parseFloat(amountInput.value) || 0;
+                if (isNaN(amount) || amount < 0) amount = 0;
+                amount = parseFloat(amount.toFixed(2));
+                amountInput.value = amount.toFixed(2);
+                
+                let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                let compData = targetArray.find(c => c.beneficiaryId === beneficiaryId);
+                
+                if (!compData) {
+                    compData = { beneficiaryId, netPayable: amount };
+                    targetArray.push(compData);
+                } else {
+                    compData.netPayable = amount;
+                }
+                
+                const statusBadge = rowElement.querySelector('.status-badge');
+                statusBadge.className = 'status-badge saved';
+                statusBadge.textContent = 'محفوظ';
+            }
+
+            saveData();
+            updateCreditDisplay();
+        }
+
+        // --- Reporting & Export ---
+        function generateReportHTML(forPrint = false) {
+            let reportData = [];
+            let totalNetPayable = 0;
+            let totalSum = 0;
+            let totalDiscount = 0;
+
+            // Reset numbering for each mode (Separation requested)
+            let startCounter = 1;
+
+            if (currentMode === 'electricity') {
+                reportData = compensations.map(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    return (b && (b.type === 'electricity' || !b.type)) ? { ...comp, name: b.name, meter: b.meter, rip: calculateRIP(b.account), id: b.id } : null;
+                }).filter(Boolean).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+                totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
+                totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+            } else if (currentMode === 'equipment') {
+                reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    return { 
+                        id: b.id, 
+                        name: b.name, 
+                        section: b.section || '', 
+                        rip: calculateRIP(b.account), 
+                        netPayable: netPayable 
+                    };
+                }).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            } else {
+                // Transport & Training
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode).map(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    return { 
+                        id: b.id, 
+                        name: b.name, 
+                        rank: b.rank || '', 
+                        rip: calculateRIP(b.account), 
+                        netPayable: netPayable 
+                    };
+                }).sort((a,b) => a.id - b.id);
+                
+                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            }
+            
+            let tableContent = '';
+            if (currentMode === 'electricity') {
+                tableContent = `
+                <table><thead><tr>
+                    <th>الرقم</th><th>اسم المستفيد</th><th>رقم العداد</th><th>رقم RIP الكامل</th>
+                    <th>تعويض ث 1</th><th>تعويض ث 2</th><th>تعويض ث 3</th><th>تعويض ث 4</th>
+                    <th>المجموع</th><th>الخصم</th><th>الصافي للدفع</th>
+                </tr></thead><tbody>
+                    ${reportData.map((item, index) => {
+                        const totalBeforeDiscount = item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated;
+                        return `
+                        <tr>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.meter}</td><td>${item.rip}</td>
+                            <td>${formatCurrency(item.q1.calculated)}</td><td>${formatCurrency(item.q2.calculated)}</td>
+                            <td>${formatCurrency(item.q3.calculated)}</td><td>${formatCurrency(item.q4.calculated)}</td>
+                            <td>${formatCurrency(totalBeforeDiscount)}</td>
+                            <td>${formatCurrency(item.discount)}</td><td>${formatCurrency(item.netPayable)}</td>
+                        </tr>`;
+                    }).join('')}
+                    <tr class="total-row">
+                        <td colspan="8">المجموع</td>
+                        <td>${formatCurrency(totalSum)}</td>
+                        <td>${formatCurrency(totalDiscount)}</td>
+                        <td>${formatCurrency(totalNetPayable)}</td>
+                    </tr>
+                </tbody></table>`;
+            } else if (currentMode === 'equipment') {
+                tableContent = `
+                <table><thead><tr>
+                    <th>الرقم</th><th>اسم المستفيد</th><th>القسم</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
+                </tr></thead><tbody>
+                    ${reportData.map((item, index) => `
+                        <tr>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.section || ''}</td><td>${item.rip}</td>
+                            <td>${formatCurrency(item.netPayable)}</td>
+                        </tr>`).join('')}
+                    <tr class="total-row">
+                        <td colspan="4">المجموع</td>
+                        <td>${formatCurrency(totalNetPayable)}</td>
+                    </tr>
+                </tbody></table>`;
+            } else {
+                tableContent = `
+                <table><thead><tr>
+                    <th>الرقم</th><th>اسم المستفيد</th><th>الرتبة</th><th>رقم RIP الكامل</th><th>الصافي للدفع</th>
+                </tr></thead><tbody>
+                    ${reportData.map((item, index) => `
+                        <tr>
+                            <td>${startCounter + index}</td><td>${item.name}</td><td>${item.rank || ''}</td><td>${item.rip}</td>
+                            <td>${formatCurrency(item.netPayable)}</td>
+                        </tr>`).join('')}
+                    <tr class="total-row">
+                        <td colspan="4">المجموع</td>
+                        <td>${formatCurrency(totalNetPayable)}</td>
+                    </tr>
+                </tbody></table>`;
+            }
+
+            let title = '';
+            if (currentMode === 'electricity') title = 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز';
+            else if (currentMode === 'equipment') title = 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+            else if (currentMode === 'transport') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف التنقل';
+            else if (currentMode === 'training') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف العمليات التكوينية';
+
+            return `
+                <div class="report-header" style="text-align: center; margin-bottom: 10px;">
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.republic}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.ministry}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.directorate}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">${institutionInfo.institution}</p>
+                    <p style="font-weight: bold; margin: 2px 0; font-family: 'Aref Ruqaa', serif; font-size: 15pt;">السنة المالية: ${institutionInfo.fiscalYear}</p>
+                    <h3 style="margin-top: 10px; margin-bottom: 10px; font-weight: bold; font-family: 'Aref Ruqaa', serif; font-size: 20pt; text-decoration: underline;">${title}</h3>
+                </div>
+                ${tableContent}
+                <div class="report-footer" style="text-align: right; margin-top: 10px;">
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}</p>
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج</p>
+                    <p style="margin: 3px 0;">أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}</p>
+                    ${forPrint ? `<div style="display: flex; justify-content: space-around; margin-top: 15px;"><p style="font-family: 'Aref Ruqaa', serif; font-weight: bold; font-size: 16pt;">المدير</p><p style="font-family: 'Aref Ruqaa', serif; font-weight: bold; font-size: 16pt;">المسير المالي</p></div>` : ''}
+                </div>`;
+        }
+
+        function generateReportPreview() {
+            document.getElementById('report-preview').innerHTML = generateReportHTML(false);
+        }
+
+        function printReport() {
+            const printContent = document.getElementById('print-report-content');
+            if (!printContent) {
+                showToast('خطأ: عنصر الطباعة غير موجود', 'error');
+                return;
+            }
+            
+            const reportHTML = generateReportHTML(true);
+            if (!reportHTML) {
+                showToast('خطأ في توليد التقرير', 'error');
+                return;
+            }
+            
+            printContent.innerHTML = reportHTML;
+            
+            // Trigger print with a small delay to ensure content is rendered
+            setTimeout(() => {
+                window.print();
+                showToast('تم فتح نافذة الطباعة', 'success');
+            }, 100);
+        }
+
+        function exportXLSX() {
+            let reportData = [];
+            let startCounter = 1;
+
+            if (currentMode === 'electricity') {
+                reportData = compensations.map(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (!b || (b.type && b.type !== 'electricity')) return null;
+                    return {
+                        id: b.id, name: b.name, meter: b.meter, rip: calculateRIP(b.account),
+                        q1: Math.round(comp.q1.calculated * 100) / 100, 
+                        q2: Math.round(comp.q2.calculated * 100) / 100, 
+                        q3: Math.round(comp.q3.calculated * 100) / 100, 
+                        q4: Math.round(comp.q4.calculated * 100) / 100,
+                        discount: Math.round(comp.discount * 100) / 100, 
+                        netPayable: Math.round(comp.netPayable * 100) / 100
+                    };
+                }).filter(Boolean).sort((a, b) => a.id - b.id);
+            } else if (currentMode === 'equipment') {
+                reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    return {
+                        id: b.id, name: b.name, section: b.section || '', rip: calculateRIP(b.account),
+                        netPayable: Math.round(netPayable * 100) / 100
+                    };
+                }).sort((a, b) => a.id - b.id);
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode).map(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    return {
+                        id: b.id, name: b.name, rank: b.rank || '', rip: calculateRIP(b.account),
+                        netPayable: Math.round(netPayable * 100) / 100
+                    };
+                }).sort((a, b) => a.id - b.id);
+            }
+
+            if (reportData.length === 0) {
+                showToast('لا توجد بيانات للتصدير', 'error');
+                return;
+            }
+
+            let title = '';
+            if (currentMode === 'electricity') title = 'الجدول التفصيلي للمستفيدين من تعويض استهلاك الكهرباء و الغاز';
+            else if (currentMode === 'equipment') title = 'الجدول التفصيلي للمستفيدين من منحة التجهيز';
+            else if (currentMode === 'transport') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف التنقل';
+            else if (currentMode === 'training') title = 'الجدول التفصيلي للمستفيدين من تعويض مصاريف العمليات التكوينية';
+
+            let worksheetData = [
+                [title],
+                [`${institutionInfo.republic} - ${institutionInfo.ministry}`],
+                [`${institutionInfo.directorate} - ${institutionInfo.institution}`],
+                [`السنة المالية: ${institutionInfo.fiscalYear}`],
+                [null]
+            ];
+
+            let totalNetPayable = 0;
+
+            if (currentMode === 'electricity') {
+                worksheetData.push(["الرقم", "اسم المستفيد", "رقم العداد", "رقم RIP الكامل", "تعويض ث 1", "تعويض ث 2", "تعويض ث 3", "تعويض ث 4", "المجموع", "الخصم", "الصافي للدفع"]);
+                reportData.forEach((item, index) => {
+                    const totalBeforeDiscount = item.q1 + item.q2 + item.q3 + item.q4;
+                    worksheetData.push([
+                        startCounter + index, item.name, item.meter, item.rip,
+                        item.q1, item.q2, item.q3, item.q4,
+                        totalBeforeDiscount, item.discount, item.netPayable
+                    ]);
+                    totalNetPayable += item.netPayable;
+                });
+                const totalSum = reportData.reduce((sum, item) => sum + (item.q1 + item.q2 + item.q3 + item.q4), 0);
+                const totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+                worksheetData.push(["المجموع", null, null, null, null, null, null, null, Math.round(totalSum * 100) / 100, Math.round(totalDiscount * 100) / 100, Math.round(totalNetPayable * 100) / 100]);
+            } else if (currentMode === 'equipment') {
+                worksheetData.push(["الرقم", "اسم المستفيد", "القسم", "رقم RIP الكامل", "الصافي للدفع"]);
+                reportData.forEach((item, index) => {
+                    worksheetData.push([startCounter + index, item.name, item.section, item.rip, item.netPayable]);
+                    totalNetPayable += item.netPayable;
+                });
+                worksheetData.push(["المجموع", null, null, null, Math.round(totalNetPayable * 100) / 100]);
+            } else {
+                worksheetData.push(["الرقم", "اسم المستفيد", "الرتبة", "رقم RIP الكامل", "الصافي للدفع"]);
+                reportData.forEach((item, index) => {
+                    worksheetData.push([startCounter + index, item.name, item.rank, item.rip, item.netPayable]);
+                    totalNetPayable += item.netPayable;
+                });
+                worksheetData.push(["المجموع", null, null, null, Math.round(totalNetPayable * 100) / 100]);
+            }
+
+            worksheetData.push([null]);
+            worksheetData.push([`أوقف الجدول على مجموع مستفيدين قدره: ${reportData.length}`]);
+            worksheetData.push([`أوقف الجدول على مجموع كلي بالأرقام: ${formatCurrency(totalNetPayable)} دج`]);
+            worksheetData.push([`أوقف الجدول على مجموع كلي بالأحرف: ${numberToArabicText(totalNetPayable)}`]);
+            
+            const ws = XLSX.utils.aoa_to_sheet(worksheetData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "تقرير التعويضات");
+            if(!ws['!props']) ws['!props'] = {};
+            ws['!props'].rtl = true;
+            
+            const filename = `تقرير_${currentMode}_${institutionInfo.fiscalYear || 'YYYY'}_${new Date().toLocaleDateString('ar-SA')}.xlsx`;
+            XLSX.writeFile(wb, filename);
+            showToast(`تم تصدير الملف: ${filename}`, 'success');
+        }
+
+        function exportTxt() {
+            let validRecords = [];
+            let totalRoundedNetPayable = 0;
+            let invalidRecords = 0;
+            
+            if (currentMode === 'electricity') {
+                compensations.forEach(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (b && (b.type === 'electricity' || !b.type)) {
+                        const rip = calculateRIP(b.account);
+                        if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            const netPayableRounded = Math.round(comp.netPayable * 100) / 100;
+                            totalRoundedNetPayable += netPayableRounded;
+                            const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                            const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                            validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                        } else {
+                            invalidRecords++;
+                        }
+                    }
+                });
+            } else if (currentMode === 'equipment') {
+                beneficiaries.filter(b => b.type === 'equipment').forEach(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    const rip = calculateRIP(b.account);
+                    
+                    if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                        const netPayableRounded = Math.round(netPayable * 100) / 100;
+                        totalRoundedNetPayable += netPayableRounded;
+                        const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                        const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                        validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    } else {
+                        invalidRecords++;
+                    }
+                });
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                beneficiaries.filter(b => b.type === currentMode).forEach(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    const rip = calculateRIP(b.account);
+                    
+                    if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
+                        const netPayableRounded = Math.round(netPayable * 100) / 100;
+                        totalRoundedNetPayable += netPayableRounded;
+                        const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                        const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                        validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                    } else {
+                        invalidRecords++;
+                    }
+                });
+            }
+
+            if (validRecords.length === 0) {
+                showToast('لا توجد سجلات صحيحة للتصدير. تحقق من بيانات المستفيدين والحسابات', 'error');
+                return;
+            }
+
+            const treasuryRIP = calculateRIP(institutionInfo.treasuryAccount);
+            if (treasuryRIP.includes('خطأ')) {
+                showToast('خطأ: رقم الحساب البريدي للخزينة غير صحيح. يرجى تحديث معلومات المؤسسة', 'error');
+                return;
+            }
+
+            const details = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? 
+                            institutionInfo.modeDetails[currentMode] : 
+                            { month: institutionInfo.financialMonth, order: institutionInfo.orderNumber, transfer: institutionInfo.transferNumber };
+
+            const totalAmountCents = String(Math.round(totalRoundedNetPayable * 100)).padStart(13, '0');
+            const recordCount = String(validRecords.length).padStart(7, '0');
+            const month = String(details.month || '01').padStart(2, '0');
+            const year = String(institutionInfo.fiscalYear).padStart(4, '0');
+            const order = String(details.order || '0').padStart(8, '0');
+            const transfer = String(details.transfer || '0').padStart(6, '0');
+            const header = `*${treasuryRIP}${totalAmountCents}${recordCount}${month}${year}${order}${transfer}0`;
+            
+            if (header.length !== 62) {
+                showToast('خطأ في توليد السطر الأول للملف. تحقق من معلومات المؤسسة كاملة', 'error');
+                return;
+            }
+
+            const txtContent = [header, ...validRecords].join('\n');
+            const blob = new Blob([txtContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const filename = `Payment_File_${currentMode}_${institutionInfo.fiscalYear}_${new Date().toLocaleDateString('ar-SA')}.txt`;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            let message = `تم تصدير الملف: ${filename}\n${validRecords.length} سجل صحيح`;
+            if (invalidRecords > 0) {
+                message += `\n⚠️ ${invalidRecords} سجل مرفوض (بيانات غير صحيحة)`;
+            }
+            showToast(message, 'success');
+        }
+
+        function printCDRomReport() {
+            let reportData = [];
+            
+            if (currentMode === 'electricity') {
+                reportData = compensations
+                    .map(comp => {
+                        const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                        if (!b || (b.type && b.type !== 'electricity')) return null;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: comp.netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            } else if (currentMode === 'equipment') {
+                reportData = beneficiaries.filter(b => b.type === 'equipment')
+                    .map(b => {
+                        const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                        const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                reportData = beneficiaries.filter(b => b.type === currentMode)
+                    .map(b => {
+                        const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                        const netPayable = comp ? comp.netPayable : 0;
+                        const rip = calculateRIP(b.account);
+                        if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) {
+                            return null;
+                        }
+                        return {
+                            id: b.id,
+                            name: b.name,
+                            accountPart: rip.substring(0, 18),
+                            keyPart: rip.substring(18),
+                            netPayable: netPayable
+                        };
+                    })
+                    .filter(Boolean)
+                    .sort((a, b) => a.id - b.id);
+            }
+            
+            if (reportData.length === 0) {
+                alert("لا توجد بيانات صالحة لطباعة التقرير.");
+                return;
+            }
+
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const monthName = months[parseInt(institutionInfo.financialMonth, 10) - 1] || 'N/A';
+            const year = institutionInfo.fiscalYear || 'YYYY';
+            const orgAccount = institutionInfo.treasuryAccount || 'N/A';
+            const orgKey = institutionInfo.treasuryKey || 'N/A';
+            const totalAmount = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+            const beneficiaryCount = reportData.length;
+
+            const beneficiaryRows = reportData.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.accountPart} / ${item.keyPart}</td>
+                    <td>${formatCurrency(item.netPayable)}</td>
+                </tr>
+            `).join('');
+
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Etat de virement sur le CD-ROM</title>
+                    <style>
+                        body { font-family: "Times New Roman", serif; margin: 40px; color: #000; }
+                        h2 { text-align: center; text-decoration: underline; margin-bottom: 5px; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .details { margin-bottom: 20px; line-height: 1.8; }
+                        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+                        th, td { border: 1px solid #000; padding: 6px; text-align: center; }
+                        th { background-color: #f2f2f2; }
+                        .footer { margin-top: 10px; font-weight: bold; }
+                        @media print {
+                            body { margin: 20px; }
+                            button { display: none; }
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>Etat de virement sur le CD-ROM</h2>
+                    <div class="header">
+                        <strong>Mois :</strong> ${monthName} &nbsp;&nbsp;&nbsp;
+                        <strong>Année :</strong> ${year}
+                    </div>
+                    <div class="details">
+                        <strong>Numéro de compte de l’organisme :</strong> ${orgAccount} &nbsp;&nbsp; <strong>Clé :</strong> ${orgKey}<br>
+                        <strong>Montant global de virement :</strong> ${formatCurrency(totalAmount)}<br>
+                        <strong>L’Effectif :</strong> ${beneficiaryCount}<br>
+                        <strong>Code Ordonnateur :</strong> 0<br>
+                        <strong>N° Mandat :</strong> 0
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N</th>
+                                <th>Nom et Prénom</th>
+                                <th>Compte / Clé</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${beneficiaryRows}
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        Nombre de titres : ${beneficiaryCount} &nbsp;&nbsp;&nbsp; Montant global de détail : ${formatCurrency(totalAmount)}
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            window.onafterprint = function() { window.close(); };
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank', 'height=700,width=900,scrollbars=yes');
+            if (printWindow) {
+                printWindow.document.write(reportHTML);
+                printWindow.document.close();
+            } else {
+                alert("فشل فتح نافذة الطباعة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.");
+            }
+        }
+
+
+        // --- Backup and Restore ---
+        function createBackup() {
+            try {
+                const backupData = { 
+                    institutionInfo, 
+                    beneficiaries, 
+                    compensations, 
+                    compensationsEquipment,
+                    compensationsTransport,
+                    compensationsTraining,
+                    backupVersion: '2.0',
+                    backupDate: new Date().toISOString()
+                };
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const now = new Date();
+                const filename = `CompData_Backup_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}.json`;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast(`تم إنشاء النسخة الاحتياطية: ${filename}`, 'success');
+            } catch (e) {
+                console.error('Backup error:', e);
+                showToast('خطأ في إنشاء النسخة الاحتياطية', 'error');
+            }
+        }
+
+        function createAutoBackup(reason = 'قبل_الحذف') {
+            try {
+                const backupData = { 
+                    institutionInfo, 
+                    beneficiaries, 
+                    compensations, 
+                    compensationsEquipment,
+                    compensationsTransport,
+                    compensationsTraining,
+                    backupVersion: '2.0',
+                    backupDate: new Date().toISOString(),
+                    reason: reason
+                };
+                const jsonString = JSON.stringify(backupData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const now = new Date();
+                const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+                const filename = `نسخة_تلقائية_${reason}_${timestamp}.json`;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                return filename;
+            } catch (e) {
+                console.error('Auto backup error:', e);
+                throw e;
+            }
+        }
+
+        function deleteAllBeneficiaries() {
+            if (beneficiaries.length === 0) {
+                showToast('لا يوجد مستفيدون للحذف', 'info');
+                return;
+            }
+
+            const message = `⚠️ تحذير: سيتم حذف جميع المستفيدين (${beneficiaries.length} مستفيد) وجميع التعويضات المرتبطة بهم.\n\n` +
+                          `سيتم حفظ نسخة احتياطية تلقائية قبل الحذف.\n\n` +
+                          `هل أنت متأكد من المتابعة؟`;
+            
+            if (!confirm(message)) {
+                return;
+            }
+
+            // حفظ نسخة احتياطية تلقائية
+            try {
+                const filename = createAutoBackup('قبل_حذف_جميع_المستفيدين');
+                showToast(`تم حفظ نسخة احتياطية: ${filename}`, 'success');
+            } catch (error) {
+                console.error('Auto backup failed:', error);
+                showToast('فشل إنشاء النسخة الاحتياطية. لن يتم الحذف', 'error');
+                return;
+            }
+
+            // التأكيد النهائي
+            if (!confirm('تم حفظ النسخة الاحتياطية. هل تريد المتابعة في حذف جميع المستفيدين؟')) {
+                return;
+            }
+
+            // حذف جميع البيانات
+            const deletedCount = beneficiaries.length;
+            beneficiaries.length = 0;
+            compensations.length = 0;
+            compensationsEquipment.length = 0;
+            compensationsTransport.length = 0;
+            compensationsTraining.length = 0;
+
+            // حفظ التغييرات
+            saveData();
+
+            // تحديث الواجهة
+            renderCompensationGrid();
+            updateCreditDisplay();
+
+            showToast(`✓ تم حذف ${deletedCount} مستفيد بنجاح. النسخة الاحتياطية محفوظة`, 'success');
+        }
+
+        function restoreBackup() {
+            document.getElementById('restore-file-input').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file || !file.name.endsWith('.json')) return alert('الرجاء اختيار ملف JSON صالح.');
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.institutionInfo && data.beneficiaries) {
+                        tempBackupData = data;
+                        showRestoreTypeModal();
+                    } else { alert('ملف النسخة الاحتياطية غير صالح.'); }
+                } catch (err) { alert('خطأ في قراءة الملف.'); }
+            };
+            reader.readAsText(file);
+            // إعادة تعيين input لتمكين اختيار نفس الملف مرة أخرى
+            event.target.value = '';
+        }
+
+        function showRestoreTypeModal() {
+            const modal = document.getElementById('restore-type-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function cancelRestoreType() {
+            const modal = document.getElementById('restore-type-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                tempBackupData = null;
+            }, 300);
+        }
+
+        function selectRestoreType(type) {
+            if (!tempBackupData) return;
+            
+            if (type === 'full') {
+                // استعادة كاملة
+                if (confirm('هل أنت متأكد من استعادة جميع البيانات؟ سيتم الكتابة فوق البيانات الحالية بالكامل.')) {
+                    restoreFullBackup(tempBackupData);
+                }
+                cancelRestoreType(); // إفراغ البيانات بعد الاستعادة الكاملة
+            } else if (type === 'beneficiaries') {
+                // استيراد المستفيدين فقط - لا نفرغ tempBackupData هنا
+                // إغلاق نافذة اختيار النوع فقط
+                const modal = document.getElementById('restore-type-modal');
+                modal.classList.remove('visible');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                
+                // عرض نافذة اختيار المستفيدين
+                showBeneficiarySelectionModal(tempBackupData, currentMode);
+            }
+        }
+
+        function restoreFullBackup(data) {
+            localStorage.setItem('institutionInfo', JSON.stringify(data.institutionInfo));
+            localStorage.setItem('beneficiaries', JSON.stringify(data.beneficiaries));
+            localStorage.setItem('compensations', JSON.stringify(data.compensations || []));
+            localStorage.setItem('compensationsEquipment', JSON.stringify(data.compensationsEquipment || []));
+            localStorage.setItem('compensationsTransport', JSON.stringify(data.compensationsTransport || []));
+            localStorage.setItem('compensationsTraining', JSON.stringify(data.compensationsTraining || []));
+            location.reload();
+        }
+
+        function showBeneficiarySelectionModal(backupData, compensationType) {
+            tempBackupData = backupData; // حفظ البيانات للاستخدام عند التأكيد
+            const modal = document.getElementById('beneficiary-selection-modal');
+            const list = document.getElementById('beneficiary-selection-list');
+            
+            if (!backupData.beneficiaries || backupData.beneficiaries.length === 0) {
+                alert('لا يوجد مستفيدون في النسخة الاحتياطية.');
+                tempBackupData = null;
+                return;
+            }
+            
+            // تصفية المستفيدين حسب نوع التعويض الحالي
+            const filteredBeneficiaries = backupData.beneficiaries.filter(b => b.type === compensationType);
+            
+            if (filteredBeneficiaries.length === 0) {
+                const typeLabel = compensationType === 'electricity' ? 'كهرباء وغاز' :
+                                 compensationType === 'equipment' ? 'منحة تجهيز' :
+                                 compensationType === 'transport' ? 'تنقل' : 'تكوين';
+                alert(`لا يوجد مستفيدون من نوع ${typeLabel} في النسخة الاحتياطية.`);
+                tempBackupData = null;
+                return;
+            }
+            
+            // إنشاء قائمة المستفيدين المصفاة
+            list.innerHTML = filteredBeneficiaries.map(b => {
+                const typeLabel = b.type === 'electricity' ? 'كهرباء وغاز' :
+                                 b.type === 'equipment' ? 'منحة تجهيز' :
+                                 b.type === 'transport' ? 'تنقل' :
+                                 b.type === 'training' ? 'تكوين' : 'غير محدد';
+                
+                const originalIndex = backupData.beneficiaries.indexOf(b);
+                return `
+                    <div style="margin-bottom: 12px; padding: 10px; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); background: white;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" class="beneficiary-checkbox" value="${b.id}" data-beneficiary-index="${originalIndex}" style="width: 18px; height: 18px; cursor: pointer;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold; color: var(--dark-color);">${b.name}</div>
+                                <div style="font-size: 0.9em; color: var(--text-secondary-color);">
+                                    <span><i class="fas fa-credit-card"></i> ${b.account}</span>
+                                    ${b.meter ? `<span style="margin-right: 15px;"><i class="fas fa-tachometer-alt"></i> ${b.meter}</span>` : ''}
+                                    <span style="margin-right: 15px;"><i class="fas fa-tag"></i> ${typeLabel}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            }).join('');
+            
+            // إعداد زر تحديد الكل
+            const selectAllCheckbox = document.getElementById('select-all-beneficiaries');
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.onchange = function() {
+                const checkboxes = list.querySelectorAll('.beneficiary-checkbox');
+                checkboxes.forEach(cb => cb.checked = this.checked);
+            };
+            
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+        }
+
+        function cancelBeneficiarySelection() {
+            const modal = document.getElementById('beneficiary-selection-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                tempBackupData = null;
+            }, 300);
+        }
+
+        function confirmBeneficiarySelection() {
+            console.log('confirmBeneficiarySelection called');
+            console.log('tempBackupData:', tempBackupData);
+            
+            if (!tempBackupData) {
+                console.log('No tempBackupData - returning');
+                alert('خطأ: لا توجد بيانات احتياطية. الرجاء إعادة المحاولة.');
+                return;
+            }
+            
+            const selectedCheckboxes = document.querySelectorAll('.beneficiary-checkbox:checked');
+            console.log('Selected checkboxes:', selectedCheckboxes.length);
+            
+            if (selectedCheckboxes.length === 0) {
+                alert('الرجاء تحديد مستفيد واحد على الأقل.');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من استيراد بيانات ${selectedCheckboxes.length} مستفيد؟`)) {
+                return;
+            }
+            
+            // جمع المستفيدين المحددين
+            const selectedBeneficiaries = [];
+            const selectedBeneficiaryIds = [];
+            
+            selectedCheckboxes.forEach(checkbox => {
+                const index = parseInt(checkbox.dataset.beneficiaryIndex);
+                const originalBeneficiary = tempBackupData.beneficiaries[index];
+                selectedBeneficiaries.push(originalBeneficiary);
+                selectedBeneficiaryIds.push(originalBeneficiary.id);
+            });
+            
+            // دمج المستفيدين الجدد مع الموجودين
+            let importedCount = 0;
+            let skippedCount = 0;
+            let nextId = getNextBeneficiaryId();
+            
+            selectedBeneficiaries.forEach(backupBen => {
+                // التحقق من عدم وجود نفس الحساب
+                if (beneficiaries.some(b => b.account === backupBen.account)) {
+                    skippedCount++;
+                    return; // تخطي هذا المستفيد
+                }
+                
+                // إنشاء معرف جديد
+                const oldId = backupBen.id;
+                const newBen = {
+                    ...backupBen,
+                    id: nextId++
+                };
+                
+                beneficiaries.push(newBen);
+                importedCount++;
+                
+                // استيراد التعويضات إن وجدت (اختياري)
+                // يمكن التعليق على هذا الجزء إذا أردت استيراد معلومات المستفيدين فقط بدون تعويضات
+                /*
+                if (tempBackupData.compensations) {
+                    const comp = tempBackupData.compensations.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensations.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsEquipment) {
+                    const comp = tempBackupData.compensationsEquipment.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsEquipment.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsTransport) {
+                    const comp = tempBackupData.compensationsTransport.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsTransport.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                
+                if (tempBackupData.compensationsTraining) {
+                    const comp = tempBackupData.compensationsTraining.find(c => c.beneficiaryId === oldId);
+                    if (comp) {
+                        compensationsTraining.push({ ...comp, beneficiaryId: newBen.id });
+                    }
+                }
+                */
+            });
+            
+            // حفظ البيانات
+            saveData();
+            
+            // إغلاق المودال
+            cancelBeneficiarySelection();
+            
+            // إعادة رسم الجدول
+            renderCompensationGrid();
+            updateCreditDisplay();
+            
+            // إظهار رسالة النتيجة
+            console.log('Imported beneficiaries:', importedCount);
+            console.log('Total beneficiaries now:', beneficiaries.length);
+            console.log('Current mode:', currentMode);
+            
+            let message = `تم استيراد ${importedCount} مستفيد بنجاح إلى قائمة المستفيدين.`;
+            if (skippedCount > 0) {
+                message += ` تم تخطي ${skippedCount} مستفيد (حساب مكرر).`;
+            }
+            message += '\n\nالمستفيدون متاحون الآن في جدول إدارة التعويضات.';
+            
+            showToast(message, 'success');
+            
+            // تحديث القائمة لإظهار المستفيدين الجدد
+            setTimeout(() => {
+                renderCompensationGrid();
+            }, 500);
+        }
+ 
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            // Don't show section yet, wait for mode selection
+            // showSection('institution-info-section'); 
+            // updateCreditDisplay();
+
+            // Main forms
+            document.getElementById('institution-info-form').addEventListener('submit', saveInstitutionInfo);
+            document.getElementById('beneficiary-form').addEventListener('submit', saveBeneficiary);
+            document.getElementById('restore-file-input').addEventListener('change', handleFileSelect);
+            document.getElementById('delete-all-beneficiaries-btn').addEventListener('click', deleteAllBeneficiaries);
+            document.getElementById('delete-all-beneficiaries-btn').addEventListener('click', deleteAllBeneficiaries);
+
+            // Navigation
+            document.getElementById('switch-mode-btn').addEventListener('click', () => {
+                const modal = document.getElementById('mode-selection-modal');
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('visible'), 10);
+            });
+
+            document.querySelectorAll('nav button[data-section]').forEach(button => {
+                button.addEventListener('click', () => showSection(button.dataset.section));
+            });
+            // Reporting
+            document.getElementById('print-report-btn').addEventListener('click', printReport);
+            document.getElementById('export-xlsx-btn').addEventListener('click', exportXLSX);
+            document.getElementById('export-txt-btn').addEventListener('click', exportTxt);
+            document.getElementById('print-cdrom-btn').addEventListener('click', printCDRomReport);
+            // Backup/Restore
+            document.getElementById('create-backup-btn').addEventListener('click', createBackup);
+            document.getElementById('restore-backup-btn').addEventListener('click', restoreBackup);
+            // Modals
+            document.getElementById('cancel-beneficiary-btn').addEventListener('click', cancelBeneficiaryEdit);
+            document.getElementById('cancel-quarterly-btn').addEventListener('click', closeQuarterlyModal);
+            
+            // Compensation Grid Listeners
+            document.getElementById('add-beneficiary-btn').addEventListener('click', () => openBeneficiaryModal());
+            document.getElementById('compensation-grid-search').addEventListener('input', e => renderCompensationGrid(e.target.value));
+            document.getElementById('quarterly-details-form').addEventListener('submit', handleQuarterlyFormSubmit);
+
+            // Event delegation for the compensation grid
+            const gridBody = document.querySelector('#compensation-grid-table tbody');
+            gridBody.addEventListener('click', (e) => {
+                const row = e.target.closest('tr');
+                if (!row || !row.dataset.beneficiaryId) return;
+                const beneficiaryId = parseInt(row.dataset.beneficiaryId);
+
+                if (e.target.closest('.edit-btn-inline')) {
+                    openBeneficiaryModal(beneficiaryId);
+                } else if (e.target.closest('.delete-btn-inline')) {
+                    deleteBeneficiary(beneficiaryId);
+                } else if (e.target.closest('.editable-cell')) {
+                    const quarterIndex = parseInt(e.target.closest('.editable-cell').dataset.quarter);
+                    openQuarterlyModal(beneficiaryId, quarterIndex);
+                } else if (e.target.closest('.save-equipment-btn') || e.target.closest('.save-manual-btn')) {
+                    processAndSaveRow(row);
+                }
+            });
+            gridBody.addEventListener('change', (e) => {
+                const row = e.target.closest('tr');
+                if (!row) return;
+                
+                const autoSaveCb = document.getElementById('auto-save-checkbox');
+                if (autoSaveCb && autoSaveCb.checked) {
+                    processAndSaveRow(row);
+                } else if (e.target.classList.contains('discount-input')) {
+                     processAndSaveRow(row);
+                }
+            });
+            
+            // Load auto-save preference
+            const savedAutoSave = localStorage.getItem('autoSaveEnabled');
+            if (savedAutoSave === 'true') {
+                const cb = document.getElementById('auto-save-checkbox');
+                if (cb) cb.checked = true;
+            }
+            
+            document.getElementById('auto-save-checkbox').addEventListener('change', (e) => {
+                localStorage.setItem('autoSaveEnabled', e.target.checked);
+            });
+        });
+    </script>
+</body>
+</html>
