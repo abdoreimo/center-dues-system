@@ -3431,8 +3431,9 @@
                 return;
             }
             
-            if (beneficiaries.some(b => b.account === account && b.id !== id)) {
-                showToast('رقم الحساب مسجل بالفعل لمستفيد آخر', 'error');
+            // التحقق من تكرار رقم الحساب فقط ضمن نفس نوع التعويض
+            if (beneficiaries.some(b => b.account === account && b.id !== id && (b.type === currentMode || (!b.type && currentMode === 'electricity')))) {
+                showToast('رقم الحساب مسجل بالفعل لمستفيد آخر في نفس نوع التعويض', 'error');
                 return;
             }
             
