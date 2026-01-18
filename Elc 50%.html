@@ -1158,6 +1158,10 @@
             background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
         }
         
+        .credit-card.discounts {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
         .credit-card.remaining {
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         }
@@ -2639,6 +2643,13 @@
                             <span class="credit-value" id="display-amount-spent">0,00 دج</span>
                         </div>
                     </div>
+                    <div class="credit-card discounts">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <div class="credit-info">
+                            <span class="credit-label">المبالغ المخصومة</span>
+                            <span class="credit-value" id="display-total-discounts">0,00 دج</span>
+                        </div>
+                    </div>
                     <div class="credit-card remaining">
                         <i class="fas fa-piggy-bank"></i>
                         <div class="credit-info">
@@ -3018,14 +3029,15 @@
                         comp.q3 = {...defaultQuarter, ...(comp.q3 || {})};
                         comp.q4 = {...defaultQuarter, ...(comp.q4 || {})};
 
-                        comp.discount = parseFloat(comp.discount) || 0;
+                        comp.discount = roundToTwo(parseFloat(comp.discount) || 0);
 
                         comp.q1.calculated = calculateQuarterlyComp(comp.q1.nofees, comp.q1.value, comp.q1.contrib);
                         comp.q2.calculated = calculateQuarterlyComp(comp.q2.nofees, comp.q2.value, comp.q2.contrib);
                         comp.q3.calculated = calculateQuarterlyComp(comp.q3.nofees, comp.q3.value, comp.q3.contrib);
                         comp.q4.calculated = calculateQuarterlyComp(comp.q4.nofees, comp.q4.value, comp.q4.contrib);
 
-                        comp.netPayable = Math.round(((comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated) - comp.discount) * 100) / 100;
+                        const totalCalc = roundToTwo(comp.q1.calculated + comp.q2.calculated + comp.q3.calculated + comp.q4.calculated);
+                        comp.netPayable = roundToTwo(totalCalc - comp.discount);
                     });
                     compensations = compensations.filter(comp => comp.beneficiaryId > 0);
                 }
@@ -3034,7 +3046,7 @@
                     compensationsEquipment = JSON.parse(savedCompensationsEquipment);
                     compensationsEquipment.forEach(comp => {
                         comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
-                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                        comp.netPayable = roundToTwo(parseFloat(comp.netPayable) || 0);
                     });
                     compensationsEquipment = compensationsEquipment.filter(comp => comp.beneficiaryId > 0);
                 }
@@ -3043,7 +3055,7 @@
                     compensationsTransport = JSON.parse(savedCompensationsTransport);
                     compensationsTransport.forEach(comp => {
                         comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
-                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                        comp.netPayable = roundToTwo(parseFloat(comp.netPayable) || 0);
                     });
                     compensationsTransport = compensationsTransport.filter(comp => comp.beneficiaryId > 0);
                 }
@@ -3052,7 +3064,7 @@
                     compensationsTraining = JSON.parse(savedCompensationsTraining);
                     compensationsTraining.forEach(comp => {
                         comp.beneficiaryId = parseInt(comp.beneficiaryId) || 0;
-                        comp.netPayable = parseFloat(comp.netPayable) || 0;
+                        comp.netPayable = roundToTwo(parseFloat(comp.netPayable) || 0);
                     });
                     compensationsTraining = compensationsTraining.filter(comp => comp.beneficiaryId > 0);
                 }
@@ -3269,21 +3281,44 @@
 
         function updateCreditDisplay() {
             let totalSpent = 0;
+            let totalDiscounts = 0;
+            
             if (currentMode === 'electricity') {
-                totalSpent = compensations.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+                // حساب مجموع التعويضات قبل الخصم
+                totalSpent = compensations.reduce((sum, comp) => {
+                    const q1 = comp.q1 ? comp.q1.calculated || 0 : 0;
+                    const q2 = comp.q2 ? comp.q2.calculated || 0 : 0;
+                    const q3 = comp.q3 ? comp.q3.calculated || 0 : 0;
+                    const q4 = comp.q4 ? comp.q4.calculated || 0 : 0;
+                    return sum + q1 + q2 + q3 + q4;
+                }, 0);
+                // حساب مجموع الخصومات
+                totalDiscounts = compensations.reduce((sum, comp) => sum + (parseFloat(comp.discount) || 0), 0);
             } else if (currentMode === 'equipment') {
-                totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+                totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (parseFloat(comp.netPayable) || 0), 0);
+                totalDiscounts = 0; // لا يوجد خصومات في منحة التجهيز
             } else if (currentMode === 'transport') {
-                totalSpent = compensationsTransport.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+                totalSpent = compensationsTransport.reduce((sum, comp) => sum + (parseFloat(comp.netPayable) || 0), 0);
+                totalDiscounts = 0; // لا يوجد خصومات في تعويض النقل
             } else if (currentMode === 'training') {
-                totalSpent = compensationsTraining.reduce((sum, comp) => sum + (comp.netPayable || 0), 0);
+                totalSpent = compensationsTraining.reduce((sum, comp) => sum + (parseFloat(comp.netPayable) || 0), 0);
+                totalDiscounts = 0; // لا يوجد خصومات في تعويض التكوين
             }
             
-            const openCredit = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? institutionInfo.modeDetails[currentMode].credit : 0;
-            const remainingCredit = openCredit - totalSpent;
+            // تقريب القيم إلى رقمين بعد الفاصلة
+            totalSpent = Math.round(totalSpent * 100) / 100;
+            totalDiscounts = Math.round(totalDiscounts * 100) / 100;
+            
+            const openCredit = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? parseFloat(institutionInfo.modeDetails[currentMode].credit) || 0 : 0;
+            
+            // الاعتماد المتبقي = الاعتماد المفتوح - (المبلغ المصروف - المبالغ المخصومة)
+            // أي الاعتماد المتبقي = الاعتماد المفتوح - الصافي للدفع
+            const netSpent = Math.round((totalSpent - totalDiscounts) * 100) / 100;
+            const remainingCredit = Math.round((openCredit - netSpent) * 100) / 100;
 
             document.getElementById('display-open-credit').textContent = `${formatCurrency(openCredit)} دج`;
             document.getElementById('display-amount-spent').textContent = `${formatCurrency(totalSpent)} دج`;
+            document.getElementById('display-total-discounts').textContent = `${formatCurrency(totalDiscounts)} دج`;
             
             const remainingEl = document.getElementById('display-remaining-credit');
             remainingEl.textContent = `${formatCurrency(remainingCredit)} دج`;
@@ -3531,11 +3566,16 @@
         }
         
         // --- Compensation Grid ---
+        // دالة مساعدة للتقريب إلى رقمين بعد الفاصلة
+        function roundToTwo(num) {
+            return Math.round((parseFloat(num) || 0) * 100) / 100;
+        }
+        
         function calculateQuarterlyComp(nofees, value, contrib) {
-            const nofeesVal = parseFloat(nofees||0);
-            const valueVal = parseFloat(value||0);
-            const contribVal = parseFloat(contrib||0);
-            const comp = ((nofeesVal + valueVal) - contribVal) * 0.5;
+            const nofeesVal = roundToTwo(nofees);
+            const valueVal = roundToTwo(value);
+            const contribVal = roundToTwo(contrib);
+            const comp = roundToTwo(((nofeesVal + valueVal) - contribVal) * 0.5);
             return comp > 0 ? comp : 0;
         }
 
@@ -3768,27 +3808,27 @@
                 compensations.push(compData);
             }
 
-            // حفظ البيانات في الكائن مباشرة
+            // حفظ البيانات في الكائن مباشرة مع التقريب
             compData[`q${quarterIndex}`] = {
-                nofees: nofees,
-                value: value,
-                contrib: contrib,
-                calculated: calculated
+                nofees: roundToTwo(nofees),
+                value: roundToTwo(value),
+                contrib: roundToTwo(contrib),
+                calculated: roundToTwo(calculated)
             };
 
             // إعادة حساب المجموع من جميع الثلاثيات
             let totalComp = 0;
             for (let i = 1; i <= 4; i++) {
-                totalComp += (compData[`q${i}`]?.calculated || 0);
+                totalComp = roundToTwo(totalComp + (compData[`q${i}`]?.calculated || 0));
             }
             
             // تحديث الخصم والصافي
             const targetRow = document.querySelector(`#compensation-grid-table tbody tr[data-beneficiary-id='${beneficiaryId}']`);
             if (targetRow) {
                 const discountInput = targetRow.querySelector('.discount-input');
-                const discount = parseFloat(discountInput.value) || 0;
+                const discount = roundToTwo(parseFloat(discountInput.value) || 0);
                 compData.discount = discount;
-                compData.netPayable = totalComp - discount;
+                compData.netPayable = roundToTwo(totalComp - discount);
                 
                 // تحديث جميع خلايا الثلاثيات في الجدول مع حفظ البيانات الكاملة
                 for (let i = 1; i <= 4; i++) {
@@ -3832,15 +3872,15 @@
                 let totalComp = 0;
                 for (let i = 1; i <= 4; i++) {
                     const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                    totalComp += parseCurrency(cell.textContent);
+                    totalComp = roundToTwo(totalComp + parseCurrency(cell.textContent));
                 }
 
                 const discountInput = rowElement.querySelector('.discount-input');
-                let discount = parseFloat(discountInput.value) || 0;
+                let discount = roundToTwo(parseFloat(discountInput.value) || 0);
                 if (isNaN(discount) || discount < 0) discount = 0;
                 discountInput.value = discount.toFixed(2);
 
-                const netPayable = Math.round((totalComp - discount) * 100) / 100;
+                const netPayable = roundToTwo(totalComp - discount);
                 rowElement.querySelector('.total-comp-cell').textContent = formatCurrency(totalComp);
                 rowElement.querySelector('.net-payable-cell').textContent = formatCurrency(netPayable);
 
@@ -3860,21 +3900,21 @@
 
                 for(let i=1; i<=4; i++) {
                     const cell = rowElement.querySelector(`td[data-quarter='${i}']`);
-                    let nofees = parseFloat(cell.getAttribute('data-nofees')) || 0;
-                    let value = parseFloat(cell.getAttribute('data-value')) || 0;
-                    let contrib = parseFloat(cell.getAttribute('data-contrib')) || 0;
+                    let nofees = roundToTwo(parseFloat(cell.getAttribute('data-nofees')) || 0);
+                    let value = roundToTwo(parseFloat(cell.getAttribute('data-value')) || 0);
+                    let contrib = roundToTwo(parseFloat(cell.getAttribute('data-contrib')) || 0);
                     let calculated = calculateQuarterlyComp(nofees, value, contrib);
 
                     compData[`q${i}`] = {
-                        nofees: parseFloat(nofees.toFixed(2)),
-                        value: parseFloat(value.toFixed(2)),
-                        contrib: parseFloat(contrib.toFixed(2)),
-                        calculated: parseFloat(calculated.toFixed(2))
+                        nofees: nofees,
+                        value: value,
+                        contrib: contrib,
+                        calculated: calculated
                     };
                 }
                 
-                compData.discount = parseFloat(discount.toFixed(2));
-                compData.netPayable = parseFloat(netPayable.toFixed(2));
+                compData.discount = discount;
+                compData.netPayable = netPayable;
 
                 rowElement.classList.remove('is-dirty');
                 const statusBadge = rowElement.querySelector('.status-badge');
@@ -3882,7 +3922,7 @@
                 statusBadge.textContent = 'محفوظ';
 
             } else if (currentMode === 'equipment') {
-                const grantValue = parseFloat(institutionInfo.equipmentGrantValue) || 0;
+                const grantValue = roundToTwo(parseFloat(institutionInfo.equipmentGrantValue) || 0);
                 
                 let compData = compensationsEquipment.find(c => c.beneficiaryId === beneficiaryId);
                 if (!compData) {
@@ -3898,9 +3938,8 @@
                 statusBadge.textContent = 'محفوظ';
             } else {
                 const amountInput = rowElement.querySelector('.manual-amount-input');
-                let amount = parseFloat(amountInput.value) || 0;
+                let amount = roundToTwo(parseFloat(amountInput.value) || 0);
                 if (isNaN(amount) || amount < 0) amount = 0;
-                amount = parseFloat(amount.toFixed(2));
                 amountInput.value = amount.toFixed(2);
                 
                 let targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
@@ -3938,13 +3977,13 @@
                     return (b && (b.type === 'electricity' || !b.type)) ? { ...comp, name: b.name, meter: b.meter, rip: calculateRIP(b.account), id: b.id } : null;
                 }).filter(Boolean).sort((a,b) => a.id - b.id);
                 
-                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
-                totalSum = reportData.reduce((sum, item) => sum + (item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated), 0);
-                totalDiscount = reportData.reduce((sum, item) => sum + item.discount, 0);
+                totalNetPayable = roundToTwo(reportData.reduce((sum, item) => sum + (item.netPayable || 0), 0));
+                totalSum = roundToTwo(reportData.reduce((sum, item) => sum + ((item.q1.calculated || 0) + (item.q2.calculated || 0) + (item.q3.calculated || 0) + (item.q4.calculated || 0)), 0));
+                totalDiscount = roundToTwo(reportData.reduce((sum, item) => sum + (item.discount || 0), 0));
             } else if (currentMode === 'equipment') {
                 reportData = beneficiaries.filter(b => b.type === 'equipment').map(b => {
                     const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
-                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    const netPayable = comp ? roundToTwo(comp.netPayable) : roundToTwo(institutionInfo.equipmentGrantValue);
                     return { 
                         id: b.id, 
                         name: b.name, 
@@ -3954,13 +3993,13 @@
                     };
                 }).sort((a,b) => a.id - b.id);
                 
-                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+                totalNetPayable = roundToTwo(reportData.reduce((sum, item) => sum + (item.netPayable || 0), 0));
             } else {
                 // Transport & Training
                 const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
                 reportData = beneficiaries.filter(b => b.type === currentMode).map(b => {
                     const comp = targetArray.find(c => c.beneficiaryId === b.id);
-                    const netPayable = comp ? comp.netPayable : 0;
+                    const netPayable = comp ? roundToTwo(comp.netPayable) : 0;
                     return { 
                         id: b.id, 
                         name: b.name, 
@@ -3970,7 +4009,7 @@
                     };
                 }).sort((a,b) => a.id - b.id);
                 
-                totalNetPayable = reportData.reduce((sum, item) => sum + item.netPayable, 0);
+                totalNetPayable = roundToTwo(reportData.reduce((sum, item) => sum + (item.netPayable || 0), 0));
             }
             
             let tableContent = '';
@@ -5157,8 +5196,8 @@
                 
                 // Arabic date
                 const arabicDays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-                const arabicMonths = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 
-                                      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                const arabicMonths = ['جانفي', 'فيفري', 'مارس', 'أفريل', 'ماي', 'جوان', 
+                                      'جويلية', 'أوت', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
                 
                 dateElement.textContent = `${arabicDays[now.getDay()]} ${now.getDate()} ${arabicMonths[now.getMonth()]} ${now.getFullYear()}`;
             }
