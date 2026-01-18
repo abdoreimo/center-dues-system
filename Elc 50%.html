@@ -1330,6 +1330,7 @@
         .backup-card.create:hover { border-color: var(--primary-color); }
         .backup-card.restore:hover { border-color: var(--success-color); }
         .backup-card.danger:hover { border-color: var(--danger-color); }
+        .backup-card.import-txt:hover { border-color: var(--info-color); }
         
         .backup-icon {
             width: 70px;
@@ -1345,6 +1346,187 @@
         .backup-card.create .backup-icon { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; }
         .backup-card.restore .backup-icon { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; }
         .backup-card.danger .backup-icon { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; }
+        .backup-card.import-txt .backup-icon { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff; }
+        
+        /* Import TXT Modal Styles */
+        .import-format-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .import-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: var(--background-section);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .import-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(245, 158, 11, 0.05);
+        }
+        
+        .import-option input[type="radio"] {
+            margin-top: 3px;
+            accent-color: var(--primary-color);
+        }
+        
+        .import-option input[type="radio"]:checked + .option-text {
+            color: var(--primary-dark-color);
+        }
+        
+        .option-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .option-text strong {
+            font-size: 1.05em;
+        }
+        
+        .option-text small {
+            color: var(--text-secondary-color);
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .import-options-extra {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(14, 165, 233, 0.1);
+            border-radius: 10px;
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .checkbox-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+        
+        .import-preview {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        
+        .import-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .import-preview h4 {
+            margin: 0;
+            color: var(--primary-dark-color);
+        }
+        
+        .selection-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-select-all, .btn-select-none {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-select-all {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        
+        .btn-select-all:hover {
+            background: #059669;
+        }
+        
+        .btn-select-none {
+            background: var(--background-white);
+            color: var(--text-color);
+        }
+        
+        .btn-select-none:hover {
+            background: var(--background-section);
+        }
+        
+        .import-row-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+        
+        #import-preview-table th:first-child,
+        #import-preview-table td:first-child {
+            text-align: center;
+            width: 40px;
+        }
+        
+        .preview-table-container {
+            max-height: 200px;
+            overflow: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        #import-preview-table {
+            width: 100%;
+            font-size: 0.85em;
+            margin: 0;
+        }
+        
+        #import-preview-table th,
+        #import-preview-table td {
+            padding: 8px 12px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        
+        #import-preview-table th {
+            background: var(--gradient-honey);
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .preview-count {
+            margin: 15px 0 0 0;
+            text-align: center;
+            font-weight: 600;
+            color: var(--success-color);
+        }
+        
+        .preview-count span {
+            font-size: 1.2em;
+            color: var(--primary-dark-color);
+        }
         
         .backup-label {
             font-weight: 700;
@@ -2762,8 +2944,14 @@
                         <span class="backup-label">حذف جميع المستفيدين</span>
                         <span class="backup-desc">سيتم حفظ نسخة تلقائياً</span>
                     </div>
+                    <div class="backup-card import-txt" id="import-txt-btn">
+                        <div class="backup-icon"><i class="fas fa-file-import"></i></div>
+                        <span class="backup-label">استيراد من ملف TXT</span>
+                        <span class="backup-desc">استيراد قائمة المستفيدين</span>
+                    </div>
                 </div>
                 <input type="file" id="restore-file-input" accept=".json" style="display: none;">
+                <input type="file" id="import-txt-input" accept=".txt,.csv" style="display: none;">
             </div>
          </section>
          
@@ -2866,6 +3054,78 @@
         </div>
     </div>
 
+
+    <!-- Import TXT Modal -->
+    <div id="import-txt-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px;">
+            <h3><i class="fas fa-file-import"></i> استيراد المستفيدين من ملف TXT</h3>
+            <p>حدد تنسيق الملف النصي:</p>
+            
+            <div class="import-format-options">
+                <label class="import-option highlight-option">
+                    <input type="radio" name="import-format" value="payment-file" checked>
+                    <span class="option-text">
+                        <strong>📄 ملف الدفع الإلكتروني (البريد الجزائري)</strong>
+                        <small>الملف المُصدّر من البرنامج بتنسيق Algérie Poste</small>
+                    </span>
+                </label>
+                <label class="import-option">
+                    <input type="radio" name="import-format" value="semicolon">
+                    <span class="option-text">
+                        <strong>فاصلة منقوطة (;)</strong>
+                        <small>الاسم;رقم الحساب;رقم العداد;القسم;الرتبة</small>
+                    </span>
+                </label>
+                <label class="import-option">
+                    <input type="radio" name="import-format" value="comma">
+                    <span class="option-text">
+                        <strong>فاصلة (,)</strong>
+                        <small>الاسم,رقم الحساب,رقم العداد,القسم,الرتبة</small>
+                    </span>
+                </label>
+                <label class="import-option">
+                    <input type="radio" name="import-format" value="tab">
+                    <span class="option-text">
+                        <strong>تاب (Tab)</strong>
+                        <small>الاسم[TAB]رقم الحساب[TAB]...</small>
+                    </span>
+                </label>
+                <label class="import-option">
+                    <input type="radio" name="import-format" value="pipe">
+                    <span class="option-text">
+                        <strong>خط عمودي (|)</strong>
+                        <small>الاسم|رقم الحساب|رقم العداد|القسم|الرتبة</small>
+                    </span>
+                </label>
+            </div>
+            
+            <div class="import-options-extra" id="header-option-container">
+                <label class="checkbox-option">
+                    <input type="checkbox" id="import-has-header">
+                    <span>الملف يحتوي على سطر عناوين (تخطي السطر الأول)</span>
+                </label>
+            </div>
+            
+            <div class="import-preview" id="import-preview" style="display: none;">
+                <div class="import-preview-header">
+                    <h4>معاينة البيانات:</h4>
+                    <div class="selection-buttons">
+                        <button type="button" class="btn-select-all" onclick="selectAllImport(true)"><i class="fas fa-check-double"></i> تحديد الكل</button>
+                        <button type="button" class="btn-select-none" onclick="selectAllImport(false)"><i class="fas fa-square"></i> إلغاء التحديد</button>
+                    </div>
+                </div>
+                <div class="preview-table-container" style="max-height: 300px; overflow-y: auto;">
+                    <table id="import-preview-table"></table>
+                </div>
+                <p class="preview-count">تم تحديد <span id="import-selected-count">0</span> من أصل <span id="import-count">0</span> مستفيد</p>
+            </div>
+            
+            <div class="modal-buttons">
+                <button type="button" class="save-button" id="confirm-import-txt" style="display: none;"><i class="fas fa-check"></i> تأكيد الاستيراد</button>
+                <button type="button" class="cancel-button" onclick="cancelImportTxt()"><i class="fas fa-times"></i> إلغاء</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Mode Selection Modal -->
     <div id="mode-selection-modal" class="modal-overlay visible" style="display: flex;">
@@ -4647,6 +4907,309 @@
         }
 
 
+        // --- Import from TXT ---
+        let importedTxtData = [];
+        
+        function openImportTxtModal() {
+            document.getElementById('import-txt-input').click();
+        }
+        
+        function handleTxtFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                showImportTxtModal(content);
+            };
+            reader.readAsText(file, 'UTF-8');
+            event.target.value = ''; // Reset for selecting same file again
+        }
+        
+        function showImportTxtModal(content) {
+            const modal = document.getElementById('import-txt-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
+            
+            // Store content for later processing
+            modal.dataset.content = content;
+            
+            // Add event listener for format change
+            const formatRadios = document.querySelectorAll('input[name="import-format"]');
+            formatRadios.forEach(radio => {
+                radio.addEventListener('change', () => parseAndPreviewTxt(content));
+            });
+            
+            document.getElementById('import-has-header').addEventListener('change', () => parseAndPreviewTxt(content));
+            
+            // Initial parse
+            parseAndPreviewTxt(content);
+        }
+        
+        function parseAndPreviewTxt(content) {
+            const format = document.querySelector('input[name="import-format"]:checked').value;
+            const hasHeader = document.getElementById('import-has-header').checked;
+            const headerOptionContainer = document.getElementById('header-option-container');
+            
+            // Hide/show header option based on format
+            if (format === 'payment-file') {
+                headerOptionContainer.style.display = 'none';
+            } else {
+                headerOptionContainer.style.display = 'block';
+            }
+            
+            const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
+            importedTxtData = [];
+            
+            // Parse based on format
+            if (format === 'payment-file') {
+                // Parse Algérie Poste payment file format
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    
+                    // Skip if line doesn't start with * or is too short
+                    if (!line.startsWith('*') || line.length < 35) continue;
+                    
+                    // Skip header line (contains treasury RIP - check if position 21-33 is all zeros for header)
+                    // Header has specific format: *[RIP 20][Amount 13][Count 7][Month 2][Year 4][Order 8][Transfer 6][0]
+                    // Beneficiary line: *[RIP 20][Amount 13][Name 30][1]
+                    
+                    // Check if this is a beneficiary line by checking line length and format
+                    // Beneficiary lines are exactly 65 characters (or close) and end with "1"
+                    const trimmedLine = line.trim();
+                    
+                    // Try to extract beneficiary data
+                    // RIP: positions 1-20 (after *)
+                    // Amount: positions 21-33 (13 digits)
+                    // Name: positions 34-63 (30 characters)
+                    // Code: position 64 (should be "1" for beneficiary)
+                    
+                    if (trimmedLine.length >= 34) {
+                        const rip = trimmedLine.substring(1, 21);
+                        const amountCentimes = trimmedLine.substring(21, 34);
+                        const nameAndCode = trimmedLine.substring(34);
+                        
+                        // Check if this looks like a beneficiary line (has name with letters)
+                        if (/[a-zA-Z]/.test(nameAndCode)) {
+                            // Extract account number from RIP (positions 9-18 are the account)
+                            // RIP format: 00799999 + XXXXXXXXXX (account 10 digits) + KK (RIP key 2 digits)
+                            // Note: RIP key ≠ CCP key, so we only extract the account number
+                            const accountNumberPadded = rip.substring(8, 18);
+                            const accountNumber = accountNumberPadded.replace(/^0+/, ''); // Remove leading zeros
+                            
+                            // Extract name (remove trailing spaces and the "1" at the end)
+                            let name = nameAndCode.replace(/\s*1?\s*$/, '').trim();
+                            
+                            // Calculate amount in DA
+                            const amountDA = parseInt(amountCentimes, 10) / 100;
+                            
+                            if (accountNumber && name) {
+                                importedTxtData.push({
+                                    name: name,
+                                    account: accountNumber, // Just the account number, RIP will be calculated automatically
+                                    meter: '',
+                                    section: '',
+                                    rank: '',
+                                    amount: amountDA // Store amount for reference
+                                });
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Parse CSV-style formats
+                let separator;
+                switch(format) {
+                    case 'semicolon': separator = ';'; break;
+                    case 'comma': separator = ','; break;
+                    case 'tab': separator = '\t'; break;
+                    case 'pipe': separator = '|'; break;
+                    default: separator = ';';
+                }
+                
+                const startIndex = hasHeader ? 1 : 0;
+                
+                for (let i = startIndex; i < lines.length; i++) {
+                    const parts = lines[i].split(separator).map(p => p.trim());
+                    if (parts.length >= 2 && parts[0] && parts[1]) {
+                        importedTxtData.push({
+                            name: parts[0] || '',
+                            account: parts[1] || '',
+                            meter: parts[2] || '',
+                            section: parts[3] || '',
+                            rank: parts[4] || ''
+                        });
+                    }
+                }
+            }
+            
+            // Show preview
+            const previewDiv = document.getElementById('import-preview');
+            const previewTable = document.getElementById('import-preview-table');
+            const importCount = document.getElementById('import-count');
+            const confirmBtn = document.getElementById('confirm-import-txt');
+            
+            if (importedTxtData.length > 0) {
+                previewDiv.style.display = 'block';
+                confirmBtn.style.display = 'inline-flex';
+                importCount.textContent = importedTxtData.length;
+                
+                // Build preview table with checkboxes (show all rows)
+                const showAmount = format === 'payment-file';
+                
+                previewTable.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="import-select-all-checkbox" checked onchange="selectAllImport(this.checked)"></th>
+                            <th>#</th>
+                            <th>الاسم</th>
+                            <th>رقم الحساب</th>
+                            ${showAmount ? '<th>المبلغ (دج)</th>' : '<th>رقم العداد</th>'}
+                            <th>القسم</th>
+                            <th>الرتبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${importedTxtData.map((row, idx) => `
+                            <tr>
+                                <td><input type="checkbox" class="import-row-checkbox" data-index="${idx}" checked onchange="updateImportSelectionCount()"></td>
+                                <td>${idx + 1}</td>
+                                <td>${row.name}</td>
+                                <td style="direction: ltr; text-align: center;">${row.account}</td>
+                                ${showAmount ? `<td>${formatCurrency(row.amount || 0)}</td>` : `<td>${row.meter}</td>`}
+                                <td>${row.section}</td>
+                                <td>${row.rank}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                
+                // Update selection count
+                updateImportSelectionCount();
+            } else {
+                previewDiv.style.display = 'none';
+                confirmBtn.style.display = 'none';
+                showToast('لم يتم العثور على بيانات صالحة. تحقق من تنسيق الملف', 'error');
+            }
+        }
+        
+        function cancelImportTxt() {
+            const modal = document.getElementById('import-txt-modal');
+            modal.classList.remove('visible');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                importedTxtData = [];
+                document.getElementById('import-preview').style.display = 'none';
+                document.getElementById('confirm-import-txt').style.display = 'none';
+            }, 300);
+        }
+        
+        function selectAllImport(select) {
+            const checkboxes = document.querySelectorAll('.import-row-checkbox');
+            const selectAllCheckbox = document.getElementById('import-select-all-checkbox');
+            checkboxes.forEach(cb => cb.checked = select);
+            if (selectAllCheckbox) selectAllCheckbox.checked = select;
+            updateImportSelectionCount();
+        }
+        
+        function updateImportSelectionCount() {
+            const checkboxes = document.querySelectorAll('.import-row-checkbox');
+            const selectedCount = document.querySelectorAll('.import-row-checkbox:checked').length;
+            const selectedCountEl = document.getElementById('import-selected-count');
+            const selectAllCheckbox = document.getElementById('import-select-all-checkbox');
+            
+            if (selectedCountEl) selectedCountEl.textContent = selectedCount;
+            if (selectAllCheckbox) selectAllCheckbox.checked = selectedCount === checkboxes.length;
+        }
+        
+        function getSelectedImportIndices() {
+            const checkboxes = document.querySelectorAll('.import-row-checkbox:checked');
+            return Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
+        }
+        
+        function confirmImportTxt() {
+            const selectedIndices = getSelectedImportIndices();
+            
+            if (selectedIndices.length === 0) {
+                showToast('يرجى تحديد مستفيد واحد على الأقل للاستيراد', 'error');
+                return;
+            }
+            
+            if (!confirm(`هل أنت متأكد من استيراد ${selectedIndices.length} مستفيد إلى نوع التعويض الحالي (${getModeLabel(currentMode)})؟`)) {
+                return;
+            }
+            
+            let importedCount = 0;
+            let skippedCount = 0;
+            let invalidCount = 0;
+            let nextId = getNextBeneficiaryId();
+            
+            // Get only selected rows
+            const selectedData = selectedIndices.map(idx => importedTxtData[idx]);
+            
+            selectedData.forEach(row => {
+                // Validate name (Latin characters only)
+                if (!/^[a-zA-Z\s\-]+$/.test(row.name)) {
+                    invalidCount++;
+                    return;
+                }
+                
+                // Check for duplicate account in same compensation type
+                if (beneficiaries.some(b => b.account === row.account && (b.type === currentMode || (!b.type && currentMode === 'electricity')))) {
+                    skippedCount++;
+                    return;
+                }
+                
+                // Validate account (RIP)
+                const rip = calculateRIP(row.account);
+                if (rip.includes('خطأ')) {
+                    invalidCount++;
+                    return;
+                }
+                
+                // Add beneficiary
+                beneficiaries.push({
+                    id: nextId++,
+                    name: row.name,
+                    account: row.account,
+                    meter: row.meter,
+                    section: row.section,
+                    rank: row.rank,
+                    type: currentMode
+                });
+                importedCount++;
+            });
+            
+            // Save and update UI
+            saveData();
+            renderCompensationGrid();
+            updateCreditDisplay();
+            
+            // Close modal
+            cancelImportTxt();
+            
+            // Show result message
+            let message = `تم استيراد ${importedCount} مستفيد بنجاح`;
+            if (skippedCount > 0) message += `\nتم تخطي ${skippedCount} (حساب مكرر)`;
+            if (invalidCount > 0) message += `\nتم رفض ${invalidCount} (بيانات غير صالحة)`;
+            
+            showToast(message, importedCount > 0 ? 'success' : 'error');
+            
+            // Check achievements
+            checkAchievements();
+        }
+        
+        function getModeLabel(mode) {
+            switch(mode) {
+                case 'electricity': return 'كهرباء وغاز';
+                case 'equipment': return 'منحة تجهيز';
+                case 'transport': return 'تنقل';
+                case 'training': return 'تكوين';
+                default: return mode;
+            }
+        }
+
         // --- Backup and Restore ---
         function createBackup() {
             try {
@@ -5023,6 +5586,11 @@
             document.getElementById('beneficiary-form').addEventListener('submit', saveBeneficiary);
             document.getElementById('restore-file-input').addEventListener('change', handleFileSelect);
             document.getElementById('delete-all-beneficiaries-btn').addEventListener('click', deleteAllBeneficiaries);
+            
+            // Import TXT
+            document.getElementById('import-txt-btn').addEventListener('click', openImportTxtModal);
+            document.getElementById('import-txt-input').addEventListener('change', handleTxtFileSelect);
+            document.getElementById('confirm-import-txt').addEventListener('click', confirmImportTxt);
 
             // Sidebar Toggle
             const sidebarToggle = document.getElementById('sidebar-toggle');
