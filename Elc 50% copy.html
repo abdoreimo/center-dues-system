@@ -1359,24 +1359,51 @@
         .backup-card.danger .backup-icon { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; }
         .backup-card.import-txt .backup-icon { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); color: #fff; }
         
-        /* Import TXT Modal Styles */
-        .import-format-options {
+        /* Import TXT Modal Styles - Compact Design */
+        #import-txt-modal .modal-content {
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px 25px;
+        }
+        
+        #import-txt-modal h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 10px;
-            margin: 20px 0;
+        }
+        
+        #import-txt-modal > .modal-content > p {
+            margin: 0 0 10px 0;
+            font-size: 0.95em;
+        }
+        
+        .import-format-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 10px 0;
         }
         
         .import-option {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            padding: 15px;
+            gap: 8px;
+            padding: 10px;
             background: var(--background-section);
             border: 2px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .import-option.highlight-option {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.1));
+            border-color: var(--info-color);
         }
         
         .import-option:hover {
@@ -1385,8 +1412,9 @@
         }
         
         .import-option input[type="radio"] {
-            margin-top: 3px;
+            margin-top: 2px;
             accent-color: var(--primary-color);
+            flex-shrink: 0;
         }
         
         .import-option input[type="radio"]:checked + .option-text {
@@ -1396,11 +1424,11 @@
         .option-text {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
         }
         
         .option-text strong {
-            font-size: 1.05em;
+            font-size: 0.95em;
         }
         
         .option-text small {
@@ -1408,34 +1436,36 @@
             font-family: monospace;
             direction: ltr;
             text-align: left;
+            font-size: 0.75em;
         }
         
         .import-options-extra {
-            margin: 15px 0;
-            padding: 15px;
+            margin: 10px 0;
+            padding: 10px 15px;
             background: rgba(14, 165, 233, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
         }
         
         .checkbox-option {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
         }
         
         .checkbox-option input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             accent-color: var(--primary-color);
         }
         
         .import-preview {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 10px;
+            padding: 12px;
             background: var(--background-white);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 10px;
         }
         
         .import-preview-header {
@@ -1443,30 +1473,31 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 10px;
         }
         
         .import-preview h4 {
             margin: 0;
             color: var(--primary-dark-color);
+            font-size: 1em;
         }
         
         .selection-buttons {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         
         .btn-select-all, .btn-select-none {
-            padding: 6px 12px;
-            font-size: 0.85em;
+            padding: 5px 10px;
+            font-size: 0.8em;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
         
         .btn-select-all {
@@ -1482,6 +1513,50 @@
         .btn-select-none {
             background: var(--background-white);
             color: var(--text-color);
+        }
+        
+        .preview-table-container {
+            max-height: 150px !important;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        
+        #import-preview-table {
+            font-size: 0.8em;
+            margin: 0;
+        }
+        
+        #import-preview-table th,
+        #import-preview-table td {
+            padding: 6px 8px;
+        }
+        
+        .preview-count {
+            margin: 8px 0 0 0;
+            font-size: 0.9em;
+        }
+        
+        #import-txt-modal .modal-buttons {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        #import-txt-modal .modal-buttons button {
+            padding: 10px 20px;
+            font-size: 0.95em;
+        }
+        
+        @media screen and (max-width: 600px) {
+            .import-format-options {
+                grid-template-columns: 1fr;
+            }
+            
+            #import-txt-modal .modal-content {
+                max-width: 95%;
+                padding: 15px;
+            }
         }
         
         .btn-select-none:hover {
@@ -1852,6 +1927,109 @@
             
             .credit-value {
                 font-size: 1.2em;
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top-btn {
+            position: fixed;
+            bottom: 70px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+            color: #fff;
+            border: none;
+            font-size: 1.4em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-to-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .scroll-to-top-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
+        }
+        
+        /* Credit Warning Banner */
+        .credit-warning-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 280px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-weight: 600;
+            z-index: 1001;
+            transform: translateY(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .credit-warning-banner.visible {
+            transform: translateY(0);
+        }
+        
+        .credit-warning-banner i {
+            font-size: 1.3em;
+            animation: pulse-icon 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .credit-warning-banner .warning-text {
+            flex: 1;
+        }
+        
+        .credit-warning-banner .close-warning-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .credit-warning-banner .close-warning-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .sidebar.collapsed ~ .main-content .credit-warning-banner {
+            right: 80px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .credit-warning-banner {
+                right: 0;
+                font-size: 0.9em;
+            }
+            
+            .scroll-to-top-btn {
+                bottom: 60px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
             }
         }
 
@@ -2666,6 +2844,10 @@
                     <i class="fas fa-moon"></i>
                     <span>الوضع الليلي</span>
                 </button>
+                <button class="nav-item theme-toggle" id="sound-toggle-btn">
+                    <i class="fas fa-volume-up"></i>
+                    <span>الأصوات</span>
+                </button>
             </nav>
         </aside>
         
@@ -2857,11 +3039,8 @@
                         <input type="text" id="compensation-grid-search" placeholder="بحث بالاسم أو CCP...">
                     </div>
                     <div class="actions-container">
-                        <label class="auto-save-toggle">
-                            <input type="checkbox" id="auto-save-checkbox">
-                            <span class="toggle-slider"></span>
-                            <span class="toggle-label">حفظ تلقائي</span>
-                        </label>
+                        <!-- الحفظ التلقائي مفعل دائماً -->
+                        <input type="checkbox" id="auto-save-checkbox" checked style="display: none;">
                         <button id="add-beneficiary-btn" class="primary-action-btn"><i class="fas fa-user-plus"></i> إضافة مستفيد جديد</button>
                     </div>
                 </div>
@@ -2967,6 +3146,18 @@
          </section>
          
             </div><!-- End content-area -->
+            
+            <!-- Credit Warning Banner -->
+            <div id="credit-warning-banner" class="credit-warning-banner">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="warning-text" id="warning-text">تحذير: تم تجاوز الاعتماد المفتوح!</span>
+                <button class="close-warning-btn" onclick="closeCreditWarning()"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <!-- Scroll to Top Button -->
+            <button id="scroll-to-top-btn" class="scroll-to-top-btn" title="العودة لأعلى الصفحة">
+                <i class="fas fa-arrow-up"></i>
+            </button>
         </div><!-- End main-content -->
     </div><!-- End app-wrapper -->
 
@@ -3068,44 +3259,44 @@
 
     <!-- Import TXT Modal -->
     <div id="import-txt-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 650px;">
-            <h3><i class="fas fa-file-import"></i> استيراد المستفيدين من ملف TXT</h3>
-            <p>حدد تنسيق الملف النصي:</p>
+        <div class="modal-content">
+            <h3><i class="fas fa-file-import"></i> استيراد المستفيدين</h3>
+            <p>حدد تنسيق الملف:</p>
             
             <div class="import-format-options">
                 <label class="import-option highlight-option">
                     <input type="radio" name="import-format" value="payment-file" checked>
                     <span class="option-text">
-                        <strong>📄 ملف الدفع الإلكتروني (البريد الجزائري)</strong>
-                        <small>الملف المُصدّر من البرنامج بتنسيق Algérie Poste</small>
+                        <strong>📄 ملف الدفع الإلكتروني</strong>
+                        <small>تنسيق Algérie Poste</small>
                     </span>
                 </label>
                 <label class="import-option">
                     <input type="radio" name="import-format" value="semicolon">
                     <span class="option-text">
                         <strong>فاصلة منقوطة (;)</strong>
-                        <small>الاسم;رقم الحساب;رقم العداد;القسم;الرتبة</small>
+                        <small>الاسم;الحساب;العداد</small>
                     </span>
                 </label>
                 <label class="import-option">
                     <input type="radio" name="import-format" value="comma">
                     <span class="option-text">
                         <strong>فاصلة (,)</strong>
-                        <small>الاسم,رقم الحساب,رقم العداد,القسم,الرتبة</small>
+                        <small>الاسم,الحساب,العداد</small>
                     </span>
                 </label>
                 <label class="import-option">
                     <input type="radio" name="import-format" value="tab">
                     <span class="option-text">
                         <strong>تاب (Tab)</strong>
-                        <small>الاسم[TAB]رقم الحساب[TAB]...</small>
+                        <small>الاسم[TAB]الحساب</small>
                     </span>
                 </label>
                 <label class="import-option">
                     <input type="radio" name="import-format" value="pipe">
                     <span class="option-text">
                         <strong>خط عمودي (|)</strong>
-                        <small>الاسم|رقم الحساب|رقم العداد|القسم|الرتبة</small>
+                        <small>الاسم|الحساب|العداد</small>
                     </span>
                 </label>
             </div>
@@ -3113,22 +3304,22 @@
             <div class="import-options-extra" id="header-option-container">
                 <label class="checkbox-option">
                     <input type="checkbox" id="import-has-header">
-                    <span>الملف يحتوي على سطر عناوين (تخطي السطر الأول)</span>
+                    <span>تخطي السطر الأول (عناوين)</span>
                 </label>
             </div>
             
             <div class="import-preview" id="import-preview" style="display: none;">
                 <div class="import-preview-header">
-                    <h4>معاينة البيانات:</h4>
+                    <h4>معاينة:</h4>
                     <div class="selection-buttons">
-                        <button type="button" class="btn-select-all" onclick="selectAllImport(true)"><i class="fas fa-check-double"></i> تحديد الكل</button>
-                        <button type="button" class="btn-select-none" onclick="selectAllImport(false)"><i class="fas fa-square"></i> إلغاء التحديد</button>
+                        <button type="button" class="btn-select-all" onclick="selectAllImport(true)"><i class="fas fa-check-double"></i> الكل</button>
+                        <button type="button" class="btn-select-none" onclick="selectAllImport(false)"><i class="fas fa-square"></i> لا شيء</button>
                     </div>
                 </div>
-                <div class="preview-table-container" style="max-height: 300px; overflow-y: auto;">
+                <div class="preview-table-container">
                     <table id="import-preview-table"></table>
                 </div>
-                <p class="preview-count">تم تحديد <span id="import-selected-count">0</span> من أصل <span id="import-count">0</span> مستفيد</p>
+                <p class="preview-count">تم تحديد <span id="import-selected-count">0</span> من <span id="import-count">0</span></p>
             </div>
             
             <div class="modal-buttons">
@@ -3594,20 +3785,36 @@
             remainingEl.textContent = `${formatCurrency(remainingCredit)} دج`;
             
             // عرض تنبيه عند الاعتماد السالب
+            const warningBanner = document.getElementById('credit-warning-banner');
+            const warningText = document.getElementById('warning-text');
+            
             if (remainingCredit < 0) {
                 remainingEl.classList.add('negative');
                 if (remainingCard) remainingCard.classList.add('negative-credit');
                 
-                // إظهار تنبيه للمستخدم (مرة واحدة فقط عند التغيير)
+                // تحديث نص التنبيه وإظهار الشريط
+                const exceededAmount = Math.abs(remainingCredit);
+                warningText.textContent = `تحذير: تم تجاوز الاعتماد المفتوح بمبلغ ${formatCurrency(exceededAmount)} دج! (الاعتماد المتبقي: ${formatCurrency(remainingCredit)} دج)`;
+                if (warningBanner) warningBanner.classList.add('visible');
+                
+                // إظهار إشعار Toast (مرة واحدة فقط عند التغيير)
                 if (!window.lastNegativeCreditWarning || window.lastNegativeCreditWarning !== currentMode + remainingCredit) {
                     window.lastNegativeCreditWarning = currentMode + remainingCredit;
-                    showToast(`تحذير: الاعتماد المتبقي سالب (${formatCurrency(remainingCredit)} دج)! تم تجاوز الاعتماد المفتوح بمبلغ ${formatCurrency(Math.abs(remainingCredit))} دج`, 'error');
+                    SoundSystem.creditAlert();
+                    showToast(`تحذير: الاعتماد المتبقي سالب (${formatCurrency(remainingCredit)} دج)! تم تجاوز الاعتماد المفتوح بمبلغ ${formatCurrency(exceededAmount)} دج`, 'error');
                 }
             } else {
                 remainingEl.classList.remove('negative');
                 if (remainingCard) remainingCard.classList.remove('negative-credit');
+                if (warningBanner) warningBanner.classList.remove('visible');
                 window.lastNegativeCreditWarning = null;
             }
+        }
+        
+        // دالة إغلاق شريط التنبيه
+        function closeCreditWarning() {
+            const warningBanner = document.getElementById('credit-warning-banner');
+            if (warningBanner) warningBanner.classList.remove('visible');
         }
 
         // --- Institution Info Management ---
@@ -3791,6 +3998,7 @@
                      targetArray.push({ beneficiaryId: newId, netPayable: amount });
                 }
                 
+                SoundSystem.add();
                 showToast('تم إضافة المستفيد بنجاح', 'success');
             }
 
@@ -3841,6 +4049,7 @@
                 saveData();
                 renderCompensationGrid();
                 updateCreditDisplay();
+                SoundSystem.delete();
                 alert('تم حذف المستفيد بنجاح وتحديث الترقيم.');
             }
         }
@@ -4017,7 +4226,189 @@
             setTimeout(() => modal.style.display = 'none', 300);
         }
 
+        // ============================================
+        // نظام الأصوات - Sound System
+        // ============================================
+        const SoundSystem = {
+            audioContext: null,
+            enabled: true,
+            volume: 0.3,
+            
+            init() {
+                try {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    // Load saved preference
+                    const savedPref = localStorage.getItem('soundEnabled');
+                    this.enabled = savedPref !== 'false';
+                } catch (e) {
+                    console.log('Web Audio API not supported');
+                    this.enabled = false;
+                }
+            },
+            
+            resume() {
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume();
+                }
+            },
+            
+            toggle() {
+                this.enabled = !this.enabled;
+                localStorage.setItem('soundEnabled', this.enabled);
+                return this.enabled;
+            },
+            
+            playTone(frequency, duration, type = 'sine', volumeMultiplier = 1) {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = type;
+                
+                const vol = this.volume * volumeMultiplier;
+                gainNode.gain.setValueAtTime(vol, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + duration);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + duration);
+            },
+            
+            // صوت النجاح - نغمة صاعدة مبهجة
+            success() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                notes.forEach((freq, i) => {
+                    setTimeout(() => this.playTone(freq, 0.15, 'sine', 0.8), i * 80);
+                });
+            },
+            
+            // صوت الخطأ - نغمة منخفضة متكررة
+            error() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(200, 0.15, 'square', 0.5);
+                setTimeout(() => this.playTone(180, 0.2, 'square', 0.5), 150);
+            },
+            
+            // صوت التحذير - نغمتان متناوبتان
+            warning() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(440, 0.1, 'triangle', 0.6);
+                setTimeout(() => this.playTone(380, 0.1, 'triangle', 0.6), 120);
+                setTimeout(() => this.playTone(440, 0.15, 'triangle', 0.6), 240);
+            },
+            
+            // صوت المعلومات - نغمة خفيفة
+            info() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(600, 0.1, 'sine', 0.4);
+            },
+            
+            // صوت الحفظ - نغمة تأكيد
+            save() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(880, 0.08, 'sine', 0.5);
+                setTimeout(() => this.playTone(1100, 0.12, 'sine', 0.5), 80);
+            },
+            
+            // صوت الحذف - نغمة هابطة
+            delete() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(400, 0.1, 'sawtooth', 0.3);
+                setTimeout(() => this.playTone(300, 0.15, 'sawtooth', 0.3), 100);
+            },
+            
+            // صوت تجاوز الاعتماد - إنذار
+            creditAlert() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        this.playTone(800, 0.1, 'square', 0.4);
+                        setTimeout(() => this.playTone(600, 0.1, 'square', 0.4), 100);
+                    }, i * 250);
+                }
+            },
+            
+            // صوت الإضافة - نغمة إيجابية
+            add() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(523.25, 0.08, 'sine', 0.5);
+                setTimeout(() => this.playTone(698.46, 0.1, 'sine', 0.5), 70);
+            },
+            
+            // صوت النقر/التفاعل
+            click() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(1000, 0.03, 'sine', 0.2);
+            },
+            
+            // صوت التصدير
+            export() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                const notes = [392, 523.25, 659.25, 783.99]; // G4, C5, E5, G5
+                notes.forEach((freq, i) => {
+                    setTimeout(() => this.playTone(freq, 0.12, 'sine', 0.5), i * 60);
+                });
+            },
+            
+            // صوت الاستيراد
+            import() {
+                if (!this.enabled || !this.audioContext) return;
+                this.resume();
+                
+                this.playTone(440, 0.1, 'sine', 0.5);
+                setTimeout(() => this.playTone(554.37, 0.1, 'sine', 0.5), 100);
+                setTimeout(() => this.playTone(659.25, 0.15, 'sine', 0.5), 200);
+            }
+        };
+        
+        // تهيئة نظام الأصوات
+        SoundSystem.init();
+        
+        // تفعيل الصوت عند أول تفاعل من المستخدم
+        document.addEventListener('click', () => SoundSystem.resume(), { once: true });
+
         function showToast(message, type = 'info') {
+            // تشغيل الصوت المناسب
+            switch(type) {
+                case 'success':
+                    SoundSystem.success();
+                    break;
+                case 'error':
+                    SoundSystem.error();
+                    break;
+                case 'warning':
+                    SoundSystem.warning();
+                    break;
+                default:
+                    SoundSystem.info();
+            }
+            
             // Create a simple toast notification
             const existingToast = document.getElementById('toast-notification');
             if (existingToast) existingToast.remove();
@@ -4029,7 +4420,7 @@
                 top: 20px;
                 right: 20px;
                 padding: 15px 20px;
-                background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
+                background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196F3'};
                 color: white;
                 border-radius: 5px;
                 box-shadow: 0 4px 6px rgba(0,0,0,0.2);
@@ -4662,6 +5053,7 @@
                 link.download = filename;
                 link.click();
                 URL.revokeObjectURL(link.href);
+                SoundSystem.export();
                 showToast(`تم تصدير الملف: ${filename}`, 'success');
             }).catch(err => {
                 console.error('خطأ في تصدير Excel:', err);
@@ -4763,6 +5155,7 @@
             a.click();
             URL.revokeObjectURL(url);
             
+            SoundSystem.export();
             let message = `تم تصدير الملف: ${filename}\n${validRecords.length} سجل صحيح`;
             if (invalidRecords > 0) {
                 message += `\n⚠️ ${invalidRecords} سجل مرفوض (بيانات غير صحيحة)`;
@@ -5209,6 +5602,9 @@
             // Close modal
             cancelImportTxt();
             
+            // تشغيل صوت الاستيراد
+            if (importedCount > 0) SoundSystem.import();
+            
             // Show result message
             let message = `تم استيراد ${importedCount} مستفيد بنجاح`;
             if (skippedCount > 0) message += `\nتم تخطي ${skippedCount} (حساب مكرر)`;
@@ -5580,6 +5976,9 @@
             console.log('Total beneficiaries now:', beneficiaries.length);
             console.log('Current mode:', currentMode);
             
+            // تشغيل صوت الاستيراد
+            if (importedCount > 0) SoundSystem.import();
+            
             let message = `تم استيراد ${importedCount} مستفيد بنجاح إلى قائمة المستفيدين.`;
             if (skippedCount > 0) {
                 message += ` تم تخطي ${skippedCount} مستفيد (حساب مكرر).`;
@@ -5611,6 +6010,39 @@
             document.getElementById('import-txt-btn').addEventListener('click', openImportTxtModal);
             document.getElementById('import-txt-input').addEventListener('change', handleTxtFileSelect);
             document.getElementById('confirm-import-txt').addEventListener('click', confirmImportTxt);
+            
+            // Scroll to Top Button
+            const scrollToTopBtn = document.getElementById('scroll-to-top-btn');
+            const mainContentArea = document.querySelector('.main-content');
+            
+            if (scrollToTopBtn && mainContentArea) {
+                // Track scroll position on main content
+                mainContentArea.addEventListener('scroll', () => {
+                    if (mainContentArea.scrollTop > 300) {
+                        scrollToTopBtn.classList.add('visible');
+                    } else {
+                        scrollToTopBtn.classList.remove('visible');
+                    }
+                });
+                
+                // Also track window scroll
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300 || document.documentElement.scrollTop > 300) {
+                        scrollToTopBtn.classList.add('visible');
+                    } else {
+                        scrollToTopBtn.classList.remove('visible');
+                    }
+                });
+                
+                // Scroll to top action
+                scrollToTopBtn.addEventListener('click', () => {
+                    // Scroll main content area
+                    mainContentArea.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Also scroll window
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
 
             // Sidebar Toggle
             const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -5655,6 +6087,35 @@
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
             if (themeToggleBtn) {
                 themeToggleBtn.addEventListener('click', toggleDarkMode);
+            }
+            
+            // Sound Toggle Button in Sidebar
+            const soundToggleBtn = document.getElementById('sound-toggle-btn');
+            if (soundToggleBtn) {
+                // تحديث الأيقونة حسب حالة الصوت
+                const updateSoundIcon = () => {
+                    const icon = soundToggleBtn.querySelector('i');
+                    const text = soundToggleBtn.querySelector('span');
+                    if (SoundSystem.enabled) {
+                        icon.className = 'fas fa-volume-up';
+                        text.textContent = 'الأصوات';
+                    } else {
+                        icon.className = 'fas fa-volume-mute';
+                        text.textContent = 'الأصوات (مغلقة)';
+                    }
+                };
+                updateSoundIcon();
+                
+                soundToggleBtn.addEventListener('click', () => {
+                    const enabled = SoundSystem.toggle();
+                    updateSoundIcon();
+                    if (enabled) {
+                        SoundSystem.success();
+                        showToast('تم تفعيل الأصوات', 'success');
+                    } else {
+                        showToast('تم تعطيل الأصوات', 'info');
+                    }
+                });
             }
             
             // Stats Button in Sidebar
@@ -5729,23 +6190,8 @@
                 const row = e.target.closest('tr');
                 if (!row) return;
                 
-                const autoSaveCb = document.getElementById('auto-save-checkbox');
-                if (autoSaveCb && autoSaveCb.checked) {
-                    processAndSaveRow(row);
-                } else if (e.target.classList.contains('discount-input')) {
-                     processAndSaveRow(row);
-                }
-            });
-            
-            // Load auto-save preference
-            const savedAutoSave = localStorage.getItem('autoSaveEnabled');
-            if (savedAutoSave === 'true') {
-                const cb = document.getElementById('auto-save-checkbox');
-                if (cb) cb.checked = true;
-            }
-            
-            document.getElementById('auto-save-checkbox').addEventListener('change', (e) => {
-                localStorage.setItem('autoSaveEnabled', e.target.checked);
+                // الحفظ التلقائي مفعل دائماً
+                processAndSaveRow(row);
             });
             
             // Initialize Creative Features
