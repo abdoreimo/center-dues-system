@@ -1166,8 +1166,19 @@
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         }
         
+        .credit-card.remaining.negative-credit {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            animation: pulse-warning 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-warning {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3); }
+            50% { transform: scale(1.02); box-shadow: 0 15px 50px rgba(239, 68, 68, 0.5); }
+        }
+        
         .credit-card.remaining .remaining-credit-value.negative {
             color: #fef3c7;
+            font-weight: bold;
         }
         
         /* Toggle Switch */
@@ -2821,14 +2832,14 @@
                     <div class="credit-card spent">
                         <i class="fas fa-money-bill-wave"></i>
                         <div class="credit-info">
-                            <span class="credit-label">المبلغ المصروف</span>
+                            <span class="credit-label">مجموع التعويضات (المصروف من الاعتماد)</span>
                             <span class="credit-value" id="display-amount-spent">0,00 دج</span>
                         </div>
                     </div>
                     <div class="credit-card discounts">
                         <i class="fas fa-hand-holding-usd"></i>
                         <div class="credit-info">
-                            <span class="credit-label">المبالغ المخصومة</span>
+                            <span class="credit-label">المبالغ المخصومة (تُحوَّل لجهة أخرى)</span>
                             <span class="credit-value" id="display-total-discounts">0,00 دج</span>
                         </div>
                     </div>
@@ -3540,19 +3551,18 @@
         }
 
         function updateCreditDisplay() {
-            let totalSpent = 0;
-            let totalDiscounts = 0;
+            let totalSpent = 0;  // المبلغ المصروف من الاعتماد (مجموع التعويضات الكلي)
+            let totalDiscounts = 0;  // المبالغ المخصومة (تُحوَّل لجهة أخرى)
             
             if (currentMode === 'electricity') {
-                // حساب مجموع التعويضات قبل الخصم
+                // حساب مجموع التعويضات الكلي (ما يُصرف فعلياً من الاعتماد = مجموع التعويضات قبل الخصم)
+                // المجموع = الصافي للدفع + الخصم (أي netPayable + discount)
                 totalSpent = compensations.reduce((sum, comp) => {
-                    const q1 = comp.q1 ? comp.q1.calculated || 0 : 0;
-                    const q2 = comp.q2 ? comp.q2.calculated || 0 : 0;
-                    const q3 = comp.q3 ? comp.q3.calculated || 0 : 0;
-                    const q4 = comp.q4 ? comp.q4.calculated || 0 : 0;
-                    return sum + q1 + q2 + q3 + q4;
+                    const netPayable = parseFloat(comp.netPayable) || 0;
+                    const discount = parseFloat(comp.discount) || 0;
+                    return sum + netPayable + discount;
                 }, 0);
-                // حساب مجموع الخصومات
+                // حساب مجموع الخصومات (للعرض فقط - تُحوَّل لجهة أخرى)
                 totalDiscounts = compensations.reduce((sum, comp) => sum + (parseFloat(comp.discount) || 0), 0);
             } else if (currentMode === 'equipment') {
                 totalSpent = compensationsEquipment.reduce((sum, comp) => sum + (parseFloat(comp.netPayable) || 0), 0);
@@ -3571,22 +3581,32 @@
             
             const openCredit = (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) ? parseFloat(institutionInfo.modeDetails[currentMode].credit) || 0 : 0;
             
-            // الاعتماد المتبقي = الاعتماد المفتوح - (المبلغ المصروف - المبالغ المخصومة)
-            // أي الاعتماد المتبقي = الاعتماد المفتوح - الصافي للدفع
-            const netSpent = Math.round((totalSpent - totalDiscounts) * 100) / 100;
-            const remainingCredit = Math.round((openCredit - netSpent) * 100) / 100;
+            // الاعتماد المتبقي = الاعتماد المفتوح - مجموع التعويضات الكلي
+            // ملاحظة: المبلغ المصروف هو المجموع الكلي (قبل الخصم) لأن الخصم يُحوَّل لجهة أخرى ولا يعود للاعتماد
+            const remainingCredit = Math.round((openCredit - totalSpent) * 100) / 100;
 
             document.getElementById('display-open-credit').textContent = `${formatCurrency(openCredit)} دج`;
             document.getElementById('display-amount-spent').textContent = `${formatCurrency(totalSpent)} دج`;
             document.getElementById('display-total-discounts').textContent = `${formatCurrency(totalDiscounts)} دج`;
             
             const remainingEl = document.getElementById('display-remaining-credit');
+            const remainingCard = remainingEl.closest('.credit-card');
             remainingEl.textContent = `${formatCurrency(remainingCredit)} دج`;
             
+            // عرض تنبيه عند الاعتماد السالب
             if (remainingCredit < 0) {
                 remainingEl.classList.add('negative');
+                if (remainingCard) remainingCard.classList.add('negative-credit');
+                
+                // إظهار تنبيه للمستخدم (مرة واحدة فقط عند التغيير)
+                if (!window.lastNegativeCreditWarning || window.lastNegativeCreditWarning !== currentMode + remainingCredit) {
+                    window.lastNegativeCreditWarning = currentMode + remainingCredit;
+                    showToast(`تحذير: الاعتماد المتبقي سالب (${formatCurrency(remainingCredit)} دج)! تم تجاوز الاعتماد المفتوح بمبلغ ${formatCurrency(Math.abs(remainingCredit))} دج`, 'error');
+                }
             } else {
                 remainingEl.classList.remove('negative');
+                if (remainingCard) remainingCard.classList.remove('negative-credit');
+                window.lastNegativeCreditWarning = null;
             }
         }
 
@@ -6291,5 +6311,6 @@
             };
         }
     </script>
+
 </body>
 </html>
