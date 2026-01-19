@@ -1542,6 +1542,9 @@
         .pro-editor-table .amount-input { width: 120px; padding: 8px 12px; text-align: center; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; font-weight: 600; transition: all 0.3s; background: #fff; }
         .pro-editor-table .amount-input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.2); outline: none; }
         .pro-editor-table .amount-input.modified { border-color: #22c55e; background: rgba(34,197,94,0.05); }
+        .pro-account-input { width: 100px; padding: 8px 10px; text-align: center; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9em; font-weight: 600; transition: all 0.3s; background: #fff; }
+        .pro-account-input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.2); outline: none; }
+        .pro-rip-display { font-family: monospace; font-size: 0.85em; direction: ltr; }
         .pro-editor-table tfoot .total-row th,
         .pro-editor-table tfoot .total-row td { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: #fff; font-size: 1.1em; font-weight: 700; }
         .original-amount { color: var(--text-secondary-color); font-size: 0.95em; }
@@ -3100,12 +3103,12 @@
                         <thead>
                             <tr>
                                 <th style="width: 50px;">#</th>
-                                <th style="width: 200px;">اللقب والاسم</th>
-                                <th style="width: 150px;">رقم الحساب CCP</th>
-                                <th style="width: 200px;">RIP</th>
-                                <th style="width: 130px;">المبلغ الأصلي</th>
-                                <th style="width: 150px;">المبلغ المعدل</th>
-                                <th style="width: 60px;">حذف</th>
+                                <th style="width: 180px;">اللقب والاسم</th>
+                                <th style="width: 140px;">CCP (قابل للتعديل)</th>
+                                <th style="width: 180px;">RIP</th>
+                                <th style="width: 120px;">المبلغ الأصلي</th>
+                                <th style="width: 140px;">المبلغ المعدل</th>
+                                <th style="width: 50px;">حذف</th>
                             </tr>
                         </thead>
                         <tbody id="pro-editor-tbody"></tbody>
@@ -5559,8 +5562,17 @@
                 tr.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.name}</td>
-                    <td>${item.account}</td>
-                    <td>${item.rip}</td>
+                    <td>
+                        <input type="text" 
+                               class="pro-account-input" 
+                               value="${item.account}" 
+                               data-index="${index}"
+                               onchange="updateProAccountAndRIP(${index}, this.value)"
+                               placeholder="رقم الحساب">
+                    </td>
+                    <td>
+                        <span class="pro-rip-display" data-index="${index}">${item.rip}</span>
+                    </td>
                     <td class="original-amount">${formatCurrency(item.originalAmount)}</td>
                     <td>
                         <input type="number" 
@@ -5630,6 +5642,32 @@
             } else {
                 input.classList.remove('modified');
             }
+        }
+
+        function updateProAccountAndRIP(index, newAccount) {
+            // تحديث رقم الحساب
+            proEditorData[index].account = newAccount;
+            
+            // حساب RIP الجديد
+            const newRIP = calculateRIP(newAccount);
+            if (newRIP.includes('خطأ')) {
+                showToast(`خطأ: رقم الحساب غير صحيح - ${newRIP}`, 'error');
+                // استعادة البيانات السابقة في الحقل
+                document.querySelector(`.pro-account-input[data-index="${index}"]`).value = proEditorData[index].account;
+                return;
+            }
+            
+            // تحديث RIP في البيانات
+            proEditorData[index].rip = newRIP;
+            
+            // تحديث عرض RIP في الجدول
+            const ripDisplay = document.querySelector(`.pro-rip-display[data-index="${index}"]`);
+            if (ripDisplay) {
+                ripDisplay.textContent = newRIP;
+            }
+            
+            SoundSystem.click();
+            showToast('تم تحديث RIP بنجاح', 'success');
         }
 
         function updateProAmount(index, value) {
