@@ -1459,6 +1459,111 @@
             height: 16px;
             accent-color: var(--primary-color);
         }
+
+        /* ===== Pro TXT Editor Styles ===== */
+        .pro-editor-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+        }
+        .pro-editor-info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .info-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        .info-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .info-card i { font-size: 1.8em; color: #8b5cf6; opacity: 0.9; }
+        .info-card.highlight { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; }
+        .info-card.highlight i { color: #fff; }
+        .info-card.highlight .info-label { color: rgba(255,255,255,0.85); }
+        .info-card.highlight .info-value { color: #fff; }
+        .info-details { display: flex; flex-direction: column; gap: 4px; }
+        .info-label { font-size: 0.85em; color: var(--text-secondary-color); }
+        .info-value { font-size: 1.3em; font-weight: 700; color: var(--dark-color); }
+
+        .pro-editor-actions { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .pro-action-btn {
+            display: flex; align-items: center; gap: 10px; padding: 14px 24px;
+            border: none; border-radius: 50px; font-size: 1em; font-weight: 600;
+            font-family: inherit; cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .pro-action-btn.export-btn { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; }
+        .pro-action-btn.export-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(34,197,94,0.4); }
+        .pro-action-btn.print-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; }
+        .pro-action-btn.print-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(245,158,11,0.4); }
+        .pro-action-btn.reset-btn { background: linear-gradient(135deg, #64748b 0%, #475569 100%); color: #fff; }
+        .pro-action-btn.reset-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(100,116,139,0.4); }
+        .pro-action-btn.import-btn { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; }
+        .pro-action-btn.import-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(59,130,246,0.4); }
+        .pro-action-btn.load-btn { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; }
+        .pro-action-btn.load-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(139,92,246,0.4); }
+        .pro-action-btn.clear-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; }
+        .pro-action-btn.clear-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(239,68,68,0.4); }
+
+        .pro-editor-controls {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .pro-editor-controls .control-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .pro-editor-controls .control-group { display: flex; flex-direction: column; gap: 6px; }
+        .pro-editor-controls .control-group label { font-size: 0.85em; font-weight: 600; color: var(--text-secondary-color); display: flex; align-items: center; gap: 6px; }
+        .pro-editor-controls .control-group label i { color: #8b5cf6; }
+        .pro-editor-controls .control-group input,
+        .pro-editor-controls .control-group select {
+            padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-size: 1em; font-family: inherit; transition: all 0.3s; background: #fff;
+        }
+        .pro-editor-controls .control-group input:focus,
+        .pro-editor-controls .control-group select:focus {
+            border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.15); outline: none;
+        }
+
+        .pro-editor-table-container { overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .pro-editor-table { width: 100%; border-collapse: collapse; background: #fff; }
+        .pro-editor-table th, .pro-editor-table td { padding: 12px 15px; text-align: center; border: 1px solid var(--border-color); }
+        .pro-editor-table thead th { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: #fff; font-weight: 600; font-size: 0.9em; position: sticky; top: 0; z-index: 10; }
+        .pro-editor-table tbody tr:nth-child(even) { background: rgba(139,92,246,0.03); }
+        .pro-editor-table tbody tr:hover { background: rgba(139,92,246,0.08); }
+        .pro-editor-table td:nth-child(2) { text-align: right; padding-right: 20px; }
+        .pro-editor-table td:nth-child(4) { font-family: monospace; font-size: 0.85em; direction: ltr; }
+        .pro-editor-table .amount-input { width: 120px; padding: 8px 12px; text-align: center; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1em; font-weight: 600; transition: all 0.3s; background: #fff; }
+        .pro-editor-table .amount-input:focus { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.2); outline: none; }
+        .pro-editor-table .amount-input.modified { border-color: #22c55e; background: rgba(34,197,94,0.05); }
+        .pro-editor-table tfoot .total-row th,
+        .pro-editor-table tfoot .total-row td { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: #fff; font-size: 1.1em; font-weight: 700; }
+        .original-amount { color: var(--text-secondary-color); font-size: 0.95em; }
+        .pro-editor-table .delete-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; border: none; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+        .pro-editor-table .delete-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(239,68,68,0.4); }
+
+        .pro-empty-state { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; background: #f8fafc; border-radius: 12px; color: var(--text-secondary-color); }
+        .pro-empty-state.visible { display: flex; }
+        .pro-empty-state i { font-size: 4em; color: #cbd5e1; margin-bottom: 20px; }
+        .pro-empty-state p { font-size: 1.2em; margin: 5px 0; }
+        .pro-empty-state .hint { font-size: 0.95em; color: #94a3b8; }
+
+        @media screen and (max-width: 768px) {
+            .pro-editor-info-cards { grid-template-columns: repeat(2, 1fr); }
+            .pro-editor-actions { justify-content: center; }
+            .pro-action-btn { flex: 1; min-width: 140px; justify-content: center; }
+            .pro-editor-controls .control-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media screen and (max-width: 480px) {
+            .pro-editor-info-cards { grid-template-columns: 1fr; }
+            .pro-editor-controls .control-row { grid-template-columns: 1fr; }
+        }
         
         .import-preview {
             margin-top: 10px;
@@ -2035,11 +2140,11 @@
 
         /* Print Specific Styles */
         @media print {
-            body, body.dark-mode {
+            body {
                 padding: 0; margin: 0; background: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; font-family: 'Amiri', serif !important; color: #000 !important;
             }
-            
-            body::before, body.dark-mode::before {
+
+            body::before {
                 display: none !important;
             }
             
@@ -2154,209 +2259,6 @@
         /* ========== CREATIVE NEW FEATURES =========== */
         /* ============================================= */
 
-        /* --- Dark Mode Theme --- */
-        body.dark-mode {
-            --primary-color: #FFB74D;
-            --primary-dark-color: #FF9800;
-            --background-light: #1a1a2e;
-            --background-white: #16213e;
-            --background-section: #0f3460;
-            --text-color: #e8e8e8;
-            --text-secondary-color: #b0b0b0;
-            --light-color: #1a1a2e;
-            --dark-color: #ffffff;
-            --border-color: #78350f;
-            --border-light-color: #451a03;
-        }
-        
-        body.dark-mode {
-            background: linear-gradient(135deg, #292524 0%, #451a03 50%, #78350f 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-        
-        body.dark-mode::before {
-            background: rgba(69, 26, 3, 0.5);
-        }
-        
-        body.dark-mode header {
-            background: linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%);
-            box-shadow: 0 20px 60px rgba(180, 83, 9, 0.4);
-        }
-        
-        body.dark-mode .app-section {
-            background: #451a03;
-            border-color: rgba(245, 158, 11, 0.2);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        body.dark-mode .section-content {
-            background: #451a03;
-        }
-        
-        body.dark-mode .section-header {
-            background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
-            color: #ffffff !important;
-        }
-        
-        body.dark-mode .section-header h2,
-        body.dark-mode .section-header .section-desc {
-            color: #ffffff !important;
-        }
-        
-        body.dark-mode .form-card {
-            background: rgba(69, 26, 3, 0.8);
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-        
-        body.dark-mode .form-card-header {
-            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
-            color: #fef3c7;
-        }
-        
-        body.dark-mode .form-card-header i {
-            color: #fbbf24;
-        }
-        
-        body.dark-mode .top-bar {
-            background: linear-gradient(135deg, #451a03 0%, #78350f 100%);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
-        }
-        
-        body.dark-mode .page-title h1 {
-            color: #000000;
-        }
-        
-        body.dark-mode .quick-stat {
-            background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
-            color: #000000;
-            border: 1px solid rgba(120, 53, 15, 0.3);
-        }
-        
-        body.dark-mode .quick-stat i {
-            color: #78350f;
-        }
-        
-        body.dark-mode .sidebar {
-            background: linear-gradient(180deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
-            border-left: 3px solid #f59e0b;
-        }
-        
-        body.dark-mode .sidebar .nav-item {
-            color: #000000;
-        }
-        
-        body.dark-mode .sidebar .nav-item i {
-            color: #78350f;
-        }
-        
-        body.dark-mode .sidebar .nav-item:hover {
-            background: rgba(245, 158, 11, 0.2);
-            color: #000;
-        }
-        
-        body.dark-mode .sidebar .logo-text {
-            color: #000;
-        }
-        
-        body.dark-mode .sidebar .clock-time {
-            color: #d97706;
-        }
-        
-        body.dark-mode .sidebar .clock-date {
-            color: #78350f;
-        }
-        
-        body.dark-mode .sidebar .theme-toggle,
-        body.dark-mode .sidebar .stats-btn {
-            color: #000000;
-            background: rgba(245, 158, 11, 0.15);
-            border-color: rgba(120, 53, 15, 0.2);
-        }
-        
-        body.dark-mode .content-area {
-            background: #292524;
-        }
-        
-        body.dark-mode .main-content {
-            background: #292524;
-        }
-        
-        body.dark-mode .credit-card {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        
-        body.dark-mode .export-card,
-        body.dark-mode .backup-card {
-            background: #451a03;
-            border-color: rgba(245, 158, 11, 0.2);
-            color: #fef3c7;
-        }
-        
-        body.dark-mode .export-label,
-        body.dark-mode .backup-label {
-            color: #fef3c7;
-        }
-        
-        body.dark-mode .report-preview-section {
-            background: rgba(69, 26, 3, 0.8);
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-        
-        body.dark-mode .app-section::before {
-            background: linear-gradient(90deg, #f59e0b, #fbbf24, #fcd34d);
-        }
-        
-        body.dark-mode table {
-            background-color: rgba(69, 26, 3, 0.9);
-        }
-        
-        body.dark-mode th {
-            background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
-        }
-        
-        body.dark-mode tbody tr:nth-child(even) {
-            background-color: rgba(245, 158, 11, 0.08);
-        }
-        
-        body.dark-mode tbody tr:hover {
-            background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.15));
-        }
-        
-        body.dark-mode .modal-content {
-            background: rgba(69, 26, 3, 0.98);
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-        
-        body.dark-mode #mode-selection-modal .modal-content {
-            background: linear-gradient(135deg, #451a03, #292524);
-        }
-        
-        body.dark-mode .mode-btn {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: rgba(245, 158, 11, 0.3);
-            color: #fef3c7;
-        }
-        
-        body.dark-mode .mode-btn:hover {
-            background: linear-gradient(135deg, #f59e0b, #ea580c);
-            color: white;
-        }
-        
-        body.dark-mode input, body.dark-mode select {
-            background-color: rgba(69, 26, 3, 0.9);
-            color: #fef3c7;
-            border-color: rgba(245, 158, 11, 0.3);
-        }
-        
-        body.dark-mode #ticker-container {
-            background: linear-gradient(135deg, #78350f 0%, #92400e 50%, #b45309 100%);
-        }
-        
-        body.dark-mode .credit-summary-container {
-            background: transparent;
-        }
-
         /* --- Floating Action Buttons --- */
         .fab-container {
             position: fixed;
@@ -2386,14 +2288,6 @@
         .fab-btn:hover {
             transform: scale(1.15) rotate(10deg);
             box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-        }
-        
-        .fab-btn.dark-mode-toggle {
-            background: linear-gradient(135deg, #451a03, #292524);
-        }
-        
-        body.dark-mode .fab-btn.dark-mode-toggle {
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
         }
         
         .fab-btn.stats-toggle {
@@ -2460,11 +2354,6 @@
             overflow-y: auto;
             padding: 30px;
             border: 1px solid rgba(245, 158, 11, 0.1);
-        }
-        
-        body.dark-mode .stats-dashboard {
-            background: rgba(69, 26, 3, 0.98);
-            border-color: rgba(245, 158, 11, 0.2);
         }
         
         .stats-dashboard.open {
@@ -2537,9 +2426,6 @@
             box-shadow: 0 4px 20px rgba(245, 158, 11, 0.1);
         }
         
-        body.dark-mode .chart-container {
-            background: rgba(69, 26, 3, 0.9);
-        }
 
         /* --- Keyboard Shortcuts Modal --- */
         .keyboard-modal {
@@ -2725,11 +2611,6 @@
             border-radius: 20px;
         }
         
-        body.dark-mode .glass-card {
-            background: rgba(0, 0, 0, 0.25);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
         /* --- Animated Counter --- */
         .animated-counter {
             display: inline-block;
@@ -2836,13 +2717,13 @@
                     <i class="fas fa-file-alt"></i>
                     <span>التقارير والتصدير</span>
                 </button>
+                <button data-section="pro-txt-editor-section" class="nav-item">
+                    <i class="fas fa-edit"></i>
+                    <span>تعديل ملف TXT</span>
+                </button>
                 <button data-section="backup-restore-section" class="nav-item">
                     <i class="fas fa-database"></i>
                     <span>النسخ الاحتياطي</span>
-                </button>
-                <button class="nav-item theme-toggle" id="theme-toggle-btn">
-                    <i class="fas fa-moon"></i>
-                    <span>الوضع الليلي</span>
                 </button>
                 <button class="nav-item theme-toggle" id="sound-toggle-btn">
                     <i class="fas fa-volume-up"></i>
@@ -3108,6 +2989,144 @@
             </div>
         </section>
 
+        <!-- التعديل الاحترافي على ملف TXT -->
+        <section id="pro-txt-editor-section" class="app-section">
+            <div class="section-header pro-editor-header">
+                <div class="section-icon"><i class="fas fa-edit"></i></div>
+                <div class="section-title-info">
+                    <h2>التعديل الاحترافي على ملف TXT</h2>
+                    <p class="section-desc">هذا التبويب مخصص من أجل التعديل على مبالغ المستفيدين في حالة وجود مبالغ إضافية لنفس المستفيد متعلقة إمّا بمبالغ مسترجعة لنفس المستفيد أو تعويضات من منح أخرى لنفس المستفيد. في هذه الحالة قم فقط بإضافة المبلغ الجديد إلى مبلغ التعويض وأدرج مجموعهما في المبلغ المعدّل ثم قم بتصدير ملف TXT الجديد.</p>
+                    <p class="section-desc"><strong>ملاحظة :</strong> بإمكانك إما استدعاء التعويضات المحجوزة من خلال زر تحميل من التعويضات أو استيراد ملف TXT سابق والتعديل عليه، وبعد انتهاء التعديل تصدير الملف الجديد لحرقه على CD وطباعة جدول الإرسال CD.</p>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="pro-editor-controls">
+                    <div class="control-row">
+                        <div class="control-group">
+                            <label><i class="fas fa-calendar-alt"></i> السنة المالية</label>
+                            <input type="number" id="pro-fiscal-year-input" min="2020" max="2050" value="2025" onchange="updateProInfo()">
+                        </div>
+                        <div class="control-group">
+                            <label><i class="fas fa-calendar-day"></i> الشهر المالي</label>
+                            <select id="pro-fiscal-month-input" onchange="updateProInfo()">
+                                <option value="1">جانفي (01)</option>
+                                <option value="2">فيفري (02)</option>
+                                <option value="3">مارس (03)</option>
+                                <option value="4">أفريل (04)</option>
+                                <option value="5">ماي (05)</option>
+                                <option value="6">جوان (06)</option>
+                                <option value="7">جويلية (07)</option>
+                                <option value="8">أوت (08)</option>
+                                <option value="9">سبتمبر (09)</option>
+                                <option value="10">أكتوبر (10)</option>
+                                <option value="11">نوفمبر (11)</option>
+                                <option value="12">ديسمبر (12)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label><i class="fas fa-file-invoice"></i> رقم الأمر بالصرف</label>
+                            <input type="number" id="pro-order-number" min="0" value="0" onchange="updateProInfo()">
+                        </div>
+                        <div class="control-group">
+                            <label><i class="fas fa-money-check-alt"></i> رقم الحوالة</label>
+                            <input type="number" id="pro-transfer-number" min="0" value="0" onchange="updateProInfo()">
+                        </div>
+                        <div class="control-group">
+                            <label><i class="fas fa-university"></i> رقم حساب الخزينة CCP</label>
+                            <input type="text" id="pro-treasury-account" placeholder="رقم حساب الخزينة" onchange="updateProInfo()">
+                        </div>
+                        <div class="control-group">
+                            <label><i class="fas fa-key"></i> رقم المفتاح</label>
+                            <input type="text" id="pro-key-number" placeholder="رقم المفتاح" onchange="updateProInfo()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pro-editor-info-cards">
+                    <div class="info-card">
+                        <i class="fas fa-users"></i>
+                        <div class="info-details">
+                            <span class="info-label">عدد المستفيدين</span>
+                            <span class="info-value" id="pro-beneficiary-count">0</span>
+                        </div>
+                    </div>
+                    <div class="info-card highlight">
+                        <i class="fas fa-coins"></i>
+                        <div class="info-details">
+                            <span class="info-label">المجموع الكلي</span>
+                            <span class="info-value" id="pro-total-amount">0,00 دج</span>
+                        </div>
+                    </div>
+                    <div class="info-card" id="pro-source-card">
+                        <i class="fas fa-database"></i>
+                        <div class="info-details">
+                            <span class="info-label">مصدر البيانات</span>
+                            <span class="info-value" id="pro-data-source">التعويضات المحجوزة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pro-editor-actions">
+                    <button class="pro-action-btn import-btn" onclick="proImportTxt()">
+                        <i class="fas fa-file-import"></i>
+                        <span>استيراد ملف TXT</span>
+                    </button>
+                    <button class="pro-action-btn load-btn" onclick="proLoadFromCompensations()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحميل من التعويضات</span>
+                    </button>
+                    <button class="pro-action-btn export-btn" onclick="proExportTxt()">
+                        <i class="fas fa-file-export"></i>
+                        <span>تصدير ملف TXT</span>
+                    </button>
+                    <button class="pro-action-btn print-btn" onclick="proPrintCDRom()">
+                        <i class="fas fa-print"></i>
+                        <span>طباعة جدول CD-ROM</span>
+                    </button>
+                    <button class="pro-action-btn reset-btn" onclick="proResetAmounts()">
+                        <i class="fas fa-undo"></i>
+                        <span>استعادة المبالغ الأصلية</span>
+                    </button>
+                    <button class="pro-action-btn clear-btn" onclick="proClearTable()">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>مسح الجدول</span>
+                    </button>
+                </div>
+
+                <input type="file" id="pro-import-file-input" accept=".txt" style="display: none;" onchange="proHandleFileImport(event)">
+
+                <div class="pro-editor-table-container">
+                    <table id="pro-editor-table" class="pro-editor-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">#</th>
+                                <th style="width: 200px;">اللقب والاسم</th>
+                                <th style="width: 150px;">رقم الحساب CCP</th>
+                                <th style="width: 200px;">RIP</th>
+                                <th style="width: 130px;">المبلغ الأصلي</th>
+                                <th style="width: 150px;">المبلغ المعدل</th>
+                                <th style="width: 60px;">حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pro-editor-tbody"></tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <th colspan="4">المجموع الكلي</th>
+                                <th id="pro-original-total">0,00</th>
+                                <th id="pro-modified-total">0,00</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="pro-empty-state" id="pro-empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>لا توجد بيانات حالياً</p>
+                        <p class="hint">قم باستيراد ملف TXT أو تحميل البيانات من التعويضات المحجوزة</p>
+                    </div>
+                </div>
+            </div>
+         </section>
+
          <!-- Backup/Restore -->
          <section id="backup-restore-section" class="app-section">
             <div class="section-header backup-header">
@@ -3168,7 +3187,6 @@
                 <span class="ticker-item"><i class="fas fa-lightbulb"></i> نصيحة: استخدم Ctrl+S للحفظ السريع</span>
                 <span class="ticker-item"><i class="fas fa-info-circle"></i> يمكنك تصدير البيانات إلى Excel أو ملف نصي</span>
                 <span class="ticker-item"><i class="fas fa-shield-alt"></i> لا تنس إنشاء نسخة احتياطية بشكل دوري</span>
-                <span class="ticker-item"><i class="fas fa-moon"></i> جرب الوضع الليلي بالضغط على Ctrl+D</span>
                 <span class="ticker-item"><i class="fas fa-keyboard"></i> اضغط F1 لعرض اختصارات لوحة المفاتيح</span>
             </div>
         </div>
@@ -3738,6 +3756,8 @@
                 updateCreditDisplay();
             } else if (sectionId === 'reporting-section') {
                 generateReportPreview();
+            } else if (sectionId === 'pro-txt-editor-section') {
+                renderProEditorSection();
             }
         }
 
@@ -5320,13 +5340,517 @@
         }
 
 
+        // ============================================
+        // ========== PRO TXT EDITOR ===========
+        // ============================================
+
+        let proEditorData = []; // بيانات المحرر مع المبالغ المعدلة
+        let proEditorInfo = {
+            fiscalYear: new Date().getFullYear(),
+            fiscalMonth: 1,
+            orderNumber: 0,
+            transferNumber: 0,
+            treasuryAccount: '',
+            keyNumber: '',
+            dataSource: 'التعويضات المحجوزة'
+        };
+
+        function renderProEditorSection() {
+            proEditorInfo.fiscalYear = institutionInfo.fiscalYear || new Date().getFullYear();
+            proEditorInfo.fiscalMonth = institutionInfo.financialMonth || 1;
+            proEditorInfo.orderNumber = institutionInfo.orderNumber || 0;
+            proEditorInfo.transferNumber = institutionInfo.transferNumber || 0;
+            proEditorInfo.treasuryAccount = institutionInfo.treasuryAccount || '';
+            proEditorInfo.keyNumber = institutionInfo.keyNumber || '';
+
+            document.getElementById('pro-fiscal-year-input').value = proEditorInfo.fiscalYear;
+            document.getElementById('pro-fiscal-month-input').value = proEditorInfo.fiscalMonth;
+            document.getElementById('pro-order-number').value = proEditorInfo.orderNumber;
+            document.getElementById('pro-transfer-number').value = proEditorInfo.transferNumber;
+            document.getElementById('pro-treasury-account').value = proEditorInfo.treasuryAccount;
+            document.getElementById('pro-key-number').value = proEditorInfo.keyNumber;
+
+            if (proEditorData.length === 0) {
+                proLoadFromCompensations();
+            } else {
+                renderProEditorTable();
+                updateProTotals();
+                updateProEmptyState();
+            }
+        }
+
+        function updateProInfo() {
+            proEditorInfo.fiscalYear = parseInt(document.getElementById('pro-fiscal-year-input').value) || new Date().getFullYear();
+            proEditorInfo.fiscalMonth = parseInt(document.getElementById('pro-fiscal-month-input').value) || 1;
+            proEditorInfo.orderNumber = parseInt(document.getElementById('pro-order-number').value) || 0;
+            proEditorInfo.transferNumber = parseInt(document.getElementById('pro-transfer-number').value) || 0;
+            proEditorInfo.treasuryAccount = document.getElementById('pro-treasury-account').value || '';
+            proEditorInfo.keyNumber = document.getElementById('pro-key-number').value || '';
+        }
+
+        function proLoadFromCompensations() {
+            proEditorData = [];
+
+            if (currentMode === 'electricity') {
+                compensations.forEach(comp => {
+                    const b = beneficiaries.find(ben => ben.id === comp.beneficiaryId);
+                    if (!b || (b.type && b.type !== 'electricity')) return;
+                    const rip = calculateRIP(b.account);
+                    if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) return;
+
+                    proEditorData.push({
+                        id: b.id,
+                        name: b.name,
+                        account: b.account,
+                        rip: rip,
+                        originalAmount: comp.netPayable,
+                        modifiedAmount: comp.netPayable
+                    });
+                });
+            } else if (currentMode === 'equipment') {
+                beneficiaries.filter(b => b.type === 'equipment').forEach(b => {
+                    const comp = compensationsEquipment.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : institutionInfo.equipmentGrantValue;
+                    const rip = calculateRIP(b.account);
+                    if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) return;
+
+                    proEditorData.push({
+                        id: b.id,
+                        name: b.name,
+                        account: b.account,
+                        rip: rip,
+                        originalAmount: netPayable,
+                        modifiedAmount: netPayable
+                    });
+                });
+            } else {
+                const targetArray = currentMode === 'transport' ? compensationsTransport : compensationsTraining;
+                beneficiaries.filter(b => b.type === currentMode).forEach(b => {
+                    const comp = targetArray.find(c => c.beneficiaryId === b.id);
+                    const netPayable = comp ? comp.netPayable : 0;
+                    const rip = calculateRIP(b.account);
+                    if (rip.includes('خطأ') || !/^[a-zA-Z\s\-]+$/.test(b.name)) return;
+
+                    proEditorData.push({
+                        id: b.id,
+                        name: b.name,
+                        account: b.account,
+                        rip: rip,
+                        originalAmount: netPayable,
+                        modifiedAmount: netPayable
+                    });
+                });
+            }
+
+            proEditorData.sort((a, b) => a.id - b.id);
+            proEditorInfo.dataSource = 'التعويضات المحجوزة';
+            document.getElementById('pro-data-source').textContent = proEditorInfo.dataSource;
+
+            renderProEditorTable();
+            updateProTotals();
+            updateProEmptyState();
+
+            if (proEditorData.length > 0) {
+                showToast(`تم تحميل ${proEditorData.length} مستفيد من التعويضات المحجوزة`, 'success');
+            }
+        }
+
+        function proImportTxt() {
+            document.getElementById('pro-import-file-input').click();
+        }
+
+        function proHandleFileImport(event) {
+            // ملاحظة: استيراد المحرر الاحترافي معزول ولا يضيف شيئاً إلى قوائم المستفيدين/التعويضات الرئيسية
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n').filter(line => line.trim());
+
+                if (lines.length < 2) {
+                    showToast('الملف لا يحتوي على بيانات كافية', 'error');
+                    return;
+                }
+
+                const headerLine = lines[0];
+                if (!headerLine.startsWith('*')) {
+                    showToast('تنسيق الملف غير صحيح', 'error');
+                    return;
+                }
+
+                const headerData = headerLine.substring(1);
+                if (headerData.length >= 51) {
+                    const month = parseInt(headerData.substring(39, 41), 10);
+                    const year = parseInt('20' + headerData.substring(41, 43), 10);
+                    const order = parseInt(headerData.substring(43, 47), 10);
+                    const transfer = parseInt(headerData.substring(47, 51), 10);
+
+                    proEditorInfo.fiscalMonth = month || 1;
+                    proEditorInfo.fiscalYear = year || new Date().getFullYear();
+                    proEditorInfo.orderNumber = order || 0;
+                    proEditorInfo.transferNumber = transfer || 0;
+
+                    // استخراج رقم الحساب CCP ورقم المفتاح من أول سجل
+                    if (lines.length > 1) {
+                        const firstDataLine = lines[1].trim();
+                        if (firstDataLine.startsWith('*') && firstDataLine.length >= 61) {
+                            const data = firstDataLine.substring(1);
+                            const rip = data.substring(0, 20);
+                            // رقم الحساب من RIP (المواضع 10-18)
+                            proEditorInfo.treasuryAccount = rip.substring(10, 18).trim();
+                            // رقم المفتاح من RIP (المواضع 0-10)
+                            proEditorInfo.keyNumber = rip.substring(0, 10).trim();
+                        }
+                    }
+
+                    document.getElementById('pro-fiscal-year-input').value = proEditorInfo.fiscalYear;
+                    document.getElementById('pro-fiscal-month-input').value = proEditorInfo.fiscalMonth;
+                    document.getElementById('pro-order-number').value = proEditorInfo.orderNumber;
+                    document.getElementById('pro-transfer-number').value = proEditorInfo.transferNumber;
+                    document.getElementById('pro-treasury-account').value = proEditorInfo.treasuryAccount;
+                    document.getElementById('pro-key-number').value = proEditorInfo.keyNumber;
+                }
+
+                proEditorData = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line.startsWith('*') || line.length < 61) continue;
+
+                    const data = line.substring(1);
+                    const rip = data.substring(0, 20);
+                    const amountCents = parseInt(data.substring(20, 33), 10);
+                    const amount = amountCents / 100;
+                    const name = data.substring(33, 60).trim();
+                    const account = rip.substring(10, 18).replace(/^0+/, '');
+
+                    proEditorData.push({
+                        id: i,
+                        name: name,
+                        account: account,
+                        rip: rip,
+                        originalAmount: amount,
+                        modifiedAmount: amount
+                    });
+                }
+
+                proEditorInfo.dataSource = `ملف مستورد (${file.name})`;
+                document.getElementById('pro-data-source').textContent = proEditorInfo.dataSource;
+
+                renderProEditorTable();
+                updateProTotals();
+                updateProEmptyState();
+
+                SoundSystem.import();
+                showToast(`تم استيراد ${proEditorData.length} سجل من الملف`, 'success');
+            };
+
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function renderProEditorTable() {
+            const tbody = document.getElementById('pro-editor-tbody');
+            tbody.innerHTML = '';
+
+            proEditorData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.account}</td>
+                    <td>${item.rip}</td>
+                    <td class="original-amount">${formatCurrency(item.originalAmount)}</td>
+                    <td>
+                        <input type="number" 
+                               class="amount-input" 
+                               value="${item.modifiedAmount.toFixed(2)}" 
+                               step="0.01" 
+                               min="0"
+                               data-index="${index}"
+                               onchange="updateProAmount(${index}, this.value)"
+                               oninput="markProInputModified(this, ${item.originalAmount})">
+                    </td>
+                    <td>
+                        <button class="delete-btn" onclick="proDeleteRow(${index})" title="حذف">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('pro-beneficiary-count').textContent = proEditorData.length;
+        }
+
+        function updateProEmptyState() {
+            const emptyState = document.getElementById('pro-empty-state');
+            const table = document.getElementById('pro-editor-table');
+
+            if (proEditorData.length === 0) {
+                emptyState.classList.add('visible');
+                table.style.display = 'none';
+            } else {
+                emptyState.classList.remove('visible');
+                table.style.display = 'table';
+            }
+        }
+
+        function proDeleteRow(index) {
+            if (!confirm('هل تريد حذف هذا السجل؟')) return;
+
+            proEditorData.splice(index, 1);
+            renderProEditorTable();
+            updateProTotals();
+            updateProEmptyState();
+            SoundSystem.delete();
+        }
+
+        function proClearTable() {
+            if (proEditorData.length === 0) {
+                showToast('الجدول فارغ بالفعل', 'info');
+                return;
+            }
+
+            if (!confirm('هل تريد مسح جميع البيانات من الجدول؟')) return;
+
+            proEditorData = [];
+            renderProEditorTable();
+            updateProTotals();
+            updateProEmptyState();
+            SoundSystem.delete();
+            showToast('تم مسح الجدول', 'success');
+        }
+
+        function markProInputModified(input, originalAmount) {
+            const currentValue = parseFloat(input.value) || 0;
+            if (Math.abs(currentValue - originalAmount) > 0.001) {
+                input.classList.add('modified');
+            } else {
+                input.classList.remove('modified');
+            }
+        }
+
+        function updateProAmount(index, value) {
+            const newAmount = parseFloat(value) || 0;
+            proEditorData[index].modifiedAmount = Math.round(newAmount * 100) / 100;
+            updateProTotals();
+            SoundSystem.click();
+        }
+
+        function updateProTotals() {
+            const originalTotal = proEditorData.reduce((sum, item) => sum + item.originalAmount, 0);
+            const modifiedTotal = proEditorData.reduce((sum, item) => sum + item.modifiedAmount, 0);
+
+            document.getElementById('pro-original-total').textContent = formatCurrency(originalTotal);
+            document.getElementById('pro-modified-total').textContent = formatCurrency(modifiedTotal);
+            document.getElementById('pro-total-amount').textContent = formatCurrency(modifiedTotal) + ' دج';
+            document.getElementById('pro-beneficiary-count').textContent = proEditorData.length;
+        }
+
+        function proResetAmounts() {
+            if (proEditorData.length === 0) {
+                showToast('لا توجد بيانات لاستعادتها', 'info');
+                return;
+            }
+
+            if (!confirm('هل تريد استعادة جميع المبالغ الأصلية؟')) return;
+
+            proEditorData.forEach(item => {
+                item.modifiedAmount = item.originalAmount;
+            });
+
+            renderProEditorTable();
+            updateProTotals();
+            SoundSystem.success();
+            showToast('تم استعادة المبالغ الأصلية', 'success');
+        }
+
+        function proExportTxt() {
+            if (proEditorData.length === 0) {
+                showToast('لا توجد بيانات للتصدير', 'error');
+                return;
+            }
+
+            updateProInfo();
+
+            let validRecords = [];
+            let totalAmount = 0;
+
+            proEditorData.forEach(item => {
+                if (item.modifiedAmount > 0) {
+                    const amountCents = String(Math.round(item.modifiedAmount * 100)).padStart(13, '0');
+                    const namePadded = (item.name + ' '.repeat(27)).substring(0, 27);
+                    validRecords.push(`*${item.rip}${amountCents}${namePadded}1`);
+                    totalAmount += item.modifiedAmount;
+                }
+            });
+
+            if (validRecords.length === 0) {
+                showToast('لا توجد سجلات صالحة للتصدير (جميع المبالغ صفر)', 'error');
+                return;
+            }
+
+            // تحديد مصدر البيانات ورقم الحساب
+            let treasuryAccount = '';
+            let treasuryRIP = '';
+            
+            // إذا كانت البيانات مستوردة من ملف TXT، استخدم بيانات الملف المستورد
+            if (proEditorInfo.dataSource.includes('ملف مستورد')) {
+                treasuryAccount = proEditorInfo.treasuryAccount;
+                // استخدام RIP من أول سجل في البيانات المستوردة (يحتوي على بيانات الخزينة)
+                if (proEditorData.length > 0) {
+                    treasuryRIP = proEditorData[0].rip ? proEditorData[0].rip.substring(0, 20) : calculateRIP(treasuryAccount);
+                }
+            } else {
+                // إذا كانت البيانات محملة من التعويضات المحجوزة، استخدم بيانات المؤسسة
+                treasuryAccount = institutionInfo.treasuryAccount;
+                treasuryRIP = calculateRIP(treasuryAccount);
+            }
+
+            if (treasuryRIP.includes('خطأ') || !treasuryRIP || treasuryRIP.length < 20) {
+                showToast('خطأ: رقم حساب الخزينة غير صحيح. يرجى التحقق من معلومات الحساب.', 'error');
+                return;
+            }
+
+            const totalAmountCents = String(Math.round(totalAmount * 100)).padStart(13, '0');
+            const recordCount = String(validRecords.length).padStart(7, '0');
+            const month = String(proEditorInfo.fiscalMonth).padStart(2, '0');
+            const year = String(proEditorInfo.fiscalYear).padStart(4, '0');
+            const order = String(proEditorInfo.orderNumber).padStart(8, '0');
+            const transfer = String(proEditorInfo.transferNumber).padStart(6, '0');
+
+            const header = `*${treasuryRIP}${totalAmountCents}${recordCount}${month}${year}${order}${transfer}0`;
+            
+            if (header.length !== 62) {
+                showToast(`خطأ في توليد السطر الأول: الطول = ${header.length} (يجب أن يكون 62)`, 'error');
+                return;
+            }
+
+            const fileContent = header + '\n' + validRecords.join('\n');
+
+            const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const filename = `Pro_Payment_${currentMode}_${proEditorInfo.fiscalYear}_${month}_${new Date().toLocaleDateString('ar-SA')}.txt`;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            SoundSystem.export();
+            showToast(`تم تصدير الملف بنجاح\n${validRecords.length} سجل - المجموع: ${formatCurrency(totalAmount)} دج`, 'success');
+        }
+
+        function proPrintCDRom() {
+            if (proEditorData.length === 0) {
+                showToast('لا توجد بيانات للطباعة', 'error');
+                return;
+            }
+
+            updateProInfo();
+
+            const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const monthName = months[proEditorInfo.fiscalMonth - 1] || 'N/A';
+            const year = proEditorInfo.fiscalYear;
+            const orgAccount = proEditorInfo.treasuryAccount || institutionInfo.treasuryAccount || 'N/A';
+            const orgKey = proEditorInfo.keyNumber || institutionInfo.treasuryKey || 'N/A';
+            const totalAmount = proEditorData.reduce((sum, item) => sum + item.modifiedAmount, 0);
+            const beneficiaryCount = proEditorData.length;
+            const orderNum = proEditorInfo.orderNumber;
+            const transferNum = proEditorInfo.transferNumber;
+
+            const beneficiaryRows = proEditorData.filter(item => item.modifiedAmount > 0).map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.rip.substring(0, 18)} / ${item.rip.substring(18)}</td>
+                    <td>${formatCurrency(item.modifiedAmount)}</td>
+                </tr>
+            `).join('');
+
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html lang="fr">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Etat de virement sur le CD-ROM (Pro)</title>
+                    <style>
+                        body { font-family: "Times New Roman", serif; margin: 40px; color: #000; }
+                        h2 { text-align: center; text-decoration: underline; margin-bottom: 5px; }
+                        .pro-badge { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; padding: 3px 12px; border-radius: 5px; font-size: 11px; margin-right: 10px; }
+                        .header { text-align: center; margin-bottom: 20px; }
+                        .details { margin-bottom: 20px; line-height: 1.8; }
+                        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+                        th, td { border: 1px solid #000; padding: 6px; text-align: center; }
+                        th { background-color: #f2f2f2; }
+                        .footer { margin-top: 10px; font-weight: bold; }
+                        @media print {
+                            body { margin: 20px; }
+                            button { display: none; }
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2><span class="pro-badge">PRO</span> Etat de virement sur le CD-ROM</h2>
+                    <div class="header">
+                        <strong>Mois :</strong> ${monthName} &nbsp;&nbsp;&nbsp;
+                        <strong>Année :</strong> ${year}
+                    </div>
+                    <div class="details">
+                        <strong>Numéro de compte de l'organisme :</strong> ${orgAccount} &nbsp;&nbsp; <strong>Clé :</strong> ${orgKey}<br>
+                        <strong>Montant global de virement :</strong> ${formatCurrency(totalAmount)}<br>
+                        <strong>L'Effectif :</strong> ${beneficiaryCount}<br>
+                        <strong>Code Ordonnateur :</strong> ${orderNum}<br>
+                        <strong>N° Mandat :</strong> ${transferNum}
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>N</th>
+                                <th>Nom et Prénom</th>
+                                <th>Compte / Clé</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${beneficiaryRows}
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        Nombre de titres : ${beneficiaryCount} &nbsp;&nbsp;&nbsp; Montant global de détail : ${formatCurrency(totalAmount)}
+                    </div>
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            window.onafterprint = function() { window.close(); };
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+
+            const printWindow = window.open('', '_blank', 'height=700,width=900,scrollbars=yes');
+            if (printWindow) {
+                printWindow.document.write(reportHTML);
+                printWindow.document.close();
+                SoundSystem.success();
+            } else {
+                showToast('فشل فتح نافذة الطباعة. يرجى السماح بالنوافذ المنبثقة.', 'error');
+            }
+        }
+
+
         // --- Import from TXT ---
         let importedTxtData = [];
-        
+
         function openImportTxtModal() {
             document.getElementById('import-txt-input').click();
         }
-        
+
         function handleTxtFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -5339,7 +5863,7 @@
             reader.readAsText(file, 'UTF-8');
             event.target.value = ''; // Reset for selecting same file again
         }
-        
+
         function showImportTxtModal(content) {
             const modal = document.getElementById('import-txt-modal');
             modal.style.display = 'flex';
@@ -6083,12 +6607,6 @@
                 });
             });
             
-            // Theme Toggle in Sidebar
-            const themeToggleBtn = document.getElementById('theme-toggle-btn');
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', toggleDarkMode);
-            }
-            
             // Sound Toggle Button in Sidebar
             const soundToggleBtn = document.getElementById('sound-toggle-btn');
             if (soundToggleBtn) {
@@ -6201,19 +6719,6 @@
         // ============================================
         // ========== CREATIVE FEATURES JS ===========
         // ============================================
-
-        // --- Dark Mode Toggle ---
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDark);
-            showToast(isDark ? '🌙 تم تفعيل الوضع الليلي' : '☀️ تم تفعيل الوضع النهاري', 'info');
-            
-            // Update charts if visible
-            if (typeof updateStatisticsChart === 'function') {
-                updateStatisticsChart();
-            }
-        }
 
         // --- Live Clock ---
         function updateLiveClock() {
@@ -6355,9 +6860,6 @@
             const chartCanvas = document.getElementById('stats-chart');
             if (!chartCanvas) return;
             
-            const isDark = document.body.classList.contains('dark-mode');
-            const textColor = isDark ? '#e8e8e8' : '#333';
-            
             if (statsChart) {
                 statsChart.destroy();
             }
@@ -6380,7 +6882,7 @@
                             '#AB47BC'
                         ],
                         borderWidth: 2,
-                        borderColor: isDark ? '#16213e' : '#ffffff'
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
@@ -6389,7 +6891,7 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: textColor,
+                                color: '#333',
                                 font: {
                                     family: 'IBM Plex Sans Arabic'
                                 }
@@ -6406,8 +6908,7 @@
             tenBeneficiaries: { title: '🏆 عشرة مستفيدين!', unlocked: false },
             fiftyBeneficiaries: { title: '🌟 خمسون مستفيداً!', unlocked: false },
             firstExport: { title: '📊 أول تصدير!', unlocked: false },
-            firstBackup: { title: '💾 أول نسخة احتياطية!', unlocked: false },
-            darkModeExplorer: { title: '🌙 مستكشف الليل!', unlocked: false }
+            firstBackup: { title: '💾 أول نسخة احتياطية!', unlocked: false }
         };
         
         function checkAchievements() {
@@ -6506,13 +7007,6 @@
                         setTimeout(() => modal.style.display = 'none', 300);
                     });
                 }
-                
-                // Ctrl/Cmd + D: Toggle dark mode
-                if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-                    e.preventDefault();
-                    toggleDarkMode();
-                }
-                
                 // F1: Show keyboard shortcuts
                 if (e.key === 'F1') {
                     e.preventDefault();
@@ -6617,12 +7111,6 @@
 
         // --- Initialize All Creative Features ---
         function initCreativeFeatures() {
-            // Load dark mode preference
-            const savedDarkMode = localStorage.getItem('darkMode');
-            if (savedDarkMode === 'true') {
-                document.body.classList.add('dark-mode');
-            }
-            
             // Initialize clock
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
@@ -6647,9 +7135,6 @@
             
             // Add FAB container event listeners
             document.addEventListener('click', (e) => {
-                if (e.target.closest('.dark-mode-toggle')) {
-                    toggleDarkMode();
-                }
                 if (e.target.closest('.stats-toggle')) {
                     toggleStatsDashboard();
                 }
