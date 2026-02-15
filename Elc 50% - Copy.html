@@ -3751,8 +3751,17 @@
 
             if (sectionId === 'institution-info-section') {
                 for (const key in institutionInfo) {
+                    if (key === 'openCredit' || key === 'orderNumber' || key === 'transferNumber' || key === 'financialMonth' || key === 'modeDetails') continue;
                     const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                     if (element) element.value = institutionInfo[key];
+                }
+                // تحميل البيانات الخاصة بنوع التعويض الحالي (الاعتماد المفتوح، رقم الحوالة، رقم الأمر، الشهر المالي)
+                if (institutionInfo.modeDetails && institutionInfo.modeDetails[currentMode]) {
+                    const details = institutionInfo.modeDetails[currentMode];
+                    document.getElementById('open-credit').value = details.credit || 0;
+                    document.getElementById('order-number').value = details.order || '';
+                    document.getElementById('transfer-number').value = details.transfer || '';
+                    document.getElementById('financial-month').value = details.month || '';
                 }
             } else if (sectionId === 'compensation-management-section') {
                 renderCompensationGrid();
@@ -3858,7 +3867,7 @@
             }
 
             for (const key in institutionInfo) {
-                 if (key === 'openCredit' || key === 'equipmentGrantValue' || key === 'modeDetails') continue;
+                 if (key === 'openCredit' || key === 'equipmentGrantValue' || key === 'modeDetails' || key === 'orderNumber' || key === 'transferNumber' || key === 'financialMonth') continue;
                 const element = document.getElementById(key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`));
                 if (element) institutionInfo[key] = element.value.trim();
             }
