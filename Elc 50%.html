@@ -3267,12 +3267,36 @@ tr:hover .beneficiary-name-cell .beneficiary-actions { opacity: 1; }
             }
 
             console.log('Calling showSection...');
-            // Combined mode goes directly to its section; others go to dashboard
-            if (mode === 'combined') {
-                showSection('combined-compensations-section');
-            } else {
-                showDashboard();
-            }
+            // فتح التبويب المناسب مباشرة حسب نوع التعويض
+                        if (mode === 'combined') {
+                                showSection('combined-compensations-section');
+                                // تفعيل زر تبويب تعويضات متعددة في الشريط الرئيسي فقط
+                                const navTabs = document.querySelector('.navbar-tabs');
+                                if (navTabs) {
+                                    navTabs.querySelectorAll('.nav-tab, .nav-item').forEach(btn => {
+                                        btn.classList.remove('active');
+                                        if (btn.dataset.section === 'combined-compensations-section') {
+                                            btn.classList.add('active');
+                                            btn.scrollIntoView({behavior:'smooth',inline:'center'});
+                                        }
+                                    });
+                                }
+                        } else if (mode === 'electricity' || mode === 'equipment' || mode === 'transport' || mode === 'training') {
+                                showSection('compensation-management-section');
+                                // تفعيل زر تبويب التعويضات في الشريط الرئيسي فقط
+                                const navTabs = document.querySelector('.navbar-tabs');
+                                if (navTabs) {
+                                    navTabs.querySelectorAll('.nav-tab, .nav-item').forEach(btn => {
+                                        btn.classList.remove('active');
+                                        if (btn.dataset.section === 'compensation-management-section') {
+                                            btn.classList.add('active');
+                                            btn.scrollIntoView({behavior:'smooth',inline:'center'});
+                                        }
+                                    });
+                                }
+                        } else {
+                                showDashboard();
+                        }
             console.log('selectMode completed');
         }
 
@@ -4228,43 +4252,8 @@ tr:hover .beneficiary-name-cell .beneficiary-actions { opacity: 1; }
             },
             
             // صوت الحذف - نغمة هابطة
-            delete() {
-                if (!this.enabled || !this.audioContext) return;
-                this.resume();
-                
-                this.playTone(400, 0.1, 'sawtooth', 0.3);
-                setTimeout(() => this.playTone(300, 0.15, 'sawtooth', 0.3), 100);
-            },
-            
-            // صوت تجاوز الاعتماد - إنذار
-            creditAlert() {
-                if (!this.enabled || !this.audioContext) return;
-                this.resume();
-                
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(() => {
-                        this.playTone(800, 0.1, 'square', 0.4);
-                        setTimeout(() => this.playTone(600, 0.1, 'square', 0.4), 100);
-                    }, i * 250);
-                }
-            },
-            
-            // صوت الإضافة - نغمة إيجابية
-            add() {
-                if (!this.enabled || !this.audioContext) return;
-                this.resume();
-                
-                this.playTone(523.25, 0.08, 'sine', 0.5);
-                setTimeout(() => this.playTone(698.46, 0.1, 'sine', 0.5), 70);
-            },
-            
-            // صوت النقر/التفاعل
-            click() {
-                if (!this.enabled || !this.audioContext) return;
-                this.resume();
-                
-                this.playTone(1000, 0.03, 'sine', 0.2);
-            },
+
+            // ...existing code...
             
             // صوت التصدير
             export() {
@@ -4597,21 +4586,31 @@ tr:hover .beneficiary-name-cell .beneficiary-actions { opacity: 1; }
                     <th>المجموع</th><th>الخصم</th><th>الصافي للدفع</th>
                 </tr></thead><tbody>
                     ${reportData.map((item, index) => {
-                        const totalBeforeDiscount = item.q1.calculated + item.q2.calculated + item.q3.calculated + item.q4.calculated;
+                        // Only sum enabled quarters
+                        let totalBeforeDiscount = 0;
+                        let q1 = quarterEnabled.q1 ? item.q1.calculated : 0;
+                        let q2 = quarterEnabled.q2 ? item.q2.calculated : 0;
+                        let q3 = quarterEnabled.q3 ? item.q3.calculated : 0;
+                        let q4 = quarterEnabled.q4 ? item.q4.calculated : 0;
+                        totalBeforeDiscount = q1 + q2 + q3 + q4;
+                        // Show value only if enabled, else show فارغ
+                        function showQ(val, enabled) { return enabled ? formatCurrency(val) : '<span style="color:#aaa">فارغ</span>'; }
+                        // Net payable: total enabled quarters - discount
+                        let netPayable = totalBeforeDiscount - (item.discount || 0);
                         return `
                         <tr>
                             <td>${startCounter + index}</td><td>${item.name}</td><td>${item.meter}</td><td>${item.rip}</td>
-                            <td>${formatCurrency(item.q1.calculated)}</td><td>${formatCurrency(item.q2.calculated)}</td>
-                            <td>${formatCurrency(item.q3.calculated)}</td><td>${formatCurrency(item.q4.calculated)}</td>
+                            <td>${showQ(item.q1.calculated, quarterEnabled.q1)}</td><td>${showQ(item.q2.calculated, quarterEnabled.q2)}</td>
+                            <td>${showQ(item.q3.calculated, quarterEnabled.q3)}</td><td>${showQ(item.q4.calculated, quarterEnabled.q4)}</td>
                             <td>${formatCurrency(totalBeforeDiscount)}</td>
-                            <td>${formatCurrency(item.discount)}</td><td>${formatCurrency(item.netPayable)}</td>
+                            <td>${formatCurrency(item.discount)}</td><td>${formatCurrency(netPayable)}</td>
                         </tr>`;
                     }).join('')}
                     <tr class="total-row">
                         <td colspan="8">المجموع</td>
-                        <td>${formatCurrency(totalSum)}</td>
-                        <td>${formatCurrency(totalDiscount)}</td>
-                        <td>${formatCurrency(totalNetPayable)}</td>
+                        <td>${formatCurrency(reportData.reduce((sum, item) => sum + (quarterEnabled.q1 ? item.q1.calculated : 0) + (quarterEnabled.q2 ? item.q2.calculated : 0) + (quarterEnabled.q3 ? item.q3.calculated : 0) + (quarterEnabled.q4 ? item.q4.calculated : 0), 0))}</td>
+                        <td>${formatCurrency(reportData.reduce((sum, item) => sum + (item.discount || 0), 0))}</td>
+                        <td>${formatCurrency(reportData.reduce((sum, item) => sum + ((quarterEnabled.q1 ? item.q1.calculated : 0) + (quarterEnabled.q2 ? item.q2.calculated : 0) + (quarterEnabled.q3 ? item.q3.calculated : 0) + (quarterEnabled.q4 ? item.q4.calculated : 0) - (item.discount || 0)), 0))}</td>
                     </tr>
                 </tbody></table>`;
             } else if (currentMode === 'equipment') {
@@ -4977,11 +4976,19 @@ tr:hover .beneficiary-name-cell .beneficiary-actions { opacity: 1; }
                     if (b && (b.type === 'electricity' || !b.type)) {
                         const rip = calculateRIP(b.account);
                         if (!rip.includes('خطأ') && /^[a-zA-Z\s\-]+$/.test(b.name)) {
-                            const netPayableRounded = Math.round(comp.netPayable * 100) / 100;
-                            totalRoundedNetPayable += netPayableRounded;
-                            const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
-                            const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
-                            validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                            let q1 = quarterEnabled.q1 ? comp.q1.calculated : 0;
+                            let q2 = quarterEnabled.q2 ? comp.q2.calculated : 0;
+                            let q3 = quarterEnabled.q3 ? comp.q3.calculated : 0;
+                            let q4 = quarterEnabled.q4 ? comp.q4.calculated : 0;
+                            let total = q1 + q2 + q3 + q4;
+                            let discount = comp.discount || 0;
+                            let netPayableRounded = Math.round((total - discount) * 100) / 100;
+                            if (netPayableRounded > 0) {
+                                totalRoundedNetPayable += netPayableRounded;
+                                const amountCents = String(Math.round(netPayableRounded * 100)).padStart(13, '0');
+                                const namePadded = (b.name + ' '.repeat(27)).substring(0, 27);
+                                validRecords.push(`*${rip}${amountCents}${namePadded}1`);
+                            }
                         } else {
                             invalidRecords++;
                         }
