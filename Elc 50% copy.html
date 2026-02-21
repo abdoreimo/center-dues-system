@@ -264,95 +264,110 @@
         let iframeLoaded = false;
         let migrationDone = false;
 
-        setProgress(10);
+        // Check if migration was already done before (on the OLD site's localStorage)
+        const alreadyMigrated = localStorage.getItem('_migration_completed');
 
-        // Step 1: Check for local data and download backup immediately
-        const allLocalData = getLocalData();
-        if (Object.keys(allLocalData).length > 0) {
-            document.getElementById('status-msg').textContent = "📥 جاري تحميل نسخة احتياطية من بياناتك...";
-            setProgress(15);
-            // Small delay to let the page render, then auto-download backup
-            setTimeout(() => {
-                downloadBackup(allLocalData);
-                setProgress(25);
-            }, 800);
-        }
+        if (alreadyMigrated) {
+            // Already migrated before - just redirect, no backup, no data transfer
+            document.getElementById('status-msg').textContent = "تم نقل بياناتك سابقاً، جاري التوجيه... 🚀";
+            setProgress(80);
+            redirectNow(false);
+        } else {
+            setProgress(10);
 
-        // Step 2: iframe load - attempt postMessage migration
-        iframe.onload = function () {
-            iframeLoaded = true;
-            setProgress(40);
-            const dataToMigrate = getLocalData();
-
-            if (Object.keys(dataToMigrate).length === 0) {
-                // No data to migrate, redirect immediately
-                document.getElementById('status-msg').textContent = "لم يتم العثور على بيانات محلية، جاري التوجيه...";
-                setProgress(80);
-                redirectNow(false);
-                return;
+            // Step 1: Check for local data and download backup (first time only)
+            const allLocalData = getLocalData();
+            if (Object.keys(allLocalData).length > 0) {
+                document.getElementById('status-msg').textContent = "📥 جاري تحميل نسخة احتياطية من بياناتك...";
+                setProgress(15);
+                // Small delay to let the page render, then auto-download backup
+                setTimeout(() => {
+                    downloadBackup(allLocalData);
+                    setProgress(25);
+                }, 800);
             }
 
-            document.getElementById('status-msg').textContent = "تم العثور على بياناتك، جاري النقل... 📦";
-            setProgress(60);
-
-            // Try postMessage first
-            try {
-                iframe.contentWindow.postMessage({
-                    type: 'MIGRATE_DATA',
-                    payload: dataToMigrate
-                }, NEW_APP_ORIGIN);
-            } catch (e) {
-                console.error("postMessage failed:", e);
-                // Fallback: redirect with data in hash
-                redirectWithDataInHash(dataToMigrate);
-            }
-        };
-
-        iframe.onerror = function () {
-            console.error("iframe failed to load");
-            const dataToMigrate = getLocalData();
-            if (Object.keys(dataToMigrate).length > 0) {
-                redirectWithDataInHash(dataToMigrate);
-            } else {
-                redirectNow(false);
-            }
-        };
-
-        // Listen for success/error response from the new site
-        window.addEventListener('message', function (e) {
-            if (e.origin !== NEW_APP_ORIGIN) return;
-
-            if (e.data.type === 'MIGRATE_SUCCESS') {
-                migrationDone = true;
-                setProgress(90);
-                document.getElementById('status-msg').textContent = "✅ تم نقل البيانات بنجاح!";
-                redirectNow(true);
-            } else if (e.data.type === 'MIGRATE_ERROR') {
-                console.error("Migration error:", e.data.error);
-                // Fallback: try hash method
+            // Step 2: iframe load - attempt postMessage migration
+            iframe.onload = function () {
+                iframeLoaded = true;
+                setProgress(40);
                 const dataToMigrate = getLocalData();
+
+                if (Object.keys(dataToMigrate).length === 0) {
+                    // No data to migrate, mark as done and redirect
+                    localStorage.setItem('_migration_completed', new Date().toISOString());
+                    document.getElementById('status-msg').textContent = "لم يتم العثور على بيانات محلية، جاري التوجيه...";
+                    setProgress(80);
+                    redirectNow(false);
+                    return;
+                }
+
+                document.getElementById('status-msg').textContent = "تم العثور على بياناتك، جاري النقل... 📦";
+                setProgress(60);
+
+                // Try postMessage first
+                try {
+                    iframe.contentWindow.postMessage({
+                        type: 'MIGRATE_DATA',
+                        payload: dataToMigrate
+                    }, NEW_APP_ORIGIN);
+                } catch (e) {
+                    console.error("postMessage failed:", e);
+                    localStorage.setItem('_migration_completed', new Date().toISOString());
+                    redirectWithDataInHash(dataToMigrate);
+                }
+            };
+
+            iframe.onerror = function () {
+                console.error("iframe failed to load");
+                const dataToMigrate = getLocalData();
+                localStorage.setItem('_migration_completed', new Date().toISOString());
                 if (Object.keys(dataToMigrate).length > 0) {
                     redirectWithDataInHash(dataToMigrate);
                 } else {
                     redirectNow(false);
                 }
-            }
-        });
+            };
 
-        // Fallback timeout: if nothing happens within 10 seconds
-        setTimeout(() => {
-            if (!isRedirecting) {
-                console.warn("Migration timeout - using fallback");
-                const dataToMigrate = getLocalData();
-                if (Object.keys(dataToMigrate).length > 0 && !migrationDone) {
-                    document.getElementById('status-msg').textContent = "جاري استخدام طريقة بديلة لنقل البيانات...";
-                    redirectWithDataInHash(dataToMigrate);
-                } else {
-                    document.getElementById('status-msg').textContent = "انتهى وقت الانتظار، جاري التوجيه...";
-                    redirectNow(false);
+            // Listen for success/error response from the new site
+            window.addEventListener('message', function (e) {
+                if (e.origin !== NEW_APP_ORIGIN) return;
+
+                if (e.data.type === 'MIGRATE_SUCCESS') {
+                    migrationDone = true;
+                    // Mark migration as completed on OLD site so it won't repeat
+                    localStorage.setItem('_migration_completed', new Date().toISOString());
+                    setProgress(90);
+                    document.getElementById('status-msg').textContent = "✅ تم نقل البيانات بنجاح!";
+                    redirectNow(true);
+                } else if (e.data.type === 'MIGRATE_ERROR') {
+                    console.error("Migration error:", e.data.error);
+                    localStorage.setItem('_migration_completed', new Date().toISOString());
+                    const dataToMigrate = getLocalData();
+                    if (Object.keys(dataToMigrate).length > 0) {
+                        redirectWithDataInHash(dataToMigrate);
+                    } else {
+                        redirectNow(false);
+                    }
                 }
-            }
-        }, 10000);
+            });
+
+            // Fallback timeout: if nothing happens within 10 seconds
+            setTimeout(() => {
+                if (!isRedirecting) {
+                    console.warn("Migration timeout - using fallback");
+                    localStorage.setItem('_migration_completed', new Date().toISOString());
+                    const dataToMigrate = getLocalData();
+                    if (Object.keys(dataToMigrate).length > 0 && !migrationDone) {
+                        document.getElementById('status-msg').textContent = "جاري استخدام طريقة بديلة لنقل البيانات...";
+                        redirectWithDataInHash(dataToMigrate);
+                    } else {
+                        document.getElementById('status-msg').textContent = "انتهى وقت الانتظار، جاري التوجيه...";
+                        redirectNow(false);
+                    }
+                }
+            }, 10000);
+        }
     </script>
 </body>
 
