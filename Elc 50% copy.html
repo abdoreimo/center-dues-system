@@ -84,6 +84,23 @@
             background: #d97706;
             transform: translateY(-2px);
         }
+
+        .progress-bar {
+            width: 300px;
+            height: 6px;
+            background: #fde68a;
+            border-radius: 3px;
+            margin: 15px auto 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
     </style>
 </head>
 
@@ -94,91 +111,173 @@
     <h1>جاري التوجيه للبرنامج الجديد...</h1>
     <p>لقد انتقلنا إلى منصة جديدة أكثر قوة وأماناً. يتم الآن نقل بياناتك المحفوظة تلقائياً.</p>
 
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
     <div id="status-msg">جارِ المعالجة ونقل البيانات... ⏳</div>
 
     <a href="https://elec-adrar01.web.app/" class="redirect-btn" id="manual-redirect">الانتقال للبرنامج الجديد الآن</a>
 
-    <!-- المخفي iframe لنقل البيانات -->
-    <iframe id="receiver-iframe" src="https://elec-adrar01.web.app/" style="display:none;"></iframe>
+    <!-- Lightweight iframe just for receiving data via postMessage -->
+    <iframe id="receiver-iframe" src="https://elec-adrar01.web.app/migrate-receiver.html"
+        style="display:none;"></iframe>
 
     <script>
         const NEW_APP_URL = "https://elec-adrar01.web.app/";
+        const NEW_APP_ORIGIN = "https://elec-adrar01.web.app";
         let isRedirecting = false;
 
-        function redirectNow() {
+        // All localStorage keys used by the app
+        const DATA_KEYS = [
+            'institutionInfo', 'beneficiaries', 'compensations',
+            'compensationsEquipment', 'compensationsTransport',
+            'compensationsTraining', 'quarterEnabled'
+        ];
+
+        function setProgress(pct) {
+            document.getElementById('progress').style.width = pct + '%';
+        }
+
+        function redirectNow(withData) {
             if (isRedirecting) return;
             isRedirecting = true;
             document.getElementById('loader').style.display = 'none';
             document.getElementById('success').style.display = 'block';
-            document.getElementById('status-msg').textContent = "تم استكمال النقل بنجاح! جاري التوجيه...";
+            setProgress(100);
+
+            if (withData) {
+                document.getElementById('status-msg').textContent = "✅ تم نقل البيانات بنجاح! جاري التوجيه...";
+            } else {
+                document.getElementById('status-msg').textContent = "جاري التوجيه للموقع الجديد...";
+            }
+
             document.getElementById('manual-redirect').style.display = 'inline-block';
 
+            setTimeout(() => {
+                window.location.href = NEW_APP_URL;
+            }, 1500);
+        }
+
+        // Fallback: encode data in URL hash and redirect
+        function redirectWithDataInHash(data) {
+            if (isRedirecting) return;
+            isRedirecting = true;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            setProgress(100);
+            document.getElementById('status-msg').textContent = "✅ جاري نقل البيانات والتوجيه...";
+            document.getElementById('manual-redirect').style.display = 'inline-block';
+
+            try {
+                const encoded = encodeURIComponent(JSON.stringify(data));
+                // Check if URL would be too long (browsers limit ~2000 chars for some, but hash is more lenient)
+                if (encoded.length < 100000) {
+                    setTimeout(() => {
+                        window.location.href = NEW_APP_URL + "#migrate=" + encoded;
+                    }, 1000);
+                    return;
+                }
+            } catch (e) {
+                console.error("Hash encoding failed:", e);
+            }
+
+            // If data is too large for hash, just redirect
             setTimeout(() => {
                 window.location.href = NEW_APP_URL;
             }, 1000);
         }
 
         function getLocalData() {
-            const keys = [
-                'institutionInfo', 'beneficiaries', 'compensations',
-                'compensationsEquipment', 'compensationsTransport',
-                'compensationsTraining', 'quarterEnabled'
-            ];
             const data = {};
-            keys.forEach(k => {
+            DATA_KEYS.forEach(k => {
                 const val = localStorage.getItem(k);
                 if (val) data[k] = val;
             });
             return data;
         }
 
+        // ========== Main Migration Logic ==========
+
         const iframe = document.getElementById('receiver-iframe');
         let iframeLoaded = false;
+        let migrationDone = false;
+
+        setProgress(20);
 
         iframe.onload = function () {
             iframeLoaded = true;
+            setProgress(40);
             const dataToMigrate = getLocalData();
 
             if (Object.keys(dataToMigrate).length === 0) {
-                // No data found, redirect normally
+                // No data to migrate, redirect immediately
                 document.getElementById('status-msg').textContent = "لم يتم العثور على بيانات محلية، جاري التوجيه...";
-                redirectNow();
+                setProgress(80);
+                redirectNow(false);
                 return;
             }
 
-            // Post data to iframe
+            document.getElementById('status-msg').textContent = "تم العثور على بياناتك، جاري النقل... 📦";
+            setProgress(60);
+
+            // Try postMessage first
             try {
                 iframe.contentWindow.postMessage({
                     type: 'MIGRATE_DATA',
                     payload: dataToMigrate
-                }, 'https://elec-adrar01.web.app');
+                }, NEW_APP_ORIGIN);
             } catch (e) {
-                console.error("Message Error:", e);
-                redirectNow();
+                console.error("postMessage failed:", e);
+                // Fallback: redirect with data in hash
+                redirectWithDataInHash(dataToMigrate);
             }
         };
 
+        iframe.onerror = function () {
+            console.error("iframe failed to load");
+            const dataToMigrate = getLocalData();
+            if (Object.keys(dataToMigrate).length > 0) {
+                redirectWithDataInHash(dataToMigrate);
+            } else {
+                redirectNow(false);
+            }
+        };
+
+        // Listen for success/error response from the new site
         window.addEventListener('message', function (e) {
-            // Verify origin matches our new firebase app
-            if (e.origin !== 'https://elec-adrar01.web.app') return;
+            if (e.origin !== NEW_APP_ORIGIN) return;
 
             if (e.data.type === 'MIGRATE_SUCCESS') {
+                migrationDone = true;
+                setProgress(90);
                 document.getElementById('status-msg').textContent = "✅ تم نقل البيانات بنجاح!";
-                redirectNow();
+                redirectNow(true);
             } else if (e.data.type === 'MIGRATE_ERROR') {
-                console.error("Migration error reported by target:", e.data.error);
-                document.getElementById('status-msg').textContent = "حدث خطأ أثناء نقل البيانات، يمكنك استيرادها يدوياً.";
-                redirectNow();
+                console.error("Migration error:", e.data.error);
+                // Fallback: try hash method
+                const dataToMigrate = getLocalData();
+                if (Object.keys(dataToMigrate).length > 0) {
+                    redirectWithDataInHash(dataToMigrate);
+                } else {
+                    redirectNow(false);
+                }
             }
         });
 
-        // Fallback timeout in case the iframe or messaging fails completely
+        // Fallback timeout: if nothing happens within 8 seconds
         setTimeout(() => {
             if (!isRedirecting) {
-                document.getElementById('status-msg').textContent = "انتهى وقت الانتظار، جاري التوجيه...";
-                redirectNow();
+                console.warn("Migration timeout - using fallback");
+                const dataToMigrate = getLocalData();
+                if (Object.keys(dataToMigrate).length > 0 && !migrationDone) {
+                    document.getElementById('status-msg').textContent = "جاري استخدام طريقة بديلة لنقل البيانات...";
+                    redirectWithDataInHash(dataToMigrate);
+                } else {
+                    document.getElementById('status-msg').textContent = "انتهى وقت الانتظار، جاري التوجيه...";
+                    redirectNow(false);
+                }
             }
-        }, 5000);
+        }, 8000);
     </script>
 </body>
 
