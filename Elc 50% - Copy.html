@@ -126,6 +126,7 @@
         const NEW_APP_URL = "https://elec-adrar01.web.app/";
         const NEW_APP_ORIGIN = "https://elec-adrar01.web.app";
         let isRedirecting = false;
+        let backupDownloaded = false;
 
         // All localStorage keys used by the app
         const DATA_KEYS = [
@@ -138,6 +139,67 @@
             document.getElementById('progress').style.width = pct + '%';
         }
 
+        // ========== Auto-Download Backup ==========
+        function downloadBackup(data) {
+            if (backupDownloaded) return; // Don't download twice
+            backupDownloaded = true;
+
+            try {
+                // Build a clean backup object with parsed JSON values
+                const backupData = {};
+                Object.keys(data).forEach(key => {
+                    try {
+                        backupData[key] = JSON.parse(data[key]);
+                    } catch (e) {
+                        backupData[key] = data[key];
+                    }
+                });
+
+                // Add metadata
+                const backup = {
+                    _backup_info: {
+                        source: 'abdoreimo.github.io',
+                        date: new Date().toISOString(),
+                        date_readable: new Date().toLocaleString('ar-DZ'),
+                        reason: 'migration_to_firebase',
+                        keys_count: Object.keys(backupData).length
+                    },
+                    data: backupData
+                };
+
+                // Create and trigger download
+                const jsonStr = JSON.stringify(backup, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const now = new Date();
+                const dateStr = now.getFullYear() + '-' +
+                    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(now.getDate()).padStart(2, '0') + '_' +
+                    String(now.getHours()).padStart(2, '0') + '-' +
+                    String(now.getMinutes()).padStart(2, '0');
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'backup_elec50_' + dateStr + '.json';
+                document.body.appendChild(a);
+                a.click();
+
+                // Cleanup
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 500);
+
+                console.log('✅ Backup downloaded successfully');
+                document.getElementById('status-msg').textContent = "📥 تم تحميل نسخة احتياطية من بياناتك!";
+
+            } catch (e) {
+                console.error('Backup download failed:', e);
+                // Don't block migration if backup fails
+            }
+        }
+
         function redirectNow(withData) {
             if (isRedirecting) return;
             isRedirecting = true;
@@ -146,7 +208,7 @@
             setProgress(100);
 
             if (withData) {
-                document.getElementById('status-msg').textContent = "✅ تم نقل البيانات بنجاح! جاري التوجيه...";
+                document.getElementById('status-msg').textContent = "✅ تم نقل البيانات وتحميل النسخة الاحتياطية! جاري التوجيه...";
             } else {
                 document.getElementById('status-msg').textContent = "جاري التوجيه للموقع الجديد...";
             }
@@ -155,7 +217,7 @@
 
             setTimeout(() => {
                 window.location.href = NEW_APP_URL;
-            }, 1500);
+            }, 2500);
         }
 
         // Fallback: encode data in URL hash and redirect
@@ -174,7 +236,7 @@
                 if (encoded.length < 100000) {
                     setTimeout(() => {
                         window.location.href = NEW_APP_URL + "#migrate=" + encoded;
-                    }, 1000);
+                    }, 1500);
                     return;
                 }
             } catch (e) {
@@ -184,7 +246,7 @@
             // If data is too large for hash, just redirect
             setTimeout(() => {
                 window.location.href = NEW_APP_URL;
-            }, 1000);
+            }, 1500);
         }
 
         function getLocalData() {
@@ -202,8 +264,21 @@
         let iframeLoaded = false;
         let migrationDone = false;
 
-        setProgress(20);
+        setProgress(10);
 
+        // Step 1: Check for local data and download backup immediately
+        const allLocalData = getLocalData();
+        if (Object.keys(allLocalData).length > 0) {
+            document.getElementById('status-msg').textContent = "📥 جاري تحميل نسخة احتياطية من بياناتك...";
+            setProgress(15);
+            // Small delay to let the page render, then auto-download backup
+            setTimeout(() => {
+                downloadBackup(allLocalData);
+                setProgress(25);
+            }, 800);
+        }
+
+        // Step 2: iframe load - attempt postMessage migration
         iframe.onload = function () {
             iframeLoaded = true;
             setProgress(40);
@@ -264,7 +339,7 @@
             }
         });
 
-        // Fallback timeout: if nothing happens within 8 seconds
+        // Fallback timeout: if nothing happens within 10 seconds
         setTimeout(() => {
             if (!isRedirecting) {
                 console.warn("Migration timeout - using fallback");
@@ -277,7 +352,7 @@
                     redirectNow(false);
                 }
             }
-        }, 8000);
+        }, 10000);
     </script>
 </body>
 
