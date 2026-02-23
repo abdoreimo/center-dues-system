@@ -4,475 +4,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نقل البيانات إلى النظام الجديد</title>
+    <title>تحديث وتوجيه البرنامج</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
             font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fef3c7 100%);
-            background-attachment: fixed;
+            background: #fffbeb;
             color: #451a03;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .migration-container {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #f59e0b;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 100%;
-            padding: 40px 30px;
-            box-shadow: 0 20px 60px rgba(245, 158, 11, 0.2), 0 0 0 1px rgba(245, 158, 11, 0.1);
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .migration-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #f59e0b, #d97706, #ea580c, #d97706, #f59e0b);
-        }
-
-        .icon-container {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border-radius: 50%;
+            padding-top: 50px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+            height: 80vh;
         }
 
-        .icon-container i {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #b45309, #d97706);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .spinner {
+            border: 8px solid #fde68a;
+            border-top: 8px solid #f59e0b;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         h1 {
-            font-size: 1.5rem;
-            color: #92400e;
+            color: #b45309;
+            font-size: 1.8rem;
             margin-bottom: 10px;
-            font-weight: 700;
         }
 
-        .subtitle {
-            font-size: 0.95rem;
-            color: #78350f;
-            line-height: 1.7;
-            margin-bottom: 25px;
-        }
-
-        /* Steps */
-        .steps-container {
-            text-align: right;
-            margin-bottom: 25px;
-        }
-
-        .step {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            transition: all 0.3s;
-        }
-
-        .step.active {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.08));
-            border-color: #f59e0b;
-            box-shadow: 0 2px 10px rgba(245, 158, 11, 0.15);
-        }
-
-        .step.done {
-            background: rgba(34, 197, 94, 0.08);
-            border-color: rgba(34, 197, 94, 0.3);
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: #fde68a;
-            color: #92400e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .step.active .step-number {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #fff;
-        }
-
-        .step.done .step-number {
-            background: #22c55e;
-            color: #fff;
-        }
-
-        .step-text {
-            font-size: 0.9rem;
-            color: #78350f;
-            line-height: 1.5;
-        }
-
-        .step.active .step-text {
-            color: #451a03;
-            font-weight: 600;
-        }
-
-        .step.done .step-text {
-            color: #166534;
-        }
-
-        /* Upload Area */
-        .upload-area {
-            border: 2px dashed #f59e0b;
-            border-radius: 16px;
-            padding: 30px 20px;
-            margin: 20px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #fffdf7;
-        }
-
-        .upload-area:hover {
-            background: rgba(245, 158, 11, 0.08);
-            border-color: #d97706;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
-        }
-
-        .upload-area.dragover {
-            background: rgba(245, 158, 11, 0.12);
-            border-color: #b45309;
-            transform: scale(1.02);
-        }
-
-        .upload-area i {
-            font-size: 2.5rem;
-            color: #d97706;
-            margin-bottom: 12px;
-        }
-
-        .upload-area p {
-            font-size: 0.95rem;
-            color: #78350f;
-            margin: 4px 0;
-        }
-
-        .upload-area .small-text {
-            font-size: 0.8rem;
-            color: #92400e;
-            opacity: 0.7;
-        }
-
-        .file-selected {
-            display: none;
-            padding: 14px 18px;
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            border-radius: 12px;
-            margin: 15px 0;
-            font-size: 0.9rem;
-            color: #166534;
-            font-weight: 600;
-        }
-
-        .file-selected i {
-            color: #22c55e;
-            margin-left: 8px;
-        }
-
-        /* Preview */
-        .preview-box {
-            display: none;
-            text-align: right;
-            margin: 20px 0;
-            padding: 18px;
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            border-radius: 12px;
-        }
-
-        .preview-box h3 {
-            font-size: 0.95rem;
-            color: #92400e;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .preview-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(245, 158, 11, 0.1);
-            font-size: 0.85rem;
-        }
-
-        .preview-item:last-child {
-            border-bottom: none;
-        }
-
-        .preview-label {
-            color: #78350f;
-        }
-
-        .preview-value {
-            color: #451a03;
-            font-weight: 600;
-        }
-
-        /* Buttons */
-        .btn-primary {
-            display: none;
-            width: 100%;
-            padding: 14px 24px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #f59e0b, #d97706, #ea580c);
-            color: #fff;
-            font-family: 'Cairo', sans-serif;
+        p {
             font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            color: #78350f;
+            max-width: 500px;
+            line-height: 1.6;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.4);
+        #status-msg {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d97706;
         }
 
-        .btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-skip {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            border: 1px solid #fde68a;
-            border-radius: 8px;
-            background: transparent;
-            color: #92400e;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-skip:hover {
-            background: rgba(245, 158, 11, 0.08);
-            border-color: #f59e0b;
-        }
-
-        /* Progress */
         .progress-bar {
-            width: 100%;
+            width: 300px;
             height: 6px;
             background: #fde68a;
             border-radius: 3px;
-            margin: 20px 0 10px;
+            margin: 15px auto 0;
             overflow: hidden;
-            display: none;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #f59e0b, #22c55e);
+            background: linear-gradient(90deg, #f59e0b, #d97706);
             border-radius: 3px;
             width: 0%;
             transition: width 0.5s ease;
         }
 
-        #status-msg {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #d97706;
+        .redirect-btn {
             display: none;
-        }
-
-        /* Error */
-        .error-box {
-            display: none;
-            padding: 14px 18px;
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            color: #dc2626;
-            font-size: 0.85rem;
-            margin: 15px 0;
-            text-align: right;
-        }
-
-        /* Auto-detected local data banner */
-        .local-data-banner {
-            display: none;
-            padding: 14px 18px;
-            background: rgba(14, 165, 233, 0.08);
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            border-radius: 12px;
-            margin: 15px 0;
-            text-align: right;
-        }
-
-        .local-data-banner h4 {
-            color: #0369a1;
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .local-data-banner p {
-            color: #0c4a6e;
-            font-size: 0.82rem;
-            line-height: 1.5;
-        }
-
-        .btn-use-local {
-            margin-top: 10px;
-            padding: 8px 16px;
-            border: 1px solid #0ea5e9;
+            margin-top: 30px;
+            padding: 12px 25px;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
             border-radius: 8px;
-            background: rgba(14, 165, 233, 0.1);
-            color: #0369a1;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
             transition: all 0.3s;
         }
 
-        .btn-use-local:hover {
-            background: rgba(14, 165, 233, 0.2);
-        }
-
-        @media (max-width: 500px) {
-            .migration-container {
-                padding: 25px 18px;
-            }
-
-            h1 {
-                font-size: 1.2rem;
-            }
-
-            .upload-area {
-                padding: 20px 15px;
-            }
+        .redirect-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 
 <body>
-    <div class="migration-container">
-        <div class="icon-container">
-            <i class="fas fa-exchange-alt"></i>
-        </div>
+    <div class="spinner" id="loader"></div>
+    <h1>جاري التوجيه للبرنامج الجديد...</h1>
+    <p>لقد انتقلنا إلى منصة جديدة أكثر قوة وأماناً. يتم الآن نقل بياناتك المحفوظة تلقائياً.</p>
 
-        <h1>نقل بياناتك إلى النظام الجديد</h1>
-        <p class="subtitle">
-            تم تحديث البرنامج وانتقلنا إلى نظام أكثر أماناً. يمكنك نقل بياناتك المحفوظة بسهولة.
-        </p>
-
-        <!-- Steps -->
-        <div class="steps-container">
-            <div class="step active" id="step1">
-                <div class="step-number">1</div>
-                <div class="step-text">اختر ملف النسخة الاحتياطية (JSON) المحفوظ على جهازك</div>
-            </div>
-            <div class="step" id="step2">
-                <div class="step-number">2</div>
-                <div class="step-text">معاينة البيانات والتأكد من صحتها</div>
-            </div>
-            <div class="step" id="step3">
-                <div class="step-number">3</div>
-                <div class="step-text">نقل البيانات تلقائياً إلى الموقع الجديد</div>
-            </div>
-        </div>
-
-        <!-- Local data auto-detection -->
-        <div class="local-data-banner" id="local-data-banner">
-            <h4><i class="fas fa-database"></i> تم اكتشاف بيانات محفوظة!</h4>
-            <p>وجدنا بيانات محفوظة على هذا المتصفح من الرابط القديم. يمكنك نقلها مباشرة دون الحاجة لملف.</p>
-            <button class="btn-use-local" onclick="useLocalData()">
-                <i class="fas fa-bolt"></i> نقل البيانات المحفوظة مباشرة
-            </button>
-        </div>
-
-        <!-- Upload Area -->
-        <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>اضغط هنا أو اسحب الملف</p>
-            <p class="small-text">ملف JSON (نسخة احتياطية من البرنامج القديم)</p>
-        </div>
-
-        <input type="file" id="file-input" accept=".json" style="display:none">
-
-        <!-- File Selected -->
-        <div class="file-selected" id="file-selected">
-            <i class="fas fa-check-circle"></i>
-            <span id="file-name"></span>
-        </div>
-
-        <!-- Error Box -->
-        <div class="error-box" id="error-box"></div>
-
-        <!-- Preview -->
-        <div class="preview-box" id="preview-box">
-            <h3><i class="fas fa-eye"></i> معاينة البيانات</h3>
-            <div id="preview-content"></div>
-        </div>
-
-        <!-- Transfer Button -->
-        <button class="btn-primary" id="transfer-btn" onclick="startTransfer()">
-            <i class="fas fa-paper-plane"></i> نقل البيانات إلى الموقع الجديد
-        </button>
-
-        <!-- Progress -->
-        <div class="progress-bar" id="progress-bar">
-            <div class="progress-fill" id="progress"></div>
-        </div>
-        <div id="status-msg"></div>
-
-        <!-- Skip Button -->
-        <button class="btn-skip" onclick="skipMigration()">
-            <i class="fas fa-forward"></i> تخطي والذهاب للموقع الجديد بدون نقل
-        </button>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
     </div>
+    <div id="status-msg">جارِ المعالجة ونقل البيانات... ⏳</div>
+
+    <a href="https://elec-adrar01.web.app/" class="redirect-btn" id="manual-redirect">الانتقال للبرنامج الجديد الآن</a>
 
     <script>
         const NEW_APP_URL = "https://elec-adrar01.web.app/";
@@ -484,371 +119,78 @@
             'compensationsTraining', 'quarterEnabled'
         ];
 
-        let parsedData = null;
+        function setProgress(pct) {
+            document.getElementById('progress').style.width = pct + '%';
+        }
 
-        // ========== Check for local data ==========
-        function checkLocalData() {
-            const localData = {};
-            let hasData = false;
+        function getLocalData() {
+            const data = {};
             DATA_KEYS.forEach(k => {
                 const val = localStorage.getItem(k);
                 if (val) {
+                    // Parse to object if possible
                     try {
-                        localData[k] = JSON.parse(val);
-                        hasData = true;
+                        data[k] = JSON.parse(val);
                     } catch (e) {
-                        localData[k] = val;
-                        hasData = true;
+                        data[k] = val;
                     }
                 }
             });
-
-            if (hasData && localData.institutionInfo) {
-                document.getElementById('local-data-banner').style.display = 'block';
-                window._localData = localData;
-            }
+            return data;
         }
 
-        function useLocalData() {
-            if (!window._localData) return;
-            parsedData = window._localData;
-            document.getElementById('local-data-banner').style.display = 'none';
-            document.getElementById('upload-area').style.display = 'none';
+        // ========== Main Logic ==========
+        (function () {
+            setProgress(10);
 
-            // Show file selected indicator
-            const fileSelected = document.getElementById('file-selected');
-            fileSelected.style.display = 'block';
-            document.getElementById('file-name').textContent = 'بيانات محلية (من هذا المتصفح)';
+            const allLocalData = getLocalData();
+            const hasData = Object.keys(allLocalData).length > 0;
 
-            showPreview(parsedData);
-            activateStep(2);
-        }
-
-        // ========== File Handling ==========
-        const fileInput = document.getElementById('file-input');
-        const uploadArea = document.getElementById('upload-area');
-
-        fileInput.addEventListener('change', function (e) {
-            const file = e.target.files[0];
-            if (file) handleFile(file);
-        });
-
-        // Drag & Drop
-        uploadArea.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', function () {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', function (e) {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file) handleFile(file);
-        });
-
-        function handleFile(file) {
-            const errorBox = document.getElementById('error-box');
-            errorBox.style.display = 'none';
-
-            if (!file.name.endsWith('.json')) {
-                showError('يرجى اختيار ملف بصيغة JSON فقط.');
+            if (!hasData) {
+                // No data - just redirect
+                document.getElementById('status-msg').textContent = "لم يتم العثور على بيانات محلية، جاري التوجيه... 🚀";
+                setProgress(80);
+                document.getElementById('manual-redirect').style.display = 'inline-block';
+                setTimeout(() => {
+                    window.location.href = NEW_APP_URL;
+                }, 1500);
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    let data = JSON.parse(e.target.result);
-
-                    // Support old migration backup format: { _backup_info: {...}, data: {...} }
-                    if (data._backup_info && data.data) {
-                        data = data.data;
-                    }
-
-                    // Ensure data values are proper objects (not double-JSON strings)
-                    const cleanData = {};
-                    DATA_KEYS.forEach(key => {
-                        if (data[key] !== undefined && data[key] !== null) {
-                            if (typeof data[key] === 'string') {
-                                try {
-                                    cleanData[key] = JSON.parse(data[key]);
-                                } catch (e) {
-                                    cleanData[key] = data[key];
-                                }
-                            } else {
-                                cleanData[key] = data[key];
-                            }
-                        }
-                    });
-
-                    // Validate minimum required data
-                    if (!cleanData.institutionInfo && !cleanData.beneficiaries) {
-                        showError('الملف لا يحتوي على بيانات صالحة. تأكد من اختيار ملف النسخة الاحتياطية الصحيح.');
-                        return;
-                    }
-
-                    parsedData = cleanData;
-
-                    // Show file info
-                    const fileSelected = document.getElementById('file-selected');
-                    fileSelected.style.display = 'block';
-                    document.getElementById('file-name').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
-                    uploadArea.style.display = 'none';
-
-                    showPreview(parsedData);
-                    activateStep(2);
-
-                } catch (err) {
-                    showError('خطأ في قراءة الملف: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function showPreview(data) {
-            const previewBox = document.getElementById('preview-box');
-            const previewContent = document.getElementById('preview-content');
-            let html = '';
-
-            // Institution Info
-            if (data.institutionInfo) {
-                const info = data.institutionInfo;
-                html += createPreviewItem('المؤسسة', info.name || info.institutionName || 'غير محدد');
-                html += createPreviewItem('مديرية التربية', info.directionName || info.direction || 'غير محدد');
-                if (info.openCredit) {
-                    html += createPreviewItem('الاعتماد المفتوح', parseFloat(info.openCredit).toLocaleString('ar-DZ') + ' دج');
-                }
-            }
-
-            // Beneficiaries
-            if (data.beneficiaries && Array.isArray(data.beneficiaries)) {
-                html += createPreviewItem('عدد المستفيدين', data.beneficiaries.length);
-            }
-
-            // Compensations
-            let compCount = 0;
-            if (data.compensations && Array.isArray(data.compensations)) compCount += data.compensations.length;
-            if (data.compensationsEquipment && Array.isArray(data.compensationsEquipment)) compCount += data.compensationsEquipment.length;
-            if (data.compensationsTransport && Array.isArray(data.compensationsTransport)) compCount += data.compensationsTransport.length;
-            if (data.compensationsTraining && Array.isArray(data.compensationsTraining)) compCount += data.compensationsTraining.length;
-            if (compCount > 0) {
-                html += createPreviewItem('سجلات التعويضات', compCount);
-            }
-
-            previewContent.innerHTML = html;
-            previewBox.style.display = 'block';
-            document.getElementById('transfer-btn').style.display = 'block';
-        }
-
-        function createPreviewItem(label, value) {
-            return '<div class="preview-item"><span class="preview-label">' + label + '</span><span class="preview-value">' + value + '</span></div>';
-        }
-
-        function showError(msg) {
-            const errorBox = document.getElementById('error-box');
-            errorBox.textContent = msg;
-            errorBox.style.display = 'block';
-        }
-
-        function activateStep(num) {
-            for (let i = 1; i <= 3; i++) {
-                const el = document.getElementById('step' + i);
-                el.classList.remove('active', 'done');
-                if (i < num) el.classList.add('done');
-                else if (i === num) el.classList.add('active');
-            }
-        }
-
-        // ========== Transfer Data ==========
-        function startTransfer() {
-            if (!parsedData) return;
-
-            activateStep(3);
-            const progressBar = document.getElementById('progress-bar');
-            const progress = document.getElementById('progress');
-            const statusMsg = document.getElementById('status-msg');
-            const transferBtn = document.getElementById('transfer-btn');
-
-            progressBar.style.display = 'block';
-            statusMsg.style.display = 'block';
-            transferBtn.disabled = true;
-            transferBtn.textContent = 'جاري النقل...';
-
-            statusMsg.textContent = '⏳ جاري تجهيز البيانات...';
-            progress.style.width = '20%';
+            // Has data - encode and redirect
+            document.getElementById('status-msg').textContent = "تم العثور على بياناتك، جاري تجهيز النقل... 📦";
+            setProgress(30);
 
             setTimeout(() => {
-                statusMsg.textContent = '📦 جاري تشفير البيانات للنقل...';
-                progress.style.width = '50%';
-
-                // Encode data into a compact format for URL transfer
                 try {
-                    const jsonStr = JSON.stringify(parsedData);
-
-                    // Check if data is small enough for URL hash
+                    const jsonStr = JSON.stringify(allLocalData);
                     const encoded = encodeURIComponent(jsonStr);
 
-                    if (encoded.length < 100000) {
-                        // Use hash-based transfer
+                    setProgress(60);
+                    document.getElementById('status-msg').textContent = "جاري التوجيه مع البيانات... 🚀";
+
+                    setTimeout(() => {
+                        setProgress(90);
+                        document.getElementById('manual-redirect').style.display = 'inline-block';
+
+                        // Redirect with data in hash
                         setTimeout(() => {
-                            statusMsg.textContent = '🚀 جاري التوجيه للموقع الجديد...';
-                            progress.style.width = '80%';
+                            setProgress(100);
+                            window.location.href = NEW_APP_URL + '#migrate=' + encoded;
+                        }, 500);
+                    }, 500);
 
-                            // Mark migration on this site
-                            localStorage.setItem('_migration_completed', new Date().toISOString());
-
-                            setTimeout(() => {
-                                progress.style.width = '100%';
-                                statusMsg.textContent = '✅ تم! جاري فتح الموقع الجديد...';
-
-                                setTimeout(() => {
-                                    window.location.href = NEW_APP_URL + '#migrate=' + encoded;
-                                }, 800);
-                            }, 500);
-                        }, 600);
-                    } else {
-                        // Data too large for URL - use sessionStorage bridge via window.open
-                        // Save to localStorage with special key for the new site to pick up
-                        statusMsg.textContent = '📦 البيانات كبيرة، جاري استخدام طريقة بديلة...';
-                        progress.style.width = '60%';
-
-                        // Create a temporary page that will handle the transfer
-                        const transferData = {
-                            _migration_transfer: true,
-                            _transfer_date: new Date().toISOString(),
-                            data: parsedData
-                        };
-
-                        // Open new window and use postMessage
-                        const iframe = document.createElement('iframe');
-                        iframe.src = NEW_APP_URL + 'migrate-receiver.html';
-                        iframe.style.display = 'none';
-                        document.body.appendChild(iframe);
-
-                        // Convert parsed data back to localStorage format (strings)
-                        const payloadForPostMessage = {};
-                        DATA_KEYS.forEach(key => {
-                            if (parsedData[key] !== undefined) {
-                                payloadForPostMessage[key] = typeof parsedData[key] === 'string'
-                                    ? parsedData[key]
-                                    : JSON.stringify(parsedData[key]);
-                            }
-                        });
-
-                        iframe.onload = function () {
-                            progress.style.width = '70%';
-                            statusMsg.textContent = '📡 جاري إرسال البيانات...';
-
-                            try {
-                                iframe.contentWindow.postMessage({
-                                    type: 'MIGRATE_DATA',
-                                    payload: payloadForPostMessage
-                                }, NEW_APP_URL.replace(/\/$/, ''));
-                            } catch (e) {
-                                console.error('postMessage failed:', e);
-                            }
-                        };
-
-                        // Listen for response
-                        window.addEventListener('message', function handler(e) {
-                            if (e.data && e.data.type === 'MIGRATE_SUCCESS') {
-                                window.removeEventListener('message', handler);
-                                progress.style.width = '100%';
-                                statusMsg.textContent = '✅ تم نقل البيانات بنجاح!';
-                                localStorage.setItem('_migration_completed', new Date().toISOString());
-
-                                setTimeout(() => {
-                                    window.location.href = NEW_APP_URL;
-                                }, 1200);
-                            } else if (e.data && e.data.type === 'MIGRATE_ERROR') {
-                                // Fallback: try chunked hash
-                                statusMsg.textContent = '⚠️ فشل النقل التلقائي. جاري تجربة طريقة أخرى...';
-                                fallbackDownloadAndRedirect();
-                            }
-                        });
-
-                        // Timeout fallback
-                        setTimeout(() => {
-                            if (progress.style.width !== '100%') {
-                                fallbackDownloadAndRedirect();
-                            }
-                        }, 8000);
-                    }
                 } catch (err) {
-                    statusMsg.textContent = '❌ خطأ: ' + err.message;
-                    transferBtn.disabled = false;
-                    transferBtn.textContent = 'إعادة المحاولة';
+                    console.error("Encoding error:", err);
+                    document.getElementById('status-msg').textContent = "جاري التوجيه... 🚀";
+                    setProgress(100);
+                    document.getElementById('manual-redirect').style.display = 'inline-block';
+                    setTimeout(() => {
+                        window.location.href = NEW_APP_URL;
+                    }, 1500);
                 }
-            }, 600);
-        }
-
-        function fallbackDownloadAndRedirect() {
-            const statusMsg = document.getElementById('status-msg');
-            const progress = document.getElementById('progress');
-
-            // Download the file for the user first
-            statusMsg.textContent = '📥 جاري تحميل ملف النسخة الاحتياطية المتوافقة...';
-            progress.style.width = '85%';
-
-            // Create a properly formatted backup for the new site
-            const backup = {
-                institutionInfo: parsedData.institutionInfo || {},
-                beneficiaries: parsedData.beneficiaries || [],
-                compensations: parsedData.compensations || [],
-                compensationsEquipment: parsedData.compensationsEquipment || [],
-                compensationsTransport: parsedData.compensationsTransport || [],
-                compensationsTraining: parsedData.compensationsTraining || [],
-                quarterEnabled: parsedData.quarterEnabled || { q1: true, q2: true, q3: true, q4: true },
-                _migration_info: {
-                    source: 'abdoreimo.github.io',
-                    date: new Date().toISOString(),
-                    format: 'compatible_with_new_site'
-                }
-            };
-
-            const jsonStr = JSON.stringify(backup, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-
-            const now = new Date();
-            const dateStr = now.getFullYear() + '-' +
-                String(now.getMonth() + 1).padStart(2, '0') + '-' +
-                String(now.getDate()).padStart(2, '0');
-            a.download = 'migration_backup_' + dateStr + '.json';
-            document.body.appendChild(a);
-            a.click();
-
-            setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
             }, 500);
-
-            setTimeout(() => {
-                progress.style.width = '100%';
-                statusMsg.innerHTML = '✅ تم تحميل النسخة الاحتياطية المتوافقة!<br><small style="color:#78350f;">في الموقع الجديد، اذهب لتبويب "الإعدادات" ← "استرداد نسخة احتياطية" واختر الملف المحمّل</small>';
-
-                localStorage.setItem('_migration_completed', new Date().toISOString());
-
-                setTimeout(() => {
-                    window.location.href = NEW_APP_URL;
-                }, 4000);
-            }, 1500);
-        }
-
-        function skipMigration() {
-            if (confirm('هل أنت متأكد؟ يمكنك نقل بياناتك لاحقاً باستخدام خيار "استرداد نسخة احتياطية" في الموقع الجديد.')) {
-                window.location.href = NEW_APP_URL;
-            }
-        }
-
-        // ========== Init ==========
-        checkLocalData();
+        })();
     </script>
 </body>
 
